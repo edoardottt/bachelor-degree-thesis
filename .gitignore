@@ -1,0 +1,12 @@
+.*.swp
+*-eps-converted-to.pdf
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.toc
+*.pdf
+*.synctex.gz
+*.auto.dot
+*.out
+_minted-tesi
