@@ -45,11 +45,78 @@
 %\end{flushright}
 %\cleardoublepage
 
-placeholder
-
-% rest of the document
+% ======================================= ABSTRACT ================================================
 \begin{abstract}
-abstract
+	abstract
 \end{abstract}
+\cleardoublepage
+
+\tableofcontents
+\cleardoublepage
+
+\mainmatter
+
+\renewcommand\chapterheadstart{}
+\renewcommand\printchaptername{}
+\renewcommand\chapternamenum{}
+\renewcommand\printchapternum{}
+\renewcommand\afterchapternum{}
+\renewcommand\printchaptertitle[1]{\chaptitlefont \thechapter. \space #1}
+
+
+% ======================================= CHAPTER 1 ================================================
+\chapter{Introduzione a SeismoCloud e obiettivi del progetto}
+
+\section{Natura dei terremoti}
+
+\section{Utilizzare dispositivi elettronici per rilevare terremoti}
+
+\section{Bisogni della community SeismoCloud}
+
+
+% ======================================= CHAPTER 2 ================================================
+\chapter{Architettura di Node-RED adattata a SeismoCloud}
+
+\section{Perché Node-RED}
+
+\section{Difficoltà e limiti nell'uso di Node-RED}
+
+\section{Architettura adattata a SeismoCloud}
+
+\section{Implementazione delle funzionalità tramite nodi}
+
+\section{Ottimizzazione delle prestazioni}
+
+
+% ======================================= CHAPTER 3 ================================================
+\chapter{Sicurezza e protezione dei dati}
+
+\section{Sicurezza nella piattaforma Node-RED}
+
+\section{Ricerca ed analisi di vulnerabilità}
+
+\section{Risoluzione dei problemi}
+
+
+% ======================================= CHAPTER 4 ================================================
+\chapter{Test, conclusioni e sviluppi futuri}
+
+\section{Iterazioni dei Test}
+
+\section{Conclusioni}
+
+\section{Sviluppi futuri}
+
+
+\refstepcounter{chapter}
+
+% ======================================= BIBLIOGRAPHY ================================================
+\begin{thebibliography}{9}
+
+\bibitem{placeholder}
+	\textbf{placeholder}.
+	placeholder
+
+\end{thebibliography}
 
 \end{document}
