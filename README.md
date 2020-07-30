@@ -2,6 +2,9 @@
 
 ![latex-logo](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/made-with-latex.svg)
 
+Get Started 🎉
+-------
+
 - LaTeX requirements:
   ```
   texlive-base
@@ -28,6 +31,8 @@
 
 - Clean the folder from files generated while building: `make clean`
 
+If you liked it drop a ⭐
+-------
 
 If you want to contact me: [edoardoottavianelli.it](https://www.edoardoottavianelli.it)
 
