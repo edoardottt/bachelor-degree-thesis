@@ -1,5 +1,7 @@
 # bachelor-degree-thesis
 
+## Titolo
+
 ![latex-logo](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/made-with-latex.svg)
 
 Get Started 🎉
