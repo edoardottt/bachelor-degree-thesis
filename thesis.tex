@@ -170,8 +170,10 @@ Per una migliore rilevazione si consiglia di fissarli ad un muro. \\
 I \textbf{sismometri mobili} invece utilizzano l'applicazione per smartphone, abilitando l'accelerometro interno del telefono per rilevare vibrazioni. \\
 Devono essere appoggiati su un piano, per esempio un tavolo. \\
 Durante la registrazione di un nuovo sismometro, esso viene localizzato per conoscere la sua posizione (fondamentale al rilevamento corretto dei sismi). Nonostante ciò la privacy può essere conservata mostrando il sismometro nella mappa pubblica con una finta posizione casuale nel raggio di 2km. \\
-I sismometri utilizzano il protocollo \textbf{MQTT} (Message Queue Telemetry Transport) per inviare e ricevere messaggi catalogati sotto un \textit{topic} (per esempio \textit{temperature}, \textit{quake}...). \\
-MQTT IMMAGINE \\
+I sismometri utilizzano il protocollo \textbf{MQTT} (Message Queue Telemetry Transport) per inviare e ricevere messaggi catalogati sotto un \textit{topic} (per esempio \textit{temperature}, \textit{quake}...).
+\begin{figure}
+\includegraphics[width=1\textwidth]{Chapter-1/mqtt.jpg}
+\end{figure}
 I dati inviati vengono elaborati in un server centrale che li gestisce, compie dei calcoli su di essi e li archivia. \\
 Per i messaggi di invio e ricezione dei sismometri e per tutti i dati prodotti da essi viene utilizzato lo stile architetturale \textbf{REST} (REpresentational State Transfer). \\
 I dati possono essere visualizzati in vari modi. \\
