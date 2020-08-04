@@ -155,22 +155,22 @@ La concentrazione maggiore di terremoti in Italia è nell'appennino e nel sud It
 
 SeismoCloud è una rete di sismometri a basso costo distribuiti in tutta Italia. 
 Ha come scopo l'\textit{Earthquake early warning}, ossia monitorare l'attività sismica e, nel caso viene rilevato un terremoto, notificare le persone interessate.
-I sismometri possono essere costruiti se si ha capacità di elettronica di base, altrimenti viene utilizzato il sensore interno di uno smartphone. \\
+I sismometri possono essere costruiti personalmente se si ha capacità di elettronica di base, altrimenti viene utilizzato il sensore interno di uno smartphone. \\
 È un progetto nato dall'Università La Sapienza e l'INGV.
 
 \subsection{Architettura di sistema}
 I sismometri sono di due tipologie: \textit{fissi} e \textit{mobili}. \\
 I \textbf{sismometri fissi} sono dei componenti elettronici formati da un chip a basso costo con un modulo Wi-Fi integrato per la connessione ad Internet e un modulo con giroscopio e accelerometro. \\
 Per una migliore rilevazione si consiglia di fissarli ad un muro. \\
-I \textbf{sismometri mobili} invece utilizzano la applicazione per smartphone, abilitando l'accelerometro interno del telefono, per rilevare vibrazioni. Devono essere appoggiati su un piano, per esempio un tavolo. \\
-%Localizzazione e Privacy
+I \textbf{sismometri mobili} invece utilizzano l'applicazione per smartphone, abilitando l'accelerometro interno del telefono per rilevare vibrazioni. Devono essere appoggiati su un piano, per esempio un tavolo. \\
+Durante la registrazione di un nuovo sismometro, esso viene localizzato per conoscere la sua posizione (fondamentale al rilevamento corretto dei sismi). Nonostante ciò la privacy può essere conservata mostrando il sismometro nella mappa pubblica con una finta posizione casuale nel raggio di 2km. \\
 I sismometri utilizzano il protocollo \textbf{MQTT} (Message Queue Telemetry Transport) per inviare e ricevere messaggi catalogati sotto un \textit{topic} (per esempio \textit{temperature}, \textit{quake}...). \\
 I dati inviati vengono elaborati in un server centrale che li gestisce, compie dei calcoli su di essi e li archivia. \\
-Per i messaggi di invio e ricezione dei sismometri e per tutti i dati prodotti da essi per le statistiche viene utilizzato lo stile architetturale \textbf{REST} (REpresentational State Transfer). \\
+Per i messaggi di invio e ricezione dei sismometri e per tutti i dati prodotti da essi viene utilizzato lo stile architetturale \textbf{REST} (REpresentational State Transfer). \\
 I dati possono essere visualizzati in vari modi. \\
-Tramite l'app mobile (disponibile in Android e iOS) si possono visualizzare la lista dei sismometri presenti, una mappa aggiornata in tempo reale con i sismometri attivi e i terremoti recenti, una lista di terremoti con relativa magnitudo, posizione e profondità dell'ipocentro e alcuni informazioni utili. \\
+Tramite l'app mobile (disponibile in Android e iOS) è possibile visualizzare la lista dei propri sismometri, una mappa aggiornata in tempo reale con i sismometri attivi e i terremoti recenti, una lista di terremoti con relativa magnitudo, posizione e profondità dell'ipocentro (ordinati cronologicamente) e infine alcuni informazioni utili. \\
 Tramite l'interfaccia web è possibile visualizzare tutte le informazioni prima citate ed in più una dashboard personalizzata (\href{https://my.seismocloud.com}{my.SeismoCloud.com}).
-Nella dashboard personale è possibile visualizzare due grafici he mostrano il tempo di utilizzo assoluto e settimanale di ogni sismometro attivo.
+Nella dashboard personale è possibile visualizzare due grafici che mostrano il tempo di utilizzo assoluto e settimanale di ogni sismometro attivo. \\
 Dopo l'effettiva autenticazione (tramite password o QRCode) si entra nella parte privata, ossia relativa ad un determinato \textit{gruppo} (insiemi di sismometri raggruppati per locazione). \\
 Qui, oltre alle funzionalità citate, è presente un sistema di \textbf{EUD} (End User Development). \\
 È un sistema che permette agli utenti di programmare delle azioni e svolgere dei compiti quando si verificano opportune condizioni. \\
@@ -184,7 +184,9 @@ Ad esempio, si può ricevere un messaggio automatico tramite Telegram ogni volta
 
 \clearpage
 
-\subsection{Potere della community}
+\section{Bisogni della community SeismoCloud}
+
+placeholder
 
 \clearpage
 
@@ -193,12 +195,6 @@ Ad esempio, si può ricevere un messaggio automatico tramite Telegram ogni volta
 \label{fig:RSS}
 \includegraphics[width=1\textwidth]{Chapter-1/seismoitalia.jpg}
 \end{figure}
-
-\clearpage
-
-\section{Bisogni della community SeismoCloud}
-
-placeholder
 
 \clearpage
 
