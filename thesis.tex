@@ -125,10 +125,9 @@ Esistono due tipologie principali di misurazione di un terremoto: la scala \text
 La scala Mercalli misura l'\textit{intensità} di un terremoto osservando i danni causati da esso. Per questo, dato che tiene in conto solo degli effetti che la scossa produce, può essere applicata anche ai terremoti avvenuti nel passato.
 Assegna dei numeri crescenti per intensità, si va dall'uno (impercettebile) sino a dodici (apocalittica). \\
 La scala (o meglio \textit{indice}) Richter misura invece l'energia sprigionata dalla scossa, ossia la \textit{magnitudo}. Viene chiamata scala, ma è più corretto dire indice dato che non ha un range di valori finito. La magnitudo è descritta da questa formula: \\
-
-\begin{center}
-\textit{M_\mathrm{w} = {\frac{2}{3}}\log_{10}($M_0$) - 6}
-\end{center}
+\begin{equation*}
+  M_w = {\frac{2}{3}}\log_{10}(M_\mathrm{0}) - 6
+\end{equation*}
 dove $M_0$ è il momento sismico all'ipocentro da esprimere in Newton per metro|N·m. \\
 Ad oggi il massimo valore magnitudo registrato è 9,5. \\
 \subsection{Strumenti di misurazione}
@@ -232,7 +231,7 @@ Con una cadenza periodica (qualche minuto, dipende dal carico del sistema) vengo
 Un topic MQTT è dedicato al comando \textit{reboot}, ossia la possibilità di riavviare il sismometro pubblicando un messaggio. \\
 Come è stato accennato nella descrizione dell'architettura del sistema (Cap 1.3), è possibile programmare della azioni quando si verificano determinate condizioni.\\
 Sostanzialmente le condizioni sono due: quando n sismometri vibrano/sono accesi, oppure la notifica di un Earthquake Early Warning.
-Le possibilità per il metodo di notifica sono quattro: un messaggio tramite Telegram, una notifica push ai membri del gruppo, un widget e la pubblicazione di un API. \\ 
+Le possibilità per il metodo di notifica sono quattro: un messaggio tramite Telegram, una notifica push ai membri del gruppo, un widget e la pubblicazione di una API. \\ 
 \begin{figure}[H]
 \caption{Vecchio sistema EUD}
 \label{VecchioEUD}
