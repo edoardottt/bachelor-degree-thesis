@@ -321,21 +321,42 @@ Il codice sorgente di draw.io è disponibile su GitHub. È  ben documentato, qui
 
 \subsection{Scelta Node-RED}
 Lo strumento che risolve i problemi precedentemente elencati è \textbf{Node-RED} (\href{https://nodered.org}{https://nodered.org}).
-Come draw.io è un creatore di diagrammi di flusso ed è anche open-source con repository su GitHub sotto l'organizzazione \href{https://github.com/node-red}{node-red}.
+Come draw.io è un creatore di diagrammi di flusso ed è anche open-source con repository su GitHub sotto l'organizzazione \href{https://github.com/node-red}{node-red}. È un servizio orientato all'\textit{Internet of Things}, non è uno standard ufficiale, ma è molto utilizzato nel campo.
 Qui, a differenza del precedente, esiste uno scheletro back-end, dato che è costruito utilizzando \href{https://nodejs.org}{NodeJS}. Vedremo più avanti in dettaglio come è stato progettato.\\
 La community, oltre ad essere pronta a risolvere dubbi sul forum ufficiale (\href{https://discourse.nodered.org}{discourse.nodered.org}), contribuisce attivamente al progetto implementando delle funzionalità che sono messe a disposizione di tutti tramite il famoso package manager NPM.
 \\
-IMMAGINE NODE-RED
+Nel nome il 'node' è dato sia dal runtime NodeJS, sia dal nome che hanno gli elementi utilizzati per creare i flussi, chiamati appunto \textit{nodi}.
+\begin{figure}[H]
+\caption{Esempio flusso di nodi in Node-RED}
+\label{fig:node-red-flows-example1}
+\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/node-red-flows-1.jpg}
+\end{figure}
+Come si nota in figura appena sopra, i nodi sono dei rettangoli che hanno funzioni particolari:
+\begin{itemize}
+    \item Nodi input: Questi nodi emettono valori e non prendono nulla in ingresso, quindi sono utilizzati per produrre dati o iniziare dei flussi. Possono avere da 1 a n valori in uscita.
+    \item Nodi intermedi: Sono nodi che hanno sia input che output. Sono utilizzati per applicare delle funzioni ai dati in ingresso, oppure il dato in ingresso viene solamente utilizzato per far iniziare una procedura intermedia. Prendono in ingresso un solo valore e possono avere da 1 a n valori in uscita.
+    \item Nodi output: Sono gli opposti dei nodi input. Non hanno valori in uscita ma solo in ingresso. Sono utilizzati per terminare un flusso, solitamente sono quindi le azioni da effettuare in caso in cui si verificano condizioni. Possono avere un solo valore in ingresso.
+\end{itemize}
+\begin{figure}[H]
+\caption{Esecuzione del comando shutdown}
+\label{fig:node-red-flows-example1}
+\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/node-red-flows-2.jpg}
+\end{figure}
+Nella figura qui sopra abbiamo un altro esempio. Qui quando viene cliccato il pulsante a sinistra del nodo \textit{input}, il nodo invia in uscita un valore (in questo caso qualsiasi, ad esempio 3 o la stringa 'input') che fa eseguire il secondo nodo (di tipo \textit{intermedio}). Il nodo \textit{shutdown} esegue il comando `shutdown` e stampa nella console di debug lo stdout, stderr ed il return code.
+\\
+Data la facilità d'uso, il grande supporto (repository con 10+K stelle su GitHub, community molto attiva e forum ufficiale), la maturità del progetto (versione 0.2 nel 2013), la facile estendibilità ed integrazione con dispositivi IoT (come appunto i sismometri), decisamente Node-RED è lo strumento più adatto per risolvere il bisogno della community SeismoCloud.
 \\
 \clearpage
 
 \section{Architettura adattata a SeismoCloud}
 
-Rimangono i gruppi
+Rimangono i gruppi trovare soluzione a ciò con nodered
 \\
-Utilizzo di Docker
+Utilizzo di Docker, vantaggi e svantaggi
 \\
 Spiegazione Architettura Node-RED
+\\
+Schema finale architettura
 \\
 
 \clearpage
