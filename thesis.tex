@@ -308,9 +308,15 @@ La soluzione a questo bisogno dovrebbe essere: \textit{facilmente utilizzabile, 
 
 Piuttosto che progettare e costruire uno strumento di End User Development da zero, si è cercato uno scheletro già pronto e maturo. La ricerca è stata piuttosto semplice, un po' meno la valutazione dei possibili candidati.
 \\
-Il primo candidato è IFTTT (\href{https://iftt.com}{https://ifttt.com}). È lo strumento più famoso, utilizzato da molte persone, con più di 5 milioni di download su Play Store. Il vantaggio di questa scelta è sicuramente la grande maturità della piattaforma. Gli svantaggi la difficoltà nell'integrare i nostri dispositivi con questo sistema, ma soprattutto la somiglianza con il sistema EUD da rimpiazzare, troppo semplice e con condizioni e azioni predefinite.
+Il primo candidato è \textbf{IFTTT} (\href{https://iftt.com}{https://ifttt.com}). È lo strumento più famoso, utilizzato da molte persone, con più di 5 milioni di download su Play Store. Il vantaggio di questa scelta è sicuramente la grande maturità della piattaforma. Gli svantaggi la difficoltà nell'integrare i nostri dispositivi con questo sistema, ma soprattutto la somiglianza con il sistema EUD da rimpiazzare, troppo semplice e con condizioni e azioni predefinite.
 \\
-Una seconda scelta è draw.io (\href{https://app.diagrams.net/}{https://draw.io}). Strumento completamente differente al precedente, è un creatore di diagrammi di flusso.
+Una seconda scelta è \textbf{draw.io} (\href{https://app.diagrams.net/}{https://draw.io}). Strumento completamente differente al precedente, è un creatore di diagrammi di flusso. Questo è un tipo di programmazione di azioni che lascia molta libertà all'utente, rimanendo semplice ma efficace. 
+\begin{figure}[H]
+\caption{Esempio di flusso esportato da draw.io}
+\label{fig:drawio}
+\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/drawio.png}
+\end{figure}
+Il codice sorgente di draw.io è disponibile su GitHub. È  ben documentato, quindi facilmente integrabile in SeismoCloud. Purtroppo si tratta di uno strumento front-end, quindi manca tutta la logica back-end; i dati inseriti dall'utente vengono esportati in file di tipo xml che devono poi essere tradotti in azioni registrate dal sistema. 
 \\
 - node-red
 \\
