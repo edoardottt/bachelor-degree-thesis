@@ -4,6 +4,8 @@
 
 ![latex-logo](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/made-with-latex.svg)
 
+[Direct pdf download](example.com)
+
 Get Started 🎉
 -------
 
