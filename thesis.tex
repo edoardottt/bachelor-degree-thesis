@@ -435,6 +435,12 @@ Un \textbf{nodo di configurazione} è un tipo speciale di nodo che setta delle c
 \\
 Un \textbf{flusso} è rappresentato da un tab o foglio di lavoro ed è il metodo principale per organizzare il lavoro. Informalmente un flusso rappresenta un insieme di nodi connessi fra loro.
 \\
+Un \textbf{sottoflusso} è una collezione di nodi che vengono collassati graficamente in un unico nodo. Possono essere utilizzati per ridurre la complessità grafica del flusso, oppure per riutilizzare un gruppo di nodi più volte in un flusso.
+\begin{figure}[H]
+\caption{Esempio di sottoflusso}
+\label{fig:sottoflusso}
+\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/node-red-flows-4.jpg}
+\end{figure}
 Il \textbf{contesto} è il modo principale di condividere informazioni tra i nodi senza essere connessi fra loro. Ne esistono di tre tipi:
 \begin{itemize}
     \item Node: Visibile solamente dal nodo che setta il valore
@@ -505,14 +511,19 @@ Viene tradotto in JSON:
     }
 ]
 \end{lstlisting}
+Questo metodo rende possibile la condivisione di 
+
 \clearpage
 
-Rimangono i gruppi trovare soluzione a ciò con nodered
-\\
-Utilizzo di Docker, vantaggi e svantaggi
-\\
-Schema finale architettura
-\\
+\subsection{Problema gruppi}
+
+\clearpage
+
+\subsection{Utilizzo di Docker, vantaggi e svantaggi}
+
+\clearpage
+
+\subsection{Schema finale architettura}
 
 \clearpage
 
