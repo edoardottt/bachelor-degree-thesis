@@ -7,6 +7,77 @@
 \usepackage{amsmath}
 \usepackage{float}
 
+%Define the listing package
+\usepackage{listings} %code highlighter
+\usepackage{color} %use color
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+ 
+%Customize a bit the look
+\lstset{ %
+backgroundcolor=\color{white}, % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+basicstyle=\footnotesize, % the size of the fonts that are used for the code
+breakatwhitespace=false, % sets if automatic breaks should only happen at whitespace
+breaklines=true, % sets automatic line breaking
+captionpos=b, % sets the caption-position to bottom
+commentstyle=\color{mygreen}, % comment style
+deletekeywords={...}, % if you want to delete keywords from the given language
+escapeinside={\%*}{*)}, % if you want to add LaTeX within your code
+extendedchars=true, % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+frame=single, % adds a frame around the code
+keepspaces=true, % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+keywordstyle=\color{blue}, % keyword style
+% language=Octave, % the language of the code
+morekeywords={*,...}, % if you want to add more keywords to the set
+numbers=left, % where to put the line-numbers; possible values are (none, left, right)
+numbersep=5pt, % how far the line-numbers are from the code
+numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+rulecolor=\color{black}, % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+showspaces=false, % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+showstringspaces=false, % underline spaces within strings only
+showtabs=false, % show tabs within strings adding particular underscores
+stepnumber=1, % the step between two line-numbers. If it's 1, each line will be numbered
+stringstyle=\color{mymauve}, % string literal style
+tabsize=2, % sets default tabsize to 2 spaces
+title=\lstname % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+%END of listing package%
+ 
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+ 
+%define Javascript language
+\lstdefinelanguage{JavaScript}{
+keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+keywordstyle=\color{blue}\bfseries,
+ndkeywords={class, export, boolean, throw, implements, import, this},
+ndkeywordstyle=\color{darkgray}\bfseries,
+identifierstyle=\color{black},
+sensitive=false,
+comment=[l]{//},
+morecomment=[s]{/*}{*/},
+commentstyle=\color{purple}\ttfamily,
+stringstyle=\color{red}\ttfamily,
+morestring=[b]',
+morestring=[b]"
+}
+ 
+\lstset{
+language=JavaScript,
+extendedchars=true,
+basicstyle=\footnotesize\ttfamily,
+showstringspaces=false,
+showspaces=false,
+numbers=left,
+numberstyle=\footnotesize,
+numbersep=9pt,
+tabsize=2,
+breaklines=true,
+showtabs=false,
+captionpos=b
+}
+
 \usepackage[chapter]{minted}
 \usepackage{adjustbox}
 \usepackage{hyperref}
@@ -51,7 +122,7 @@
 
 % ======================================= ABSTRACT ================================================
 \begin{abstract}
-  abstract
+	abstract
 \end{abstract}
 \cleardoublepage
 
@@ -308,7 +379,7 @@ La soluzione a questo bisogno dovrebbe essere: \textit{facilmente utilizzabile, 
 
 Piuttosto che progettare e costruire uno strumento di End User Development da zero, si è cercato uno scheletro già pronto e maturo. La ricerca è stata piuttosto semplice, un po' meno la valutazione dei possibili candidati.
 \\
-Il primo candidato è \textbf{IFTTT} (\href{https://iftt.com}{https://ifttt.com}). È lo strumento più famoso, utilizzato da molte persone, con più di 5 milioni di download su Play Store. Il vantaggio di questa scelta è sicuramente la grande maturità della piattaforma. Gli svantaggi la difficoltà nell'integrare i nostri dispositivi con questo sistema, ma soprattutto la somiglianza con il sistema EUD da rimpiazzare, troppo semplice e con condizioni e azioni predefinite.
+Il primo candidato è \textbf{IFTTT} (\href{https://iftt.com}{https://ifttt.com}). È lo strumento più famoso, utilizzato da molte persone, con più di 5 milioni di download su Play Store. Il vantaggio di questa scelta è sicuramente la grande maturità della piattaforma. Gli svantaggi sono la difficoltà nell'integrare i nostri dispositivi con questo sistema, ma soprattutto la somiglianza con il sistema EUD da rimpiazzare, troppo semplice e con condizioni e azioni predefinite.
 \\
 Una seconda scelta è \textbf{draw.io} (\href{https://app.diagrams.net/}{https://draw.io}). Strumento completamente differente al precedente, è un creatore di diagrammi di flusso. Questo è un tipo di programmazione di azioni che lascia molta libertà all'utente, rimanendo semplice ma efficace. 
 \begin{figure}[H]
@@ -334,8 +405,8 @@ Nel nome il 'node' è dato sia dal runtime NodeJS, sia dal nome che hanno gli el
 Come si nota in figura appena sopra, i nodi sono dei rettangoli che hanno funzioni particolari:
 \begin{itemize}
     \item Nodi input: Questi nodi emettono valori e non prendono nulla in ingresso, quindi sono utilizzati per produrre dati o iniziare dei flussi. Possono avere da 1 a n valori in uscita.
-    \item Nodi intermedi: Sono nodi che hanno sia input che output. Sono utilizzati per applicare delle funzioni ai dati in ingresso, oppure il dato in ingresso viene solamente utilizzato per far iniziare una procedura intermedia. Prendono in ingresso un solo valore e possono avere da 1 a n valori in uscita.
-    \item Nodi output: Sono gli opposti dei nodi input. Non hanno valori in uscita ma solo in ingresso. Sono utilizzati per terminare un flusso, solitamente sono quindi le azioni da effettuare in caso in cui si verificano condizioni. Possono avere un solo valore in ingresso.
+    \item Nodi intermedi: Sono nodi che hanno sia input che output. Sono utilizzati per applicare delle funzioni ai dati in ingresso, oppure il dato in ingresso viene solamente utilizzato per far iniziare una procedura intermedia. Prendono in input un solo valore e possono avere da 1 a n valori in uscita.
+    \item Nodi output: Sono gli opposti dei nodi input. Non hanno valori in uscita ma solo in ingresso. Sono utilizzati per terminare un flusso, solitamente sono quindi le azioni da effettuare nel caso in cui si verificano le condizioni stabilite. Possono avere un solo valore in ingresso.
 \end{itemize}
 \begin{figure}[H]
 \caption{Esecuzione del comando shutdown}
@@ -344,12 +415,91 @@ Come si nota in figura appena sopra, i nodi sono dei rettangoli che hanno funzio
 \end{figure}
 Nella figura qui sopra abbiamo un altro esempio. Qui quando viene cliccato il pulsante a sinistra del nodo \textit{input}, il nodo invia in uscita un valore (in questo caso qualsiasi, ad esempio 3 o la stringa 'input') che fa eseguire il secondo nodo (di tipo \textit{intermedio}). Il nodo \textit{shutdown} esegue il comando `shutdown` e stampa nella console di debug lo stdout, stderr ed il return code.
 \\
+\\
 Data la facilità d'uso, il grande supporto (repository con 10+K stelle su GitHub, community molto attiva e forum ufficiale), la maturità del progetto (versione 0.2 nel 2013), la facile estendibilità ed integrazione con dispositivi IoT (come appunto i sismometri), decisamente Node-RED è lo strumento più adatto per risolvere il bisogno della community SeismoCloud.
 \\
 \clearpage
 
 \section{Architettura adattata a SeismoCloud}
 
+\subsection{Come funziona Node-RED}
+Può essere utilizzato in vari modi, ad esempio in locale su un computer, tramite Docker, su un dispositivo Raspberry oppure su alcuni sistemi Cloud (IBM Cloud, AWS, Microsoft Azure).
+\\
+Ci sono alcuni concetti di base da conoscere.
+\\
+Un \textbf{nodo} è il blocco costruttivo di base di un flusso. Le funzionalità dei nodi sono scatenate da eventi esterni (richieste HTTP o altro protocollo oppure un timer) o da input ricevuti da altri nodi. Processano il messaggio ricevuto oppure ne creano uno nuovo e possono inviare messaggi ai nodi successivi nel flusso. 
+\\
+- nodo di configurazione
+\\
+- flusso
+\\
+- contesto
+\\
+- messaggio
+\\
+- sottoflusso
+\\
+- wire
+\\
+- palette
+\\
+- workspace
+\\
+- sidebar
+\\
+Ogni flusso viene poi tradotto in codice JSON per poter essere esportato ed importato in altri ambienti.
+\\
+Questo semplice flusso:
+\begin{figure}[H]
+\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/node-red-flows-3.jpg}
+\end{figure}
+Il nodo \textit{date} non è altro che un nodo function che restituisce la data:
+\begin{lstlisting}[language=JavaScript]
+// Create a Date object from the payload
+var date = new Date(msg.payload);
+// Change the payload to be a formatted Date string
+msg.payload = date.toString();
+// Return the message so it can be sent on
+return msg;
+\end{lstlisting}
+\\
+Viene tradotto in JSON:
+\begin{lstlisting}[language=JavaScript]
+[
+    {
+        "id":"58ffae9d.a7005",
+        "type":"debug",
+        "name":"",
+        "active":true,
+        "complete":false,
+        "x":640,"y":200,
+        "wires":[]
+    },
+    {
+        "id":"17626462.e89d9c",
+        "type":"inject",
+        "name":"timestamp",
+        "topic":"",
+        "payload":"",
+        "repeat":"",
+        "once":false,
+        "x":240,
+        "y":200,
+        "wires":[["2921667d.d6de9a"]]
+    },
+    {
+        "id":"2921667d.d6de9a",
+        "type":"function",
+        "name":"date",
+        "func":"// Create a Date object from the payload\nvar date = new Date(msg.payload);\n// Change the payload to be a formatted Date string\nmsg.payload = date.toString();\n// Return the message so it can be sent on\nreturn msg;",
+        "outputs":1,
+        "x":440,
+        "y":200,
+        "wires":[["58ffae9d.a7005"]]
+    }
+]
+\end{lstlisting}
+\clearpage
 Rimangono i gruppi trovare soluzione a ciò con nodered
 \\
 Utilizzo di Docker, vantaggi e svantaggi
@@ -437,16 +587,16 @@ placeholder
 \begin{thebibliography}{9}
 
 \bibitem{Istituto Nazionale di Geologia e Vulcanologia}
-  \textbf{Istituto Nazionale di Geologia e Vulcanologia}.
-  \href{http://ingv.it}{http://ingv.it}
+	\textbf{Istituto Nazionale di Geologia e Vulcanologia}.
+	\href{http://ingv.it}{http://ingv.it}
 
 \bibitem{MathWorks}
-  \textbf{Publish MQTT messages and subscribe to message topics}.\\
-  \href{https://www.mathworks.com/help/supportpkg/raspberrypi/ref/publish-and-subscribe-to-mqtt-messages.html}{https://www.mathworks.com/help/supportpkg/raspberrypi/ref/publish-and-subscribe-to-mqtt-messages.html}
+	\textbf{Publish MQTT messages and subscribe to message topics}.\\
+	\href{https://www.mathworks.com/help/supportpkg/raspberrypi/ref/publish-and-subscribe-to-mqtt-messages.html}{https://www.mathworks.com/help/supportpkg/raspberrypi/ref/publish-and-subscribe-to-mqtt-messages.html}
 
 \bibitem{Node-RED Wiki}
-  \textbf{Node-RED Wiki}.
-  \href{https://github.com/node-red/node-red/wiki}{https://github.com/node-red/node-red/wiki}
+	\textbf{Node-RED Wiki}.
+	\href{https://github.com/node-red/node-red/wiki}{https://github.com/node-red/node-red/wiki}
 \end{thebibliography}
 
 \end{document}
