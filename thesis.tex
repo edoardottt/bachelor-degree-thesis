@@ -429,23 +429,25 @@ Ci sono alcuni concetti di base da conoscere.
 \\
 Un \textbf{nodo} è il blocco costruttivo di base di un flusso. Le funzionalità dei nodi sono scatenate da eventi esterni (richieste HTTP o altro protocollo oppure un timer) o da input ricevuti da altri nodi. Processano il messaggio ricevuto oppure ne creano uno nuovo e possono inviare messaggi ai nodi successivi nel flusso. 
 \\
-- nodo di configurazione
+Un \textbf{nodo di configurazione} è un tipo speciale di nodo che setta delle configurazioni utili agli altri nodi, ma non fa parte di nessun flusso. Ad esempio, i nodi \textit{MQTT-in} e \textit{MQTT-out} utilizzano il nodo di configurazione \textit{MQTT-broker} che rappresenta una connessione condivisa con un broker MQTT.
 \\
-- flusso
+Un \textbf{flusso} è rappresentato da un tab o foglio di lavoro ed è il metodo principale per organizzare il lavoro. Informalmente un flusso rappresenta un insieme di nodi connessi fra loro.
 \\
-- contesto
+Il \textbf{contesto} è il modo principale di condividere informazioni tra i nodi senza essere connessi fra loro. Ne esistono di tre tipi:
+\begin{itemize}
+    \item Node: Visibile solamente dal nodo che setta il valore
+    \item Flow: Visibile a tutti i nodi che appartengono allo stesso flusso (o tab)
+    \item Global: Visibile a tutti i nodi
+\end{itemize}
+Un \textbf{messaggio} è un oggetto JSON che viene passato attraverso i nodi. Di default si chiama \textit{msg} ed ha due campi: \textit{payload} e \textit{id}. 
 \\
-- messaggio
+La \textbf{palette} è posizionata sulla sinistra dell'interfaccia e lista tutti i nodi presenti nel sistema. Dei nodi extra possono essere aggiunti direttamente dall'editor.
 \\
-- sottoflusso
+Il \textbf{workspace} è lo spazio principale, dove tutti i nodi vengono posizionati in modo da creare degli automatismi.
 \\
-- wire
+La \textbf{sidebar} è uno spazio posizionato a destra del workspace in cui ci sono degli strumenti utili, ad esempio la console di debug, l'interfaccia della configurazione dei nodi e la finestra descrittiva per ogni nodo.
 \\
-- palette
-\\
-- workspace
-\\
-- sidebar
+SCRIVI QUI
 \\
 Ogni flusso viene poi tradotto in codice JSON per poter essere esportato ed importato in altri ambienti.
 \\
@@ -462,7 +464,6 @@ msg.payload = date.toString();
 // Return the message so it can be sent on
 return msg;
 \end{lstlisting}
-\\
 Viene tradotto in JSON:
 \begin{lstlisting}[language=JavaScript]
 [
