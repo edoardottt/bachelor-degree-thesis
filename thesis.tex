@@ -425,6 +425,8 @@ Data la facilità d'uso, il grande supporto (repository con 10+K stelle su GitHu
 \subsection{Come funziona Node-RED}
 Può essere utilizzato in vari modi, ad esempio in locale su un computer, tramite Docker, su un dispositivo Raspberry oppure su alcuni sistemi Cloud (IBM Cloud, AWS, Microsoft Azure).
 \\
+L'interazione con l'utente avviene tramite un browser web. 
+\\
 Ci sono alcuni concetti di base da conoscere.
 \\
 Un \textbf{nodo} è il blocco costruttivo di base di un flusso. Le funzionalità dei nodi sono scatenate da eventi esterni (richieste HTTP o altro protocollo oppure un timer) o da input ricevuti da altri nodi. Processano il messaggio ricevuto oppure ne creano uno nuovo e possono inviare messaggi ai nodi successivi nel flusso. 
@@ -447,9 +449,12 @@ Il \textbf{workspace} è lo spazio principale, dove tutti i nodi vengono posizio
 \\
 La \textbf{sidebar} è uno spazio posizionato a destra del workspace in cui ci sono degli strumenti utili, ad esempio la console di debug, l'interfaccia della configurazione dei nodi e la finestra descrittiva per ogni nodo.
 \\
-SCRIVI QUI
 \\
-Ogni flusso viene poi tradotto in codice JSON per poter essere esportato ed importato in altri ambienti.
+È molto orientato al riuso ed alla portabilità, infatti tutti i nodi o collezioni di nodi sono moduli Javascript che possono essere caricati e utilizzati poi da altri tramite NPM.
+\\
+Inoltre, ogni flusso viene poi tradotto in codice JSON per poter essere esportato ed importato in altri ambienti.
+\\
+Viene fornita anche una 'vetrina' (\href{https://flows.nodered.org}{flows.nodered.org}) dove possono essere esplorati nodi e flussi creati e pubblicati per la community.
 \\
 Questo semplice flusso:
 \begin{figure}[H]
@@ -501,11 +506,10 @@ Viene tradotto in JSON:
 ]
 \end{lstlisting}
 \clearpage
+
 Rimangono i gruppi trovare soluzione a ciò con nodered
 \\
 Utilizzo di Docker, vantaggi e svantaggi
-\\
-Spiegazione Architettura Node-RED
 \\
 Schema finale architettura
 \\
