@@ -410,7 +410,7 @@ Come si nota in figura appena sopra, i nodi sono dei rettangoli che hanno funzio
 \end{itemize}
 \begin{figure}[H]
 \caption{Esecuzione del comando shutdown}
-\label{fig:node-red-flows-example1}
+\label{fig:node-red-flows-example2}
 \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/node-red-flows-2.jpg}
 \end{figure}
 Nella figura qui sopra abbiamo un altro esempio. Qui quando viene cliccato il pulsante a sinistra del nodo \textit{input}, il nodo invia in uscita un valore (in questo caso qualsiasi, ad esempio 3 o la stringa 'input') che fa eseguire il secondo nodo (di tipo \textit{intermedio}). Il nodo \textit{shutdown} esegue il comando `shutdown` e stampa nella console di debug lo stdout, stderr ed il return code.
@@ -523,9 +523,22 @@ Questa impostazione viene ripresa nel nuovo sistema, quindi ogni gruppo deve pot
 \subsection{Utilizzo di Docker, vantaggi e svantaggi}
 
 Lo strumento che più soddisfa i requisiti imposti è \textbf{Docker}.
-Docker automatizza il deployment di applicazioni software incapsulando i programmi all'interno di contenitori astraendo dal sistema operativo Linux sottostante.
-Esso isola6
-Attraverso un file chiamato \textit{Dockerfile} viene descritto come 
+È uno dei sistemi più noti per il deployment di applicazioni software, incapsula i programmi all'interno di contenitori astraendo dal sistema operativo Linux sottostante.
+Utilizza i \textit{container}, cioè un insieme di più processi isolati dal resto del sistema.
+I container sono utili perché sono altamente portabili in tutti gli ambienti e restano integri dallo sviluppo ai test.
+\\
+Viene definita un'immagine, ossia un file chiamato Dockerfile, che definisce tutte le dipendenze ed i file necessari per creare un container.
+\\
+Differisce dalla \textbf{virtualizzazione} in:
+\begin{itemize}
+    \item Deployment semplificato: permette di impacchettare l'applicativo in un singolo elemento distribuibile
+    \item Ampia portabilità: i container possono essere creati, distrutti e replicati in qualsiasi ambiente in modo semplice e veloce
+    \item Prestazioni: Sono più leggeri e veloci delle macchine virtuali perché non hanno una emulazione del sistema operativo virtuale
+\end{itemize}
+\begin{figure}[H]
+\caption{Container vs Virtualizzazione}
+\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/vm-c.jpg}
+\end{figure}
 \clearpage
 
 \subsection{Schema finale architettura}
