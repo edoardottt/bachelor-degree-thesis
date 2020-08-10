@@ -511,16 +511,21 @@ Viene tradotto in JSON:
     }
 ]
 \end{lstlisting}
-Questo metodo rende possibile la condivisione di 
+Dato che Node-RED ha tutti i dati in-memory, per salvare i flussi creati utilizza (di default) un file chiamato \textit{flows.json}. Questo rende molto facile condividere i progetti.
 
-\clearpage
-
-\subsection{Problema gruppi}
+\subsection{Progettazione MODIFICARE}
+Il vecchio sistema di EUD rende possibile, come già introdotto, la programmazione di azioni condivisa con il proprio gruppo di appartenenza.
+\\
+Questa impostazione viene ripresa nel nuovo sistema, quindi ogni gruppo deve poter accedere ad una propria area \textit{privata} per programmare le azioni desiderate con tutti e soli i dati dei sismometri appartenenti al gruppo.
 
 \clearpage
 
 \subsection{Utilizzo di Docker, vantaggi e svantaggi}
 
+Lo strumento che più soddisfa i requisiti imposti è \textbf{Docker}.
+Docker automatizza il deployment di applicazioni software incapsulando i programmi all'interno di contenitori astraendo dal sistema operativo Linux sottostante.
+Esso isola6
+Attraverso un file chiamato \textit{Dockerfile} viene descritto come 
 \clearpage
 
 \subsection{Schema finale architettura}
