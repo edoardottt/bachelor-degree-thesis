@@ -3,7 +3,7 @@
 ## Titolo
 
 ![latex-logo](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/made-with-latex.svg)
-![overleaf](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/overleaf.png)
+![overleaf](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/overleaf.svg)
 
 [Direct pdf download](example.com)
 
