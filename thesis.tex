@@ -404,9 +404,9 @@ Nel nome il 'node' è dato sia dal runtime NodeJS, sia dal nome che hanno gli el
 \end{figure}
 Come si nota in figura appena sopra, i nodi sono dei rettangoli che hanno funzioni particolari:
 \begin{itemize}
-    \item Nodi input: Questi nodi emettono valori e non prendono nulla in ingresso, quindi sono utilizzati per produrre dati o iniziare dei flussi. Possono avere da 1 a n valori in uscita.
-    \item Nodi intermedi: Sono nodi che hanno sia input che output. Sono utilizzati per applicare delle funzioni ai dati in ingresso, oppure il dato in ingresso viene solamente utilizzato per far iniziare una procedura intermedia. Prendono in input un solo valore e possono avere da 1 a n valori in uscita.
-    \item Nodi output: Sono gli opposti dei nodi input. Non hanno valori in uscita ma solo in ingresso. Sono utilizzati per terminare un flusso, solitamente sono quindi le azioni da effettuare nel caso in cui si verificano le condizioni stabilite. Possono avere un solo valore in ingresso.
+    \item \textbf{Nodi input}: Questi nodi emettono valori e non prendono nulla in ingresso, quindi sono utilizzati per produrre dati o iniziare dei flussi. Possono avere da 1 a n valori in uscita.
+    \item \textbf{Nodi intermedi}: Sono nodi che hanno sia input che output. Sono utilizzati per applicare delle funzioni ai dati in ingresso, oppure il dato in ingresso viene solamente utilizzato per far iniziare una procedura intermedia. Prendono in input un solo valore e possono avere da 1 a n valori in uscita.
+    \item \textbf{Nodi output}: Sono gli opposti dei nodi input. Non hanno valori in uscita ma solo in ingresso. Sono utilizzati per terminare un flusso, solitamente sono quindi le azioni da effettuare nel caso in cui si verificano le condizioni stabilite. Possono avere un solo valore in ingresso.
 \end{itemize}
 \begin{figure}[H]
 \caption{Esecuzione del comando shutdown}
@@ -416,14 +416,14 @@ Come si nota in figura appena sopra, i nodi sono dei rettangoli che hanno funzio
 Nella figura qui sopra abbiamo un altro esempio. Qui quando viene cliccato il pulsante a sinistra del nodo \textit{input}, il nodo invia in uscita un valore (in questo caso qualsiasi, ad esempio 3 o la stringa 'input') che fa eseguire il secondo nodo (di tipo \textit{intermedio}). Il nodo \textit{shutdown} esegue il comando `shutdown` e stampa nella console di debug lo stdout, stderr ed il return code.
 \\
 \\
-Data la facilità d'uso, il grande supporto (repository con 10+K stelle su GitHub, community molto attiva e forum ufficiale), la maturità del progetto (versione 0.2 nel 2013), la facile estendibilità ed integrazione con dispositivi IoT (come appunto i sismometri), decisamente Node-RED è lo strumento più adatto per risolvere il bisogno della community SeismoCloud.
+Data la facilità d'uso, il grande supporto (repository con 10+K star su GitHub, community molto attiva e forum ufficiale), la maturità del progetto (versione 0.2 nel 2013, ad oggi (2020) 1.1.3), la facile estendibilità ed integrazione con dispositivi IoT (come appunto i nostri sismometri), decisamente Node-RED è lo strumento più adatto per risolvere i bisogni della community SeismoCloud.
 \\
 \clearpage
 
 \section{Architettura adattata a SeismoCloud}
 
 \subsection{Come funziona Node-RED}
-Può essere utilizzato in vari modi, ad esempio in locale su un computer, tramite Docker, su un dispositivo Raspberry oppure su alcuni sistemi Cloud (IBM Cloud, AWS, Microsoft Azure).
+Può essere utilizzato in vari modi, ad esempio su un computer in locale, tramite Docker, su un dispositivo Raspberry, oppure su alcuni sistemi Cloud (IBM Cloud, Amazon Web Services, Microsoft Azure).
 \\
 L'interazione con l'utente avviene tramite un browser web. 
 \\
@@ -513,7 +513,7 @@ Viene tradotto in JSON:
 \end{lstlisting}
 Dato che Node-RED ha tutti i dati in-memory, per salvare i flussi creati utilizza (di default) un file chiamato \textit{flows.json}. Questo rende molto facile condividere i progetti.
 
-\subsection{Progettazione MODIFICARE}
+\subsection{Progettazione ************MODIFICARE**********}
 Il vecchio sistema di EUD rende possibile, come già introdotto, la programmazione di azioni condivisa con il proprio gruppo di appartenenza.
 \\
 Questa impostazione viene ripresa nel nuovo sistema, quindi ogni gruppo deve poter accedere ad una propria area \textit{privata} per programmare le azioni desiderate con tutti e soli i dati dei sismometri appartenenti al gruppo.
