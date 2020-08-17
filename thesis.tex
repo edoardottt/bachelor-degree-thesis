@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{listingsutf8}
 \usepackage{amsmath}
+\usepackage{afterpage}
 \usepackage{float}
 
 %Define the listing package
@@ -90,6 +91,12 @@ breaklines=true,
 showtabs=false,
 captionpos=b
 }
+
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    \addtocounter{page}{-1}%
+    \newpage}
 
 \usepackage[chapter]{minted}
 \usepackage{adjustbox}
@@ -577,25 +584,31 @@ Viene fornita l'immagine di base ufficiale di Node-RED scaricabile dalla reposit
 FROM nodered/node-red@sha256:82f367ab41d19e3ebd5e9b1cc62e4f615d4b4be4fa8bc83f1bf5441ba8c0d32a
 
 # Qui vengono settate tutte le variabili d'ambiente
-ENV FLOWS="/storage/flows.json"
+ENV VAR="hello-world"
 
-VOLUME /certs
-VOLUME /storage
+# Vengono creati i volumi per la persistenza dei dati
+VOLUME /volume
 
-COPY settings.js /data/settings.js
-COPY common common
-COPY seismometer-data seismometer-data
-COPY api-seismocloud api-seismocloud
+# Tutte le cartelle vengono copiate nell'immagine
+COPY data data
 
 USER 0
-RUN chown -R node-red seismometer-data \
-    && chown -R node-red api-seismocloud
+RUN chown -R node-red data
 USER node-red
 
 RUN npm install #Tutti i nodi custom necessari
 
 CMD ["npm", "start"]
 \end{lstlisting}
+\clearpage
+
+La persistenza dei dati viene garantita dal volume (nell'esempio chiamato appunto volume). 
+\\
+È una parte del file-system che viene riservata per salvare i dati prodotti dal container in esecuzione.
+\\
+Questo garantisce che se il container va in uno stato di errore o la macchina dove viene deployato il container si spegne, i dati vengono comunque salvati in un disco fisso.
+\\
+\\
 Differisce dalla \textbf{virtualizzazione} in:
 
 \begin{itemize}
@@ -612,12 +625,24 @@ Differisce dalla \textbf{virtualizzazione} in:
 \clearpage
 
 \subsection{Schema finale architettura}
-
 \begin{figure}[H]
 \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/architettura-seismocloud2.png}
 \end{figure}
 
 \clearpage
+
+Qui con \textbf{node-RED instance} si intende un container per un gruppo specifico.
+\\
+Il container interagisce con l'interfaccia web riguardo tutta l'interazione con l'utente.
+\\
+Interagisce con i sismometri attraverso i vari protocolli per lo scambio di dati (http, mqtt...)
+\\
+Interagisce con gli smartphone nel caso in cui gli utenti decidono di ricevere notifiche o altri tipi di alert su telefoni cellulari (tipo messaggi telegram).
+\\
+Con il data server scambia informazioni con il broker mqtt e riceve informazioni sul gruppo (statistiche e dati dei sismometri) attraverso le API.
+\\
+\clearpage
+
 
 % ======================================= CHAPTER 3 ================================================
 \chapter{Implementazione delle funzionalità}
@@ -718,6 +743,11 @@ placeholder
     \textbf{Performance Evaluation of Docker Container and Virtual Machine}
     \\
     \href{https://www.sciencedirect.com/science/article/pii/S1877050920311315}{https://www.sciencedirect.com/science/article/pii/S1877050920311315}
+
+\bibitem{Best practices for writing Dockerfiles}
+    \textbf{Best practices for writing Dockerfiles}
+    \\
+    \href{https://docs.docker.com/develop/develop-images/dockerfile_best-practices/}{https://docs.docker.com/develop/develop-images/dockerfile\_best-practices/}
 
 \end{thebibliography}
 
