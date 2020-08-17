@@ -4,6 +4,7 @@
 \usepackage[pdftex]{graphicx}
 \usepackage{graphviz}
 \usepackage{graphicx}
+\usepackage{listingsutf8}
 \usepackage{amsmath}
 \usepackage{float}
 
@@ -62,7 +63,19 @@ stringstyle=\color{red}\ttfamily,
 morestring=[b]',
 morestring=[b]"
 }
- 
+
+\lstdefinelanguage{docker}{
+  keywords={FROM, RUN, COPY, ADD, ENTRYPOINT, CMD,  ENV, ARG, WORKDIR, EXPOSE, LABEL, USER, VOLUME, STOPSIGNAL, ONBUILD, MAINTAINER},
+  keywordstyle=\color{blue}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{\#},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
 \lstset{
 language=JavaScript,
 extendedchars=true,
@@ -532,18 +545,69 @@ Utilizza i \textit{container}, cioè un insieme di più processi isolati dal res
 I container sono utili perché sono altamente portabili in tutti gli ambienti e restano integri dallo sviluppo ai test.
 \\
 Viene costruita un'immagine, ossia un file chiamato Dockerfile, che definisce tutte le dipendenze ed i file necessari per creare un container.
+Una immagine Docker consiste in livelli read-only i quali rappresentano istruzioni Docker. Una istruzione aggiunge qualcosa al livello precedente.
 \\
+\\
+Esempio di Dockerfile:
+\begin{lstlisting}[language=Javascript]
+FROM ubuntu:18.04
+COPY . /app
+RUN make /app
+CMD python /app/app.py
+\end{lstlisting}
+
+Ogni istruzione crea un livello:
+
+\begin{itemize}
+    \item FROM crea un livello dall'immagine Docker di ubuntu versione 18.04
+    \item COPY aggiunge i file dalla cartella corrente del Docker client
+    \item RUN costruisce l'applicazione con make
+    \item CMD specifica quale comando eseguire nel container
+\end{itemize}
+Quando viene eseguita un'immagine e generato un container, si aggiunge un ulteriore livello sopra ai precedenti.
+\\
+Tutte le modifiche poi fatte al container in esecuzione sono eseguite su questo nuovo livello.
+\\
+Nel nostro caso, la struttura del Dockerfile è ovviamente la stessa.
+\\
+Viene fornita l'immagine di base ufficiale di Node-RED scaricabile dalla repository di DockerHub (\href{https://hub.docker.com/r/nodered/node-red/}{https://hub.docker.com/r/nodered/node-red/}).
+\\
+\begin{lstlisting}[language=docker]
+# from nodered/node-red:1.0.6-12
+FROM nodered/node-red@sha256:82f367ab41d19e3ebd5e9b1cc62e4f615d4b4be4fa8bc83f1bf5441ba8c0d32a
+
+# Qui vengono settate tutte le variabili d'ambiente
+ENV FLOWS="/storage/flows.json"
+
+VOLUME /certs
+VOLUME /storage
+
+COPY settings.js /data/settings.js
+COPY common common
+COPY seismometer-data seismometer-data
+COPY api-seismocloud api-seismocloud
+
+USER 0
+RUN chown -R node-red seismometer-data \
+    && chown -R node-red api-seismocloud
+USER node-red
+
+RUN npm install #Tutti i nodi custom necessari
+
+CMD ["npm", "start"]
+\end{lstlisting}
 Differisce dalla \textbf{virtualizzazione} in:
+
 \begin{itemize}
     \item Deployment semplificato: permette di impacchettare l'applicativo in un singolo elemento distribuibile
     \item Ampia portabilità: i container possono essere creati, distrutti e replicati in qualsiasi ambiente in modo semplice e veloce
     \item Prestazioni: Sono più leggeri e veloci delle macchine virtuali perché non hanno una emulazione del sistema operativo virtuale
 \end{itemize}
+
 \begin{figure}[H]
 \caption{Container vs Virtualizzazione}
 \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/vm-c.jpg}
 \end{figure}
-
 
 \clearpage
 
