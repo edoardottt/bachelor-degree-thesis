@@ -77,6 +77,20 @@ morestring=[b]"
   morestring=[b]"
 }
 
+\lstdefinelanguage{docker-compose-2}{
+  keywords={version, volumes, services},
+  keywordstyle=\color{blue}\bfseries,
+  keywords=[2]{image, environment, ports, container_name, ports, links, build},
+  keywordstyle=[2]\color{blue}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{\#},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
 \lstset{
 language=JavaScript,
 extendedchars=true,
@@ -621,6 +635,11 @@ Differisce dalla \textbf{virtualizzazione} in:
 \caption{Container vs Virtualizzazione}
 \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/vm-c.jpg}
 \end{figure}
+Questa divisione netta fra i container si presta molto al nostro caso. Ogni container avrà in esecuzione una instanza di node-red configurata con i dati di un determinato gruppo.
+\\
+Dato che ogni container è isolato, non ci sono problemi di dati condivisi fra i vari gruppi.
+\\
+QUI SE POSSIBILE INSERIRE FOTO DEL PAPER DOCKER VS VM (BIBLIO n'6).
 
 \clearpage
 
@@ -641,6 +660,40 @@ Interagisce con gli smartphone nel caso in cui gli utenti decidono di ricevere n
 \\
 Con il data server scambia informazioni con il broker mqtt e riceve informazioni sul gruppo (statistiche e dati dei sismometri) attraverso le API.
 \\
+\\
+Il deploy di tanti servizi può essere semplificato utilizzando \textbf{docker-compose}.
+
+\begin{lstlisting}[language=docker-compose-2]
+version: '3'
+services:
+
+  seismocloud-nodered-1:
+    restart: always
+    image: seismocloud-nodered:latest
+    environment:
+      - NUM_GROUP = 2222345435
+    ports:
+      - 1880:1880
+    volumes:
+      - ./volume:/volume
+      
+  seismocloud-nodered-2:
+    restart: always
+    image: seismocloud-nodered:latest
+    environment:
+      - NUM_GROUP = 2222345436
+    ports:
+      - 1880:1880
+    volumes:
+      - ./volume:/volume
+\end{lstlisting}
+Compose è uno strumento per definire ed eseguire applicazioni Docker multi-container.
+\\
+In questo caso appunto, vengono eseguiti due servizi node-red con immagine customizzata (seismocloud-nodered) per due differenti gruppi.
+\\
+Con un singolo comando si possono eseguire tutti i servizi configurati in precedenza (\textit{docker-compose up}), oppure stopparli (\textit{docker-compose stop}) e con un altro farli ripartire (\textit{docker-compose restart}).
+\\
+Se, mentre tutti i servizi sono in esecuzione, voglio modificare lo stato di uno solo posso farlo con i comandi di Docker.
 \clearpage
 
 
