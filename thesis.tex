@@ -517,19 +517,21 @@ Dato che Node-RED ha tutti i dati in-memory, per salvare i flussi creati utilizz
 Il vecchio sistema di EUD rende possibile, come già introdotto, la programmazione di azioni condivisa con il proprio gruppo di appartenenza.
 \\
 Questa impostazione viene ripresa nel nuovo sistema, quindi ogni gruppo deve poter accedere ad una propria area \textit{privata} per programmare le azioni desiderate con tutti e soli i dati dei sismometri appartenenti al gruppo.
+\\
+La ragione principale di questa scelta è che in questo modo si hanno molti più dati disponibili. In media ogni gruppo ha una decina di sismometri attivi.
+\\
+Così posso programmare azioni sulla base di dati provenienti da più fonti, dislocate in una porzione di territorio, che aumentano l'affidabilità dei dati.
 
 \clearpage
 
 \subsection{Utilizzo di Docker, vantaggi e svantaggi}
 
 Lo strumento che più soddisfa i requisiti imposti è \textbf{Docker}.
-È uno dei sistemi più noti per il deployment di applicazioni software, incapsula i programmi all'interno di contenitori astraendo dal sistema operativo Linux sottostante.
+È uno dei sistemi più noti per il deployment di applicazioni software, incapsula i programmi all'interno di contenitori astraendo dal sistema operativo sottostante.
 Utilizza i \textit{container}, cioè un insieme di più processi isolati dal resto del sistema.
 I container sono utili perché sono altamente portabili in tutti gli ambienti e restano integri dallo sviluppo ai test.
 \\
-Viene definita un'immagine, ossia un file chiamato Dockerfile, che definisce tutte le dipendenze ed i file necessari per creare un container.
-\\
-Il container viene creato su più livelli. Ogni modifica 
+Viene costruita un'immagine, ossia un file chiamato Dockerfile, che definisce tutte le dipendenze ed i file necessari per creare un container.
 \\
 Differisce dalla \textbf{virtualizzazione} in:
 \begin{itemize}
@@ -546,6 +548,10 @@ Differisce dalla \textbf{virtualizzazione} in:
 \clearpage
 
 \subsection{Schema finale architettura}
+
+\begin{figure}[H]
+\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/architettura-seismocloud2.png}
+\end{figure}
 
 \clearpage
 
