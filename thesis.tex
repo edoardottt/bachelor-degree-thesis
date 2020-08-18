@@ -7,6 +7,7 @@
 \usepackage{listingsutf8}
 \usepackage{amsmath}
 \usepackage{afterpage}
+\usepackage{subfig}
 \usepackage{float}
 
 %Define the listing package
@@ -606,7 +607,6 @@ VOLUME /volume
 # Tutte le cartelle vengono copiate nell'immagine
 COPY data data
 
-USER 0
 RUN chown -R node-red data
 USER node-red
 
@@ -638,10 +638,24 @@ Differisce dalla \textbf{virtualizzazione} in:
 Questa divisione netta fra i container si presta molto al nostro caso. Ogni container avrà in esecuzione una instanza di node-red configurata con i dati di un determinato gruppo.
 \\
 Dato che ogni container è isolato, non ci sono problemi di dati condivisi fra i vari gruppi.
-\\
-QUI SE POSSIBILE INSERIRE FOTO DEL PAPER DOCKER VS VM (BIBLIO n'6).
+
+INSERIRE PERFORMANCE PARAGRAFO PAPER
+
+\begin{figure}
+    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-1.jpg}
+    \label{fig:docker-vm-1}
+\end{figure}
+
+
+\begin{figure}
+\begin{tabular}{cc}
+  \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-2.jpg} &   \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-3.jpg} \\
+ \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-4.jpg} &   \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-5.jpg} \\
+\end{tabular}
+\end{figure}
 
 \clearpage
+
 
 \subsection{Schema finale architettura}
 \begin{figure}[H]
@@ -693,7 +707,7 @@ In questo caso appunto, vengono eseguiti due servizi node-red con immagine custo
 \\
 Con un singolo comando si possono eseguire tutti i servizi configurati in precedenza (\textit{docker-compose up}), oppure stopparli (\textit{docker-compose stop}) e con un altro farli ripartire (\textit{docker-compose restart}).
 \\
-Se, mentre tutti i servizi sono in esecuzione, voglio modificare lo stato di uno solo posso farlo con i comandi di Docker.
+Se, mentre tutti i servizi sono in esecuzione, si vuole modificare lo stato di uno solo è possibile farlo con i comandi di Docker.
 \clearpage
 
 
