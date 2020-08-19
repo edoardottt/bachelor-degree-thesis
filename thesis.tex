@@ -281,15 +281,26 @@ La concentrazione maggiore di terremoti in Italia è nell'appennino e nel sud It
 \includegraphics[width=0.15\textwidth]{Chapter-1/ingv.jpg}
 \end{wrapfigure}
 
-SeismoCloud è una rete di dispositivi IoT (Internet of Things) connessi fra loro a basso costo distribuiti in tutta Italia.
-Ha come scopo l'\textit{Earthquake Early Warning}, ossia monitorare l'attività sismica e, nel caso viene rilevato un terremoto, notificare le persone interessate.
+SeismoCloud è una rete di dispositivi IoT (Internet of Things) a basso costo connessi fra loro distribuiti in tutta Italia.
+Ha come scopo l'\textbf{Earthquake Early Warning}, ossia monitorare l'attività sismica e, nel caso viene rilevato un terremoto, notificare le persone interessate.
 L'obiettivo specifico dell'EEW è l'avviso \textbf{in tempo reale} di un possibile sisma.
 I sismometri possono essere costruiti personalmente se si ha capacità di elettronica di base, altrimenti viene utilizzato il sensore interno di uno smartphone.
+Come si può notare dalla Figura \ref{fig:RSS} la \textbf{Rete Sismica SeismoCloud} si estende su tutto il territorio nazionale. Si contano circa 100 sismometri attivi.
+Ad oggi il sistema EEW non è attivo perché i sismometri presenti non bastano a compiere delle rilevazioni sufficienti a stabilire l'effettiva presenza di un sisma.
+I nodi della rete sono ben distribuiti nel nord e centro Italia, male nel Sud. Questo è un problema perché l'attività sismica principale italiana si sviluppa lungo la catena appenninica fino in Sicilia.
+Grande menzione meritano anche i vulcani attivi (Etna, Stromboli, Vesuvio, Vulcano).
 È un progetto nato dall'Università La Sapienza e l'INGV. Viene presentato anche nelle scuole per sensibilizzare gli studenti sul tema terremoti ed
 utilizzare questo progetto come
 strumento didattico.
-Il codice di alcune porzioni di sistema è disponibili su GitHub sotto
+Il codice di alcune porzioni di sistema è disponibile su GitHub sotto
 l'organizzazione \href{https://github.com/SapienzaApps}{SapienzaApps}.
+
+\begin{figure}[ht]
+\centering
+\caption{Rete Sismica SeismoCloud}
+\label{fig:RSS}
+\includegraphics[width=0.55\textwidth]{Chapter-1/seismoitalia.jpg}
+\end{figure}
 
 \subsection{Architettura di sistema}
 I sismometri sono di due tipologie: \textit{fissi} e \textit{mobili}.
@@ -299,28 +310,34 @@ I \textbf{sismometri mobili} invece utilizzano l'applicazione per smartphone, ab
 Devono essere appoggiati su un piano orizzontale, per esempio un tavolo.
 Durante la registrazione di un nuovo sismometro fisso, esso viene localizzato per conoscere la sua posizione (fondamentale al rilevamento corretto dei sismi), mentre i sismometri mobili aggiornano di continuano la loro posizione. Nonostante ciò la privacy può essere conservata mostrando il sismometro nella mappa pubblica con una finta posizione casuale nel raggio di 2km.
 I sismometri utilizzano il protocollo ISO standard \textbf{MQTT} (Message Queue Telemetry Transport) per inviare e ricevere messaggi di controllo e dati.
+
 \begin{figure}[ht]
 \centering
 \label{fig:mqtt}
 \includegraphics[width=1\textwidth]{Chapter-1/mqtt.jpg}
 \end{figure}
 Viene utilizzato questo protocollo perché è stato progettato per i dispositivi IoT, dato che questi ultimi hanno, solitamente, una batteria con piccola capienza ed in generale risorse limitate. Rispetto al precedente protocollo HTTP, esso invia messaggi ad alta affidabilità, ha una bassa latenza ed un basso overhead\cite{ottimizzazione}. In MQTT, il \texttt{topic} è una stringa UTF-8 che un broker utilizza per filtrare i messaggi. 
-Si può considerare come una etichetta che viene affissa a dei valori che si riferiscono tutti alla stessa cosa. Un broker è il responsabile della comunicazione tra i vari client connessi. I topic hanno una gerarchia basata a livelli. Ogni livello è separato da uno slash. 
+Si può considerare come una etichetta che viene affissa a dei valori che si riferiscono tutti allo stesso argomento. Un broker è il responsabile della comunicazione tra i vari client connessi. I topic hanno una gerarchia basata a livelli. Ogni livello è separato da uno slash. 
 Ad esempio il topic che si riferisce alla temperatura del sismometro con identificativo $34$ potrebbe essere \texttt{sensor/34/temperature}.
-Dato che MQTT è un protocollo di tipo \textit{publish/subscribe}, i client possono pubblicare dati sun un topic, i quali verranno ricevuti dai client che sono iscritti a quel determinato topic.
-I client possono solamente iscriversi ad alcuni topic, oppure solamente pubblicare dati su topic senza iscriversi, oppure possono eseguire entrambe le operazioni.
-I dati inviati vengono elaborati in un server centrale che li gestisce, compie dei calcoli su di essi (allo scopo di identificare una possibile scossa di terremoto e lanciare un Earthquake Early Warning) e li archivia.
-Come già detto, i dati che i sismometri rilevano vengono salvati in un database. Quando gli utenti richiedono questi dati non viene utilizzato il protocollo MQTT, ma il protocollo HTTP.
+Dato che MQTT è un protocollo di tipo \textit{publish/subscribe}, i client possono pubblicare dati relativi ad un topic, i quali verranno ricevuti dai client che sono iscritti a quel determinato topic.
+I client sono liberi di scegliere le azioni da compiere: possono solamente iscriversi ad alcuni topic (o a tutti), oppure solamente pubblicare dati su topic senza iscriversi, oppure possono eseguire entrambe le operazioni.
+I dati inviati vengono poi elaborati in un server centrale che li gestisce, compie dei calcoli su di essi (allo scopo di identificare una possibile scossa di terremoto e attivare una notifica di Earthquake Early Warning) e li archivia in un database. 
+
+\clearpage
+
+Quando gli utenti richiedono i dati (da app o interfaccia web) non viene utilizzato il protocollo MQTT, ma il protocollo HTTP (Hyper Text Transfer Protocol).
 Per i messaggi inviati tramite HTTP viene utilizzato lo stile architetturale \textbf{REST} (REpresentational State Transfer).
 Questo schema è definito da dei principi \cite{rest}:
 \begin{itemize}
-  \item Tutto è considerato una risorsa
-  \item Ogni risorsa è identificabile da un URI (Uniform Resource Identifier)
-  \item Usa metodi HTTP standard (GET, POST, PUT, DELETE)
-  \item Possibili rappresentazioni multiple per la stessa risorsa
-  \item La comunicazione deve essere sempre senza stato
+  \item \texttt{Client-Server}: Separare l'interfaccia dalla logica dei dati aumenta la portabilità del sistema.
+  \item \texttt{Stateless}: Ogni richiesta dal client al server non deve basarsi su altri dati se non quelli interni alla richiesta
+  \item \texttt{Cacheable}: I dati, se possibile, devono essere salvati nella cache del client per utilizzi futuri.
+  \item \texttt{Interfacce uniformi}: Prediligere identificazione delle risorse; manipolazione delle risorse tramite rappresentazioni; messaggi auto-esplicativi; hypermedia come motore dello stato dell'applicazione.
+  \item \texttt{Sistema a livelli}: un sistema composto da più livelli indipendenti rende il sistema modulare.
+  \item \texttt{Codice su richiesta (opzionale)}: È permesso scaricare ed eseguire codice (applet o script) per snellire il client.
 \end{itemize}
-Un esempio di risorsa REST è: \texttt{example.domain/sensor/sensor-id/quake}, dove \texttt{sensor-id} è l'identificatore unico per un sensore.
+RISORSA [https://restfulapi.net/]
+Un esempio di risorsa in stile REST è: \texttt{example.domain/sensor/sensor-id/quake}, dove \texttt{sensor-id} è l'identificatore unico per un sensore.
 Tramite l'app mobile (disponibile per Android e iOS) si registrano i nuovi sismometri (sia fissi che mobili). Il sismometro interno viene registrato automaticamente quando viene scaricata l'applicazione per la prima volta. Con i sismometri fissi, quest'ultimo crea una connessione Wi-Fi chiamata \textit{SeismoCloud}. L'utente ci si collega ed inserisce i dati per connettersi alla rete Wi-Fi locale. Successivamente in automatico il dispositivo fisso si collega alla rete Wi-Fi e l'app cerca di trovare nella rete un sismometro.
 In entrambi i casi viene richiesto di consentire all'acquisizione della posizione GPS e un nome per il nuovo sismometro.
 Attivando un sismometro viene prodotta una mole consistente di dati.
@@ -343,23 +360,6 @@ Ad esempio, si può ricevere un messaggio automatico tramite Telegram ogni volta
 \label{fig:ArchitetturaSeismoCloud}
 \includegraphics[width=1\textwidth]{Chapter-1/architettura-seismocloud.png}
 \end{figure}
-
-\clearpage
-
-\subsection{Un lavoro di gruppo}
-
-\begin{wrapfigure}[14]{r}{0.55\textwidth}
-\caption{Rete Sismica SeismoCloud}
-\label{fig:RSS}
-\includegraphics[width=0.55\textwidth]{Chapter-1/seismoitalia.jpg}
-\end{wrapfigure}
-Come si può notare dalla Figura \ref{fig:RSS} la \textbf{Rete Sismica SeismoCloud} si estende su tutto il territorio nazionale. Si contano circa 100 sismometri attivi.\\
-Ad oggi il sistema EEW non è attivo perché i sismometri presenti non bastano a compiere delle rilevazioni sufficienti.
-
-I nodi della rete sono ben distribuiti nel centro Italia, poco nel Sud. Questo è un problema perché l'attività sismica principale in Italia si sviluppa lungo la catena appenninica fino in Sicilia. \\
-Grande menzione meritano anche i \\vulcani attivi (Etna, Stromboli, Vesuvio, \\Vulcano).\\
-
-\subsection{Bisogni della community}
 
 \clearpage
 
@@ -616,9 +616,9 @@ Questa divisione netta fra i container si presta molto al nostro caso. Ogni cont
 Dato che ogni container è isolato, non ci sono problemi di dati condivisi fra i vari gruppi.
 
 
-Come si può notare dai grafici nelle prossime pagine, nello studio "Performance Evaluation of Docker Container and Virtual Machine" (di Amit M. Potdara, Narayan D. G., Shivaraj Kengond e Mohammed Moin Mulla), ci sono molti vantaggi prestazionali nell'utilizzare i container Docker invece di macchine virtuali.
+Come si può notare dai grafici nelle prossime pagine, tratti dallo studio di \textit{Potdara et al.}\cite{dockervsvm}, ci sono molti vantaggi prestazionali nell'utilizzare i container Docker invece di macchine virtuali.
 
-Come viene scritto sul paper, \begin{quoting}[font=itshape, begintext={``}, endtext={``}]
+Come viene scritto nel paper, \begin{quoting}[font=itshape, begintext={``}, endtext={``}]
 Le prestazioni computazionali possono essere misurate dal numero di operazioni che il sistema performa in un dato tempo (eventi/sec) o dal tempo di completamento di un certo compito. I risultati maggiormente dipendono dal numero di core della CPU virtuale che è allocata nel server. La comparazione nei test delle prestazioni della CPU è stato fatta utilizzando gli strumenti sysbench, Phoronix e Apache benchmark.
 \end{quoting}
 
@@ -626,7 +626,7 @@ Le prestazioni computazionali possono essere misurate dal numero di operazioni c
     \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-1.jpg}
     \label{fig:docker-vm-1}
 \end{figure}
-Sono state comparate le prestazioni della CPU, come già anticipato sopra, con Sysbench. È stato utilizzato il metodo \textbf{Massimo numero primo}.
+Sono state comparate le prestazioni della CPU, come già anticipato sopra, con Sysbench. È stato utilizzato il metodo del \textbf{massimo numero primo}.
 
 Viene dato un tempo massimo, in questo caso 60 secondi e deve essere dato in risultato il numero primo massimo minore di 50000 con 4 thread operativi.
 
