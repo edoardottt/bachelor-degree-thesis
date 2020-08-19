@@ -442,10 +442,10 @@ Nel nome il 'node' è dato sia dal runtime NodeJS, sia dal nome che hanno gli el
 \label{fig:node-red-flows-example1}
 \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/node-red-flows-1.jpg}
 \end{figure}
-Come si nota in figura appena sopra, i nodi sono dei rettangoli che hanno funzioni particolari:
+Come si nota in figura \ref{fig:node-red-flows-example1}, i nodi sono dei rettangoli che hanno funzioni particolari:
 \begin{itemize}
     \item \textbf{Nodi input}: Questi nodi emettono valori e non prendono nulla in ingresso, quindi sono utilizzati per produrre dati o iniziare dei flussi. Possono avere da 1 a n valori in uscita.
-    \item \textbf{Nodi intermedi}: Sono nodi che hanno sia input che output. Sono utilizzati per applicare delle funzioni ai dati in ingresso, oppure il dato in ingresso viene solamente utilizzato per far iniziare una procedura intermedia. Prendono in input un solo valore e possono avere da 1 a n valori in uscita.
+    \item \textbf{Nodi intermedi}: Sono nodi che hanno sia input che output. Sono utilizzati per applicare delle funzioni ai dati in ingresso, oppure il dato in ingresso viene solamente utilizzato per far iniziare una procedura intermedia. Prendono in input un solo valore e possono avere da $1$ a $n$ valori in uscita.
     \item \textbf{Nodi output}: Sono gli opposti dei nodi input. Non hanno valori in uscita ma solo in ingresso. Sono utilizzati per terminare un flusso, solitamente sono quindi le azioni da effettuare nel caso in cui si verificano le condizioni stabilite. Possono avere un solo valore in ingresso.
 \end{itemize}
 \begin{figure}[H]
@@ -453,20 +453,18 @@ Come si nota in figura appena sopra, i nodi sono dei rettangoli che hanno funzio
 \label{fig:node-red-flows-example2}
 \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/node-red-flows-2.jpg}
 \end{figure}
-Nella figura qui sopra abbiamo un altro esempio. Qui quando viene cliccato il pulsante a sinistra del nodo \textit{input}, il nodo invia in uscita un valore (in questo caso qualsiasi, ad esempio 3 o la stringa 'input') che fa eseguire il secondo nodo (di tipo \textit{intermedio}). Il nodo \textit{shutdown} esegue il comando `shutdown` e stampa nella console di debug lo stdout, stderr ed il return code.
+Nella figura \ref{fig:node-red-flows-example2} abbiamo un altro esempio. Qui quando viene cliccato il pulsante a sinistra del nodo \textit{input}, il nodo invia in uscita un valore (in questo caso qualsiasi, ad esempio 3 o la stringa 'input') che fa eseguire il secondo nodo (di tipo \textit{intermedio}). Il nodo \textit{shutdown} esegue il comando `shutdown` e stampa nella console di debug lo stdout, stderr ed il return code.
 
 Data la facilità d'uso, il grande supporto (repository con 10+K star su GitHub, community molto attiva e forum ufficiale), la maturità del progetto (versione 0.2 nel 2013, ad oggi (2020) 1.1.3), la facile estendibilità ed integrazione con dispositivi IoT (come appunto i nostri sismometri), decisamente Node-RED è lo strumento più adatto per risolvere i bisogni della community SeismoCloud.
 
 \clearpage
 
-\section{Architettura adattata a SeismoCloud}
+\section{Implementazione di Node-RED per SeismoCloud}
 
 \subsection{Come funziona Node-RED}
-Può essere utilizzato in vari modi, ad esempio su un computer in locale, tramite Docker, su un dispositivo Raspberry, oppure su alcuni sistemi Cloud (IBM Cloud, Amazon Web Services, Microsoft Azure).
+Può essere utilizzato in vari modi, ad esempio: su un computer in locale, tramite Docker, su un dispositivo Raspberry, oppure su alcuni sistemi Cloud (IBM Cloud, Amazon Web Services, Microsoft Azure).
 
 L'interazione con l'utente avviene tramite un browser web. 
-
-Ci sono alcuni concetti di base da conoscere.
 
 Un \textbf{nodo} è il blocco costruttivo di base di un flusso. Le funzionalità dei nodi sono scatenate da eventi esterni (richieste HTTP o altro protocollo oppure un timer) o da input ricevuti da altri nodi. Processano il messaggio ricevuto oppure ne creano uno nuovo e possono inviare messaggi ai nodi successivi nel flusso. 
 
@@ -501,7 +499,7 @@ Inoltre, ogni flusso viene poi tradotto in codice JSON per poter essere esportat
 
 Viene fornita anche una 'vetrina' (\href{https://flows.nodered.org}{flows.nodered.org}) dove possono essere esplorati nodi e flussi creati e pubblicati per la community.
 
-Questo semplice flusso:
+Esempio di un semplice flusso Node-RED:
 \begin{figure}[H]
 \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/node-red-flows-3.jpg}
 \end{figure}
@@ -558,8 +556,6 @@ Il vecchio sistema di EUD rende possibile, come già introdotto, la programmazio
 Questa impostazione viene ripresa nel nuovo sistema, quindi ogni membro di un gruppo deve poter accedere alla propria \textit{istanza di gruppo di Node-RED} per programmare le azioni desiderate con tutti e soli i dati dei sismometri appartenenti al gruppo.
 
 La ragione principale di questa scelta è che in questo modo si hanno molti più dati disponibili. Infatti, in media ogni gruppo ha una decina di sismometri attivi.
-
-Così posso programmare azioni sulla base di dati provenienti da più fonti, dislocate in una porzione di territorio, che aumentano l'affidabilità dei dati.
 
 \clearpage
 
