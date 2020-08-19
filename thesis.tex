@@ -285,7 +285,9 @@ SeismoCloud è una rete di dispositivi IoT (Internet of Things) connessi fra lor
 Ha come scopo l'\textit{Earthquake Early Warning}, ossia monitorare l'attività sismica e, nel caso viene rilevato un terremoto, notificare le persone interessate.
 L'obiettivo specifico dell'EEW è l'avviso \textbf{in tempo reale} di un possibile sisma.
 I sismometri possono essere costruiti personalmente se si ha capacità di elettronica di base, altrimenti viene utilizzato il sensore interno di uno smartphone.
-È un progetto nato dall'Università La Sapienza e l'INGV.
+È un progetto nato dall'Università La Sapienza e l'INGV. Viene presentato anche nelle scuole per sensibilizzare gli studenti sul tema terremoti ed
+utilizzare questo progetto come
+strumento didattico.
 
 \subsection{Architettura di sistema}
 I sismometri sono di due tipologie: \textit{fissi} e \textit{mobili}.
@@ -295,17 +297,20 @@ I \textbf{sismometri mobili} invece utilizzano l'applicazione per smartphone, ab
 Devono essere appoggiati su un piano orizzontale, per esempio un tavolo.
 Durante la registrazione di un nuovo sismometro fisso, esso viene localizzato per conoscere la sua posizione (fondamentale al rilevamento corretto dei sismi), mentre i sismometri mobili aggiornano di continuano la loro posizione. Nonostante ciò la privacy può essere conservata mostrando il sismometro nella mappa pubblica con una finta posizione casuale nel raggio di 2km.
 I sismometri utilizzano il protocollo ISO standard \textbf{MQTT} (Message Queue Telemetry Transport) per inviare e ricevere messaggi di controllo e dati.
-Viene utilizzato questo protocollo perché è stato progettato per i dispositivi IoT, dato che questi ultimi hanno, solitamente, una batteria con piccola capienza ed in generale risorse limitate. Rispetto al precedente protocollo HTTP, esso invia messaggi ad alta affidabilità, ha una bassa latenza ed un basso overhead. I client si iscrivono ad un \texttt{topic}, ossia un identificatore che si riferisce ad un dato ben preciso (ad esempio \texttt{sensor/temperature}).
-Oltre a ricevere dati, posso \textit{pubblicarli}, cioè inviare dati riferiti ad un topic, dati che gli iscritti al topic riceveranno. 
-I dati inviati vengono elaborati in un server centrale che li gestisce, compie dei calcoli su di essi (allo scopo di identificare una possibile scossa di terremoto e lanciare un Earthquake Early Warning) e li archivia.
-
 \begin{figure}[ht]
+\centering
+\label{fig:mqtt}
 \includegraphics[width=1\textwidth]{Chapter-1/mqtt.jpg}
 \end{figure}
-
-Per i messaggi di invio e ricezione dei sismometri e per tutti i dati prodotti da essi viene utilizzato lo stile architetturale \textbf{REST} (REpresentational State Transfer).
-
-Questo schema è definito da dei principi: 
+Viene utilizzato questo protocollo perché è stato progettato per i dispositivi IoT, dato che questi ultimi hanno, solitamente, una batteria con piccola capienza ed in generale risorse limitate. Rispetto al precedente protocollo HTTP, esso invia messaggi ad alta affidabilità, ha una bassa latenza ed un basso overhead\cite{ottimizzazione}. In MQTT, il \texttt{topic} è una stringa UTF-8 che un broker utilizza per filtrare i messaggi. 
+Si può considerare come una etichetta che viene affissa a dei valori che si riferiscono tutti alla stessa cosa. Un broker è il responsabile della comunicazione tra i vari client connessi. I topic hanno una gerarchia basata a livelli. Ogni livello è separato da uno slash. 
+Ad esempio il topic che si riferisce alla temperatura del sismometro con identificativo $34$ potrebbe essere \texttt{sensor/34/temperature}.
+Dato che MQTT è un protocollo di tipo \textit{publish/subscribe}, i client possono pubblicare dati sun un topic, i quali verranno ricevuti dai client che sono iscritti a quel determinato topic.
+I client possono solamente iscriversi ad alcuni topic, oppure solamente pubblicare dati su topic senza iscriversi, oppure possono eseguire entrambe le operazioni.
+I dati inviati vengono elaborati in un server centrale che li gestisce, compie dei calcoli su di essi (allo scopo di identificare una possibile scossa di terremoto e lanciare un Earthquake Early Warning) e li archivia.
+Come già detto, i dati che i sismometri rilevano vengono salvati in un database. Quando gli utenti richiedono questi dati non viene utilizzato il protocollo MQTT, ma il protocollo HTTP.
+Per i messaggi inviati tramite HTTP viene utilizzato lo stile architetturale \textbf{REST} (REpresentational State Transfer).
+Questo schema è definito da dei principi \cite{rest}:
 \begin{itemize}
   \item Tutto è considerato una risorsa
   \item Ogni risorsa è identificabile da un URI (Uniform Resource Identifier)
@@ -313,14 +318,18 @@ Questo schema è definito da dei principi:
   \item Possibili rappresentazioni multiple per la stessa risorsa
   \item La comunicazione deve essere sempre senza stato
 \end{itemize}
-Un esempio di risorsa in stile REST è: \texttt{example.domain/sensor/sensor-id/connect}, dove \texttt{sensor-id} è l'identificatore unico per un sensore.
-
-Tramite l'app mobile (disponibile per Android e iOS) è possibile visualizzare la lista dei propri sismometri, una mappa aggiornata in tempo reale con i sismometri attivi e i terremoti recenti, una lista di terremoti con relativa magnitudo, posizione e profondità dell'ipocentro (ordinati cronologicamente) e infine alcuni informazioni utili.
+Un esempio di risorsa REST è: \texttt{example.domain/sensor/sensor-id/quake}, dove \texttt{sensor-id} è l'identificatore unico per un sensore.
+Tramite l'app mobile (disponibile per Android e iOS) si registrano i nuovi sismometri (sia fissi che mobili). Il sismometro interno viene registrato automaticamente quando viene scaricata l'applicazione per la prima volta. Con i sismometri fissi, quest'ultimo crea una connessione Wi-Fi chimata SeismoCloud. L'utente ci si collega ed inserisce i dati per connettersi alla rete Wi-Fi locale. Successivamente in automatico il dispositivo fisso si collega alla rete Wi-Fi e l'app cerca di trovare nella rete un sismometro.
+In entrambi i casi viene richiesto di consentire all'acquisizione della posizione GPS e un nome per il nuovo sismometro.
+Inoltre è possibile visualizzare la lista dei propri sismometri, una mappa aggiornata in tempo reale con i sismometri attivi e i terremoti recenti, una lista di terremoti con relativa magnitudo, posizione e profondità dell'ipocentro (ordinati cronologicamente) e infine alcuni informazioni utili.
 È disponibile anche una interfaccia web è possibile visualizzare tutte le informazioni prima citate ed in più una dashboard personalizzata.
 Nella dashboard personale è possibile visualizzare due grafici che mostrano il tempo di utilizzo assoluto e settimanale di ogni sismometro attivo.
 Dopo l'effettiva autenticazione (tramite password o QRCode) si entra nella parte privata, ossia relativa ad un determinato \textit{gruppo} (insiemi di sismometri raggruppati per locazione).
 Qui, oltre alle funzionalità citate, è presente un sistema di \textbf{EUD} (End User Development).
-È un sistema che permette agli utenti di programmare delle azioni e svolgere dei compiti quando si verificano opportune condizioni.
+Dalla pagina Wikipedia \cite{wikieud}:
+\begin{quoting}[font=itshape, begintext={``}, endtext={``}]
+Lo sviluppo per l'utente finale (EUD) o la programmazione per l'utente finale (EUP) si riferisce ad attività e strumenti che consentono agli utenti finali, persone che non sono sviluppatori di software professionisti, di programmare i computer. Le persone che non sono sviluppatori professionisti possono utilizzare gli strumenti EUD per creare o modificare artefatti software (descrizioni di comportamenti automatizzati) e oggetti di dati complessi senza una conoscenza significativa di un linguaggio di programmazione.
+\end{quoting}
 Ad esempio, si può ricevere un messaggio automatico tramite Telegram ogni volta che il mio sismometro vibra.
 
 \begin{figure}
@@ -340,22 +349,19 @@ Ad esempio, si può ricevere un messaggio automatico tramite Telegram ogni volta
 \label{fig:RSS}
 \includegraphics[width=0.55\textwidth]{Chapter-1/seismoitalia.jpg}
 \end{wrapfigure}
-Come si può notare dalla Figura \ref{fig:RSS} (a lato) la \textbf{Rete Sismica SeismoCloud} si estende su tutto il territorio nazionale. Si contano circa 100 sismometri attivi.\\
+Come si può notare dalla Figura \ref{fig:RSS} la \textbf{Rete Sismica SeismoCloud} si estende su tutto il territorio nazionale. Si contano circa 100 sismometri attivi.\\
 Ad oggi il sistema EEW non è attivo perché i sismometri presenti non bastano a compiere delle rilevazioni sufficienti.
 
 I nodi della rete sono ben distribuiti nel centro Italia, poco nel Sud. Questo è un problema perché l'attività sismica principale in Italia si sviluppa lungo la catena appenninica fino in Sicilia. \\
-Grande menzione meritano anche i \\vulcani attivi (Etna, Stromboli, Vesuvio, \\Vulcano).\\ La community è attiva su vari canali: \\un gruppo su Telegram ed uno su \\Facebook.\\
+Grande menzione meritano anche i \\vulcani attivi (Etna, Stromboli, Vesuvio, \\Vulcano).\\
 Il codice di alcune porzioni di sistema \\è disponibili su GitHub sotto
 \\
-l'organizzazione \href{https://github.com/SapienzaApps}{SapienzaApps}.\\
-SeismoCloud viene presentato anche nelle \\scuole per sensibilizzare gli studenti \\sul tema terremoti ed
-utilizzare \\questo progetto come
-strumento didattico.
+l'organizzazione \href{https://github.com/SapienzaApps}{SapienzaApps}.
 
 \subsection{Bisogni della community}
 
-Attivando un sismometro produco una mole abbastanza consistente di dati.\\
-Con una cadenza periodica (qualche minuto, dipende dal carico del sistema) vengono pubblicati questi dati: indirizzo IP locale e pubblico, indirizzo MAC e qualità del segnale della rete Wi-Fi, localizzazione e temperatura del sismometro, soglia attuale (valore utile alla rilevazione di una vibrazione).\\
+Attivando un sismometro viene prodotta una mole consistente di dati.\\
+Con una cadenza periodica (qualche minuto, dipende dal carico del sistema) vengono pubblicati: indirizzo IP locale e pubblico, indirizzo MAC e qualità del segnale della rete Wi-Fi, localizzazione e temperatura del sismometro, soglia attuale (valore utile alla rilevazione di una vibrazione).\\
 Quando il sismometro rileva una vibrazione viene inviata l'intensità della vibrazione.\\
 Un topic MQTT è dedicato al comando \textit{reboot}, ossia la possibilità di riavviare il sismometro pubblicando un messaggio.\\
 Come è stato accennato nella descrizione dell'architettura del sistema (Cap 1.3), è possibile programmare della azioni quando si verificano determinate condizioni.\\
@@ -384,7 +390,9 @@ La soluzione a questo bisogno dovrebbe essere: \textit{facilmente utilizzabile, 
 % ======================================= CHAPTER 2 ================================================
 \chapter{Architettura del sistema}
 
-\section{Perché Node-RED}
+\section{Sistema Legacy}
+
+\section{La soluzione proposta: Node-RED}
 
 \subsection{Candidati iniziali}
 
@@ -784,6 +792,14 @@ placeholder
 \bibitem{berkeleyfaq}
   \textbf{Seismo Berkeley Lab FAQ}.
   \href{http://seismo.berkeley.edu/outreach/faq.html}{http://seismo.berkeley.edu/outreach/faq.html}
+
+\bibitem{rest}
+  \textbf{REST API documentation}.
+  \href{https://restfulapi.net/}{https://restfulapi.net/}
+
+\bibitem{wikieud}
+  \textbf{Wikipedia - End User Development}.
+  \href{https://en.wikipedia.org/wiki/End-user_development}{https://en.wikipedia.org/wiki/End-user_development}
 
 \bibitem{MathWorks}
   \textbf{Publish MQTT messages and subscribe to message topics}.\\
