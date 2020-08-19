@@ -158,7 +158,7 @@ captionpos=b
 
 % ======================================= ABSTRACT ================================================
 \begin{abstract}
-	abstract
+  abstract
 \end{abstract}
 \cleardoublepage
 
@@ -229,7 +229,7 @@ Le \textbf{onde superficiali}, anche se il nome può essere mal interpretato, no
 \section{Misurazione dei terremoti}
 
 \subsection{Tipologie di terremoti}
-Abbiamo 4 differenti tipologie di terremoti: \textit{tettonici}, \textit{vulcanici}, \textit{da crollo} e \textit{artificiali}.
+Esistono 4 differenti tipologie di terremoti: \textit{tettonici}, \textit{vulcanici}, \textit{da crollo} e \textit{artificiali}.
 
 I terremoti \textbf{tettonici}, come dice il nome, sono provocati dal movimento delle placche tettoniche e hanno origine lungo le faglie.
 Sono i più pericolosi ed i più frequenti.
@@ -307,11 +307,11 @@ Per una migliore rilevazione si consiglia di fissarli ad un muro.
 
 I \textbf{sismometri mobili} invece utilizzano l'applicazione per smartphone, abilitando l'accelerometro interno del telefono per rilevare vibrazioni.
 
-Devono essere appoggiati su un piano, per esempio un tavolo.
+Devono essere appoggiati su un piano orizzontale, per esempio un tavolo.
 
 Durante la registrazione di un nuovo sismometro, esso viene localizzato per conoscere la sua posizione (fondamentale al rilevamento corretto dei sismi). Nonostante ciò la privacy può essere conservata mostrando il sismometro nella mappa pubblica con una finta posizione casuale nel raggio di 2km.
 
-I sismometri utilizzano il protocollo ISO standard \textbf{MQTT} (Message Queue Telemetry Transport) per inviare e ricevere messaggi.
+I sismometri utilizzano il protocollo ISO standard \textbf{MQTT} (Message Queue Telemetry Transport) per inviare e ricevere messaggi di controllo e dati.
 
 È stato progettato per un basso impatto a livello di banda e di risorse. I client si iscrivono ad un \textit{topic}, ossia un identificatore che si riferisce ad un dato ben preciso (ad esempio \textit{sensor/temperature}).
 
@@ -335,11 +335,12 @@ Questo schema è definito da dei principi:
   \item Possibili rappresentazioni multiple per la stessa risorsa
   \item La comunicazione deve essere sempre senza stato
 \end{itemize}
-Un esempio di risorsa in stile REST è: \textit{example.domain/sensor/sensor-id/connect}, dove sensor-id è l'identificatore unico per un sensore.
+Un esempio di risorsa in stile REST è: \texttt{example.domain/sensor/sensor-id/connect}, dove \texttt{sensor-id} è l'identificatore unico per un sensore.
 
 Tramite l'app mobile (disponibile per Android e iOS) è possibile visualizzare la lista dei propri sismometri, una mappa aggiornata in tempo reale con i sismometri attivi e i terremoti recenti, una lista di terremoti con relativa magnitudo, posizione e profondità dell'ipocentro (ordinati cronologicamente) e infine alcuni informazioni utili.
 
-Tramite l'interfaccia web è possibile visualizzare tutte le informazioni prima citate ed in più una dashboard personalizzata (\href{https://my.seismocloud.com}{my.SeismoCloud.com}).
+È disponibile anche una interfaccia web è possibile visualizzare tutte le informazioni prima citate ed in più una dashboard personalizzata.
+
 Nella dashboard personale è possibile visualizzare due grafici che mostrano il tempo di utilizzo assoluto e settimanale di ogni sismometro attivo.
 
 Dopo l'effettiva autenticazione (tramite password o QRCode) si entra nella parte privata, ossia relativa ad un determinato \textit{gruppo} (insiemi di sismometri raggruppati per locazione).
@@ -428,7 +429,7 @@ Una seconda scelta è \textbf{draw.io} (\href{https://app.diagrams.net/}{https:/
 Il codice sorgente di draw.io è disponibile su GitHub. È  ben documentato, quindi questo aiuta l'integrazione con SeismoCloud. Purtroppo si tratta di uno strumento front-end, quindi manca tutta la logica back-end; i dati inseriti dall'utente vengono esportati in file di tipo xml che devono poi essere tradotti in azioni registrate dal sistema. 
 
 
-\subsection{Scelta Node-RED}
+\subsection{La piattaforma Node-RED}
 Lo strumento che risolve i problemi precedentemente elencati è \textbf{Node-RED} (\href{https://nodered.org}{https://nodered.org}).
 Come draw.io è un creatore di diagrammi di flusso ed è anche open-source con repository su GitHub sotto l'organizzazione \href{https://github.com/node-red}{node-red}. È un servizio orientato all'\textit{Internet of Things}, non è uno standard ufficiale, ma è molto utilizzato nel campo.
 Qui, a differenza del precedente, esiste uno scheletro back-end, dato che è costruito utilizzando \href{https://nodejs.org}{NodeJS}. Vedremo più avanti in dettaglio come è stato progettato.
@@ -797,24 +798,24 @@ placeholder
 \begin{thebibliography}{9}
 
 \bibitem{Istituto Nazionale di Geologia e Vulcanologia}
-	\textbf{Istituto Nazionale di Geologia e Vulcanologia}.
-	\href{http://ingv.it}{http://ingv.it}
+  \textbf{Istituto Nazionale di Geologia e Vulcanologia}.
+  \href{http://ingv.it}{http://ingv.it}
 
 \bibitem{MathWorks}
-	\textbf{Publish MQTT messages and subscribe to message topics}.\\
-	\href{https://www.mathworks.com/help/supportpkg/raspberrypi/ref/publish-and-subscribe-to-mqtt-messages.html}{https://www.mathworks.com/help/supportpkg/raspberrypi/ref/publish-and-subscribe-to-mqtt-messages.html}
+  \textbf{Publish MQTT messages and subscribe to message topics}.\\
+  \href{https://www.mathworks.com/help/supportpkg/raspberrypi/ref/publish-and-subscribe-to-mqtt-messages.html}{https://www.mathworks.com/help/supportpkg/raspberrypi/ref/publish-and-subscribe-to-mqtt-messages.html}
 
 \bibitem{Node-RED Wiki}
-	\textbf{Node-RED Wiki}.
-	\href{https://github.com/node-red/node-red/wiki}{https://github.com/node-red/node-red/wiki}
+  \textbf{Node-RED Wiki}.
+  \href{https://github.com/node-red/node-red/wiki}{https://github.com/node-red/node-red/wiki}
 
 \bibitem{Node-RED Documentation}
-	\textbf{Node-RED Documentation}.
-	\href{https://nodered.org/docs}{https://nodered.org/docs}
+  \textbf{Node-RED Documentation}.
+  \href{https://nodered.org/docs}{https://nodered.org/docs}
 
 \bibitem{Docker Documentation}
-	\textbf{Docker Documentation}.
-	\href{https://docs.docker.com/}{https://docs.docker.com/}
+  \textbf{Docker Documentation}.
+  \href{https://docs.docker.com/}{https://docs.docker.com/}
 
 \bibitem{Performance Evaluation of Docker Container and Virtual Machine}
     \textbf{Performance Evaluation of Docker Container and Virtual Machine}
