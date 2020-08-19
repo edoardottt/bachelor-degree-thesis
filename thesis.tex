@@ -288,6 +288,8 @@ I sismometri possono essere costruiti personalmente se si ha capacità di elettr
 È un progetto nato dall'Università La Sapienza e l'INGV. Viene presentato anche nelle scuole per sensibilizzare gli studenti sul tema terremoti ed
 utilizzare questo progetto come
 strumento didattico.
+Il codice di alcune porzioni di sistema è disponibili su GitHub sotto
+l'organizzazione \href{https://github.com/SapienzaApps}{SapienzaApps}.
 
 \subsection{Architettura di sistema}
 I sismometri sono di due tipologie: \textit{fissi} e \textit{mobili}.
@@ -319,8 +321,12 @@ Questo schema è definito da dei principi \cite{rest}:
   \item La comunicazione deve essere sempre senza stato
 \end{itemize}
 Un esempio di risorsa REST è: \texttt{example.domain/sensor/sensor-id/quake}, dove \texttt{sensor-id} è l'identificatore unico per un sensore.
-Tramite l'app mobile (disponibile per Android e iOS) si registrano i nuovi sismometri (sia fissi che mobili). Il sismometro interno viene registrato automaticamente quando viene scaricata l'applicazione per la prima volta. Con i sismometri fissi, quest'ultimo crea una connessione Wi-Fi chimata SeismoCloud. L'utente ci si collega ed inserisce i dati per connettersi alla rete Wi-Fi locale. Successivamente in automatico il dispositivo fisso si collega alla rete Wi-Fi e l'app cerca di trovare nella rete un sismometro.
+Tramite l'app mobile (disponibile per Android e iOS) si registrano i nuovi sismometri (sia fissi che mobili). Il sismometro interno viene registrato automaticamente quando viene scaricata l'applicazione per la prima volta. Con i sismometri fissi, quest'ultimo crea una connessione Wi-Fi chiamata \textit{SeismoCloud}. L'utente ci si collega ed inserisce i dati per connettersi alla rete Wi-Fi locale. Successivamente in automatico il dispositivo fisso si collega alla rete Wi-Fi e l'app cerca di trovare nella rete un sismometro.
 In entrambi i casi viene richiesto di consentire all'acquisizione della posizione GPS e un nome per il nuovo sismometro.
+Attivando un sismometro viene prodotta una mole consistente di dati.
+Con una cadenza periodica (qualche minuto, dipende dal carico del sistema) vengono pubblicati: indirizzo IP locale e pubblico, indirizzo MAC e qualità del segnale della rete Wi-Fi, localizzazione e temperatura del sismometro, soglia attuale (valore utile alla rilevazione di una vibrazione).
+Quando il sismometro rileva una vibrazione viene inviata l'intensità della vibrazione.
+Un topic MQTT è dedicato al comando \textit{reboot}, ossia la possibilità di riavviare il sismometro pubblicando un messaggio.\\
 Inoltre è possibile visualizzare la lista dei propri sismometri, una mappa aggiornata in tempo reale con i sismometri attivi e i terremoti recenti, una lista di terremoti con relativa magnitudo, posizione e profondità dell'ipocentro (ordinati cronologicamente) e infine alcuni informazioni utili.
 È disponibile anche una interfaccia web è possibile visualizzare tutte le informazioni prima citate ed in più una dashboard personalizzata.
 Nella dashboard personale è possibile visualizzare due grafici che mostrano il tempo di utilizzo assoluto e settimanale di ogni sismometro attivo.
@@ -340,8 +346,6 @@ Ad esempio, si può ricevere un messaggio automatico tramite Telegram ogni volta
 
 \clearpage
 
-\section{Community SeismoCloud}
-
 \subsection{Un lavoro di gruppo}
 
 \begin{wrapfigure}[14]{r}{0.55\textwidth}
@@ -354,16 +358,16 @@ Ad oggi il sistema EEW non è attivo perché i sismometri presenti non bastano a
 
 I nodi della rete sono ben distribuiti nel centro Italia, poco nel Sud. Questo è un problema perché l'attività sismica principale in Italia si sviluppa lungo la catena appenninica fino in Sicilia. \\
 Grande menzione meritano anche i \\vulcani attivi (Etna, Stromboli, Vesuvio, \\Vulcano).\\
-Il codice di alcune porzioni di sistema \\è disponibili su GitHub sotto
-\\
-l'organizzazione \href{https://github.com/SapienzaApps}{SapienzaApps}.
 
 \subsection{Bisogni della community}
 
-Attivando un sismometro viene prodotta una mole consistente di dati.\\
-Con una cadenza periodica (qualche minuto, dipende dal carico del sistema) vengono pubblicati: indirizzo IP locale e pubblico, indirizzo MAC e qualità del segnale della rete Wi-Fi, localizzazione e temperatura del sismometro, soglia attuale (valore utile alla rilevazione di una vibrazione).\\
-Quando il sismometro rileva una vibrazione viene inviata l'intensità della vibrazione.\\
-Un topic MQTT è dedicato al comando \textit{reboot}, ossia la possibilità di riavviare il sismometro pubblicando un messaggio.\\
+\clearpage
+
+% ======================================= CHAPTER 2 ================================================
+\chapter{Architettura del sistema}
+
+\section{Sistema Legacy}
+
 Come è stato accennato nella descrizione dell'architettura del sistema (Cap 1.3), è possibile programmare della azioni quando si verificano determinate condizioni.\\
 Sostanzialmente le condizioni sono due: quando n sismometri vibrano/sono accesi, oppure la notifica di un Earthquake Early Warning.
 Le possibilità per il metodo di notifica sono quattro: un messaggio tramite Telegram, una notifica push ai membri del gruppo, un widget e la pubblicazione di una API.\\
@@ -378,19 +382,13 @@ Visto che i dati prodotti sono tanti, sarebbe molto utile ampliare il range di c
 
 Sarebbe molto più utile lasciare completa \textbf{libertà all'utente} (sotto alcune restrizioni di sicurezza) integrando il sismometro con l'ambiente locale. 
 
-Ad esempio una casa smart con dispositivi IoT o altre tipologie di interazione. 
-
 Potrei quindi decidere di riavviare il mio sismometro ogni volta che la temperatura supera i 50$^{\circ}$C. Oppure mandare una mail, pubblicare un tweet e scaricare un file quando vengono rilevate tre vibrazioni nello stesso minuto.
 
 Il tutto non deve risultare complesso, deve essere possibile l'utilizzo per utenti non esperti in informatica o elettronica, ma allo stesso tempo i più competenti devono poter sfruttare le loro abilità.
 
 La soluzione a questo bisogno dovrebbe essere: \textit{facilmente utilizzabile, sicura, affidabile e performante}.
-\clearpage
 
-% ======================================= CHAPTER 2 ================================================
-\chapter{Architettura del sistema}
-
-\section{Sistema Legacy}
+Ad esempio una casa smart con dispositivi IoT o altre tipologie di interazione.
 
 \section{La soluzione proposta: Node-RED}
 
