@@ -386,24 +386,19 @@ Ad esempio, si può ricevere un messaggio automatico tramite Telegram ogni volta
 
 \section{Sistema Legacy}
 
-Come è stato accennato nella descrizione dell'architettura del sistema (Cap 1.3), è possibile programmare della azioni quando si verificano determinate condizioni.\\
+Come è stato accennato nella descrizione dell'architettura del sistema (Cap 1.3), è possibile programmare della azioni quando si verificano determinate condizioni.
 Sostanzialmente le condizioni sono due: quando n sismometri vibrano/sono accesi, oppure la notifica di un Earthquake Early Warning.
-Le possibilità per il metodo di notifica sono quattro: un messaggio tramite Telegram, una notifica push ai membri del gruppo, un widget e la pubblicazione di una API.\\
+Le possibilità per il metodo di notifica sono quattro: un messaggio tramite Telegram, una notifica push ai membri del gruppo, un widget e la pubblicazione di una API.
 
 \begin{figure}[H]
 \caption{Vecchio sistema EUD}
 \label{VecchioEUD}
 \includegraphics[width=1\textwidth]{Chapter-1/eud-vecchio.jpg}
 \end{figure}
-
 Visto che i dati prodotti sono tanti, sarebbe molto utile ampliare il range di condizioni ad un più vasto campo, tenendo in conto anche di tutti i dati che non vengono considerati in questo sistema.
-
 Sarebbe molto più utile lasciare completa \textbf{libertà all'utente} (sotto alcune restrizioni di sicurezza) integrando il sismometro con l'ambiente locale. 
-
 Potrei quindi decidere di riavviare il mio sismometro ogni volta che la temperatura supera i 50$^{\circ}$C. Oppure mandare una mail, pubblicare un tweet e scaricare un file quando vengono rilevate tre vibrazioni nello stesso minuto.
-
 Il tutto non deve risultare complesso, deve essere possibile l'utilizzo per utenti non esperti in informatica o elettronica, ma allo stesso tempo i più competenti devono poter sfruttare le loro abilità.
-
 La soluzione a questo bisogno dovrebbe essere: \textit{facilmente utilizzabile, sicura, affidabile e performante}.
 
 Ad esempio una casa smart con dispositivi IoT o altre tipologie di interazione.
@@ -413,9 +408,7 @@ Ad esempio una casa smart con dispositivi IoT o altre tipologie di interazione.
 \subsection{Candidati iniziali}
 
 Piuttosto che progettare e costruire uno strumento di End User Development da zero, si è cercato uno scheletro già pronto e maturo. La ricerca è stata piuttosto semplice, un po' meno la valutazione dei possibili candidati.
-
 Il primo candidato è \textbf{IFTTT} (\href{https://iftt.com}{https://ifttt.com}). È lo strumento più famoso, utilizzato da molte persone, con più di 5 milioni di download su Play Store. Il vantaggio di questa scelta è sicuramente la grande maturità della piattaforma. Gli svantaggi sono la difficoltà nell'integrare i nostri dispositivi con questo sistema, ma soprattutto la somiglianza con il sistema EUD da rimpiazzare, troppo semplice e con condizioni e azioni predefinite.
-
 Una seconda scelta è \textbf{draw.io} (\href{https://app.diagrams.net/}{https://draw.io}). Strumento completamente differente al precedente, è un creatore di diagrammi di flusso. Questo è un tipo di programmazione di azioni che lascia molta libertà all'utente, rimanendo semplice ma efficace. 
 \begin{figure}[H]
 \caption{Esempio di flusso esportato da draw.io}
@@ -424,14 +417,11 @@ Una seconda scelta è \textbf{draw.io} (\href{https://app.diagrams.net/}{https:/
 \end{figure}
 Il codice sorgente di draw.io è disponibile su GitHub. È  ben documentato, quindi questo aiuta l'integrazione con SeismoCloud. Purtroppo si tratta di uno strumento front-end, quindi manca tutta la logica back-end; i dati inseriti dall'utente vengono esportati in file di tipo xml che devono poi essere tradotti in azioni registrate dal sistema. 
 
-
 \subsection{La piattaforma Node-RED}
 Lo strumento che risolve i problemi precedentemente elencati è \textbf{Node-RED} (\href{https://nodered.org}{https://nodered.org}).
 Come draw.io è un creatore di diagrammi di flusso ed è anche open-source con repository su GitHub sotto l'organizzazione \href{https://github.com/node-red}{node-red}. È un servizio orientato all'\textit{Internet of Things}, non è uno standard ufficiale, ma è molto utilizzato nel campo.
 Qui, a differenza del precedente, esiste uno scheletro back-end, dato che è costruito utilizzando \href{https://nodejs.org}{NodeJS}. Vedremo più avanti in dettaglio come è stato progettato.
-
 La community, oltre ad essere pronta a risolvere dubbi sul forum ufficiale (\href{https://discourse.nodered.org}{discourse.nodered.org}), contribuisce attivamente al progetto implementando delle funzionalità che sono messe a disposizione di tutti tramite il famoso package manager NPM.
-
 Nel nome il 'node' è dato sia dal runtime NodeJS, sia dal nome che hanno gli elementi utilizzati per creare i flussi, chiamati appunto \textit{nodi}.
 \begin{figure}[H]
 \caption{Esempio flusso di nodi in Node-RED}
@@ -450,7 +440,6 @@ Come si nota in figura \ref{fig:node-red-flows-example1}, i nodi sono dei rettan
 \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/node-red-flows-2.jpg}
 \end{figure}
 Nella figura \ref{fig:node-red-flows-example2} abbiamo un altro esempio. Qui quando viene cliccato il pulsante a sinistra del nodo \textit{input}, il nodo invia in uscita un valore (in questo caso qualsiasi, ad esempio 3 o la stringa 'input') che fa eseguire il secondo nodo (di tipo \textit{intermedio}). Il nodo \textit{shutdown} esegue il comando `shutdown` e stampa nella console di debug lo stdout, stderr ed il return code.
-
 Data la facilità d'uso, il grande supporto (repository con 10+K star su GitHub, community molto attiva e forum ufficiale), la maturità del progetto (versione 0.2 nel 2013, ad oggi (2020) 1.1.3), la facile estendibilità ed integrazione con dispositivi IoT (come appunto i nostri sismometri), decisamente Node-RED è lo strumento più adatto per risolvere i bisogni della community SeismoCloud.
 
 \clearpage
@@ -459,15 +448,10 @@ Data la facilità d'uso, il grande supporto (repository con 10+K star su GitHub,
 
 \subsection{Come funziona Node-RED}
 Può essere utilizzato in vari modi, ad esempio: su un computer in locale, tramite Docker, su un dispositivo Raspberry, oppure su alcuni sistemi Cloud (IBM Cloud, Amazon Web Services, Microsoft Azure).
-
 L'interazione con l'utente avviene tramite un browser web. 
-
 Un \textbf{nodo} è il blocco costruttivo di base di un flusso. Le funzionalità dei nodi sono scatenate da eventi esterni (richieste HTTP o altro protocollo oppure un timer) o da input ricevuti da altri nodi. Processano il messaggio ricevuto oppure ne creano uno nuovo e possono inviare messaggi ai nodi successivi nel flusso. 
-
 Un \textbf{nodo di configurazione} è un tipo speciale di nodo che setta delle configurazioni utili agli altri nodi, ma non fa parte di nessun flusso. Ad esempio, i nodi \textit{MQTT-in} e \textit{MQTT-out} utilizzano il nodo di configurazione \textit{MQTT-broker} che rappresenta una connessione condivisa con un broker MQTT.
-
 Un \textbf{flusso} è rappresentato da un tab o foglio di lavoro ed è il metodo principale per organizzare il lavoro. Informalmente un flusso rappresenta un insieme di nodi connessi fra loro.
-
 Un \textbf{sottoflusso} è una collezione di nodi che vengono collassati graficamente in un unico nodo. Possono essere utilizzati per ridurre la complessità grafica del flusso, oppure per riutilizzare un gruppo di nodi più volte in un flusso.
 \begin{figure}[H]
 \caption{Esempio di sottoflusso}
@@ -481,20 +465,12 @@ Il \textbf{contesto} è il modo principale di condividere informazioni tra i nod
     \item Global: Visibile a tutti i nodi
 \end{itemize}
 Un \textbf{messaggio} è un oggetto JSON che viene passato attraverso i nodi. Di default si chiama \textit{msg} ed ha due campi: \textit{payload} e \textit{id}. 
-
 La \textbf{palette} è posizionata sulla sinistra dell'interfaccia e lista tutti i nodi presenti nel sistema. Dei nodi extra possono essere aggiunti direttamente dall'editor.
-
 Il \textbf{workspace} è lo spazio principale, dove tutti i nodi vengono posizionati in modo da creare degli automatismi.
-
 La \textbf{sidebar} è uno spazio posizionato a destra del workspace in cui ci sono degli strumenti utili, ad esempio la console di debug, l'interfaccia della configurazione dei nodi e la finestra descrittiva per ogni nodo.
-
-
 È molto orientato al riuso ed alla portabilità, infatti tutti i nodi o collezioni di nodi sono moduli Javascript che possono essere caricati e utilizzati poi da altri tramite NPM.
-
 Inoltre, ogni flusso viene poi tradotto in codice JSON per poter essere esportato ed importato in altri ambienti.
-
 Viene fornita anche una 'vetrina' (\href{https://flows.nodered.org}{flows.nodered.org}) dove possono essere esplorati nodi e flussi creati e pubblicati per la community.
-
 Esempio di un semplice flusso Node-RED:
 \begin{figure}[H]
 \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/node-red-flows-3.jpg}
@@ -548,9 +524,7 @@ Dato che Node-RED ha tutti i dati in-memory, per salvare i flussi creati utilizz
 
 \subsection{Progettazione ************MODIFICARE**********}
 Il vecchio sistema di EUD rende possibile, come già introdotto, la programmazione di azioni condivisa con il proprio gruppo di appartenenza.
-
 Questa impostazione viene ripresa nel nuovo sistema, quindi ogni membro di un gruppo deve poter accedere alla propria \textit{istanza di gruppo di Node-RED} per programmare le azioni desiderate con tutti e soli i dati dei sismometri appartenenti al gruppo.
-
 La ragione principale di questa scelta è che in questo modo si hanno molti più dati disponibili. Infatti, in media ogni gruppo ha una decina di sismometri attivi.
 
 \clearpage
@@ -561,11 +535,8 @@ Lo strumento che più soddisfa i requisiti imposti è \textbf{Docker}.
 È uno dei sistemi più noti per il deployment di applicazioni software, incapsula i programmi all'interno di contenitori astraendo dal sistema operativo sottostante.
 Utilizza i \textit{container}, cioè un insieme di più processi isolati dal resto del sistema.
 I container sono utili perché sono altamente portabili in tutti gli ambienti e restano integri dallo sviluppo ai test.
-
 Viene costruita un'immagine, ossia un file chiamato Dockerfile, che definisce tutte le dipendenze ed i file necessari per creare un container.
 Una immagine Docker consiste in livelli read-only i quali rappresentano istruzioni Docker. Una istruzione aggiunge qualcosa al livello precedente.
-
-
 Esempio di Dockerfile:
 \begin{lstlisting}[language=Javascript]
 FROM ubuntu:18.04
@@ -573,7 +544,6 @@ COPY . /app
 RUN make /app
 CMD python /app/app.py
 \end{lstlisting}
-
 Ogni istruzione crea un livello:
 
 \begin{itemize}
@@ -583,11 +553,8 @@ Ogni istruzione crea un livello:
     \item CMD specifica quale comando eseguire nel container
 \end{itemize}
 Quando viene eseguita un'immagine e generato un container, si aggiunge un ulteriore livello sopra ai precedenti.
-
 Tutte le modifiche poi fatte al container in esecuzione sono eseguite su questo nuovo livello.
-
 Viene fornita l'immagine di base ufficiale di Node-RED scaricabile dalla repository di DockerHub (\href{https://hub.docker.com/r/nodered/node-red/}{https://hub.docker.com/r/nodered/node-red/}).
-
 \begin{lstlisting}[language=docker]
 # from nodered/node-red:1.0.6-12
 FROM nodered/node-red@sha256:82f367ab41d19e3ebd5e9b1cc62e4f615d4b4be4fa8bc83f1bf5441ba8c0d32a
@@ -611,11 +578,8 @@ CMD ["npm", "start"]
 \clearpage
 
 La persistenza dei dati viene garantita dal volume (nell'esempio chiamato appunto volume). 
-
 È una parte del file-system che viene riservata per salvare i dati prodotti dal container in esecuzione.
-
 Questo garantisce che se il container va in uno stato di errore o la macchina dove viene deployato il container si spegne, i dati vengono comunque salvati in un disco fisso.
-
 
 Differisce dalla \textbf{virtualizzazione} in:
 
@@ -630,12 +594,8 @@ Differisce dalla \textbf{virtualizzazione} in:
 \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/vm-c.jpg}
 \end{figure}
 Questa divisione netta fra i container si presta molto al nostro caso. Ogni container avrà in esecuzione una instanza di node-red configurata con i dati di un determinato gruppo.
-
 Dato che ogni container è isolato, non ci sono problemi di dati condivisi fra i vari gruppi.
-
-
 Come si può notare dai grafici nelle prossime pagine, tratti dallo studio di \textit{Potdara et al.}\cite{dockervsvm}, ci sono molti vantaggi prestazionali nell'utilizzare i container Docker invece di macchine virtuali.
-
 Come viene scritto nel paper, \begin{quoting}[font=itshape, begintext={``}, endtext={``}]
 Le prestazioni computazionali possono essere misurate dal numero di operazioni che il sistema performa in un dato tempo (eventi/sec) o dal tempo di completamento di un certo compito. I risultati maggiormente dipendono dal numero di core della CPU virtuale che è allocata nel server. La comparazione nei test delle prestazioni della CPU è stato fatta utilizzando gli strumenti sysbench, Phoronix e Apache benchmark.
 \end{quoting}
@@ -645,11 +605,8 @@ Le prestazioni computazionali possono essere misurate dal numero di operazioni c
     \label{fig:docker-vm-1}
 \end{figure}
 Sono state comparate le prestazioni della CPU, come già anticipato sopra, con Sysbench. È stato utilizzato il metodo del \textbf{massimo numero primo}.
-
 Viene dato un tempo massimo, in questo caso 60 secondi e deve essere dato in risultato il numero primo massimo minore di 50000 con 4 thread operativi.
-
 Per il test di compressione dati è stato utilizzato 7-Zip con un file di 10GB.
-
 le prestazioni della memoria RAM (utilizzando RAM speed/SMP) e un caso particolare. Come caso particolare è stato utilizzato Eigth Queen, una simulazione di un problema del gioco degli scacchi. 
 \begin{figure}
 \begin{tabular}{cc}
@@ -669,18 +626,11 @@ le prestazioni della memoria RAM (utilizzando RAM speed/SMP) e un caso particola
 \clearpage
 
 Qui con \textbf{node-RED instance} si intende un container per un gruppo specifico.
-
 Il container interagisce con l'interfaccia web riguardo tutta l'interazione con l'utente.
-
 Interagisce con i sismometri attraverso i vari protocolli per lo scambio di dati (HyperText Transfer Protocol, Message Queue Telemetry Transport ...)
-
 Interagisce con gli smartphone nel caso in cui gli utenti decidono di ricevere notifiche o altri tipi di alert su telefoni cellulari (tipo messaggi telegram).
-
 Con il data server scambia informazioni con il broker mqtt e riceve informazioni sul gruppo (statistiche e dati dei sismometri) attraverso le API.
-
-
 Il deploy di tanti servizi può essere semplificato utilizzando \textbf{docker-compose}.
-
 \begin{lstlisting}[language=docker-compose-2]
 version: '3'
 services:
@@ -706,11 +656,8 @@ services:
       - ./volume:/volume
 \end{lstlisting}
 Compose è uno strumento per definire ed eseguire applicazioni Docker multi-container.
-
 In questo caso appunto, vengono eseguiti due servizi node-red con immagine customizzata (seismocloud-nodered) per due differenti gruppi.
-
 Con un singolo comando si possono eseguire tutti i servizi configurati in precedenza (\textit{docker-compose up}), oppure stopparli (\textit{docker-compose stop}) e con un altro farli ripartire (\textit{docker-compose restart}).
-
 Se, mentre tutti i servizi sono in esecuzione, si vuole modificare lo stato di uno solo è possibile farlo con i comandi di Docker.
 \clearpage
 
