@@ -343,6 +343,22 @@ Un esempio di risorsa in stile REST è: \texttt{example.domain/sensor/sensor-id/
 Tramite l'app mobile (disponibile per Android e iOS) si registrano i nuovi sismometri (sia fissi che mobili). Il sismometro interno viene registrato automaticamente quando viene scaricata l'applicazione per la prima volta. Con i sismometri fissi, quest'ultimo crea una connessione Wi-Fi chiamata \textit{SeismoCloud}. L'utente ci si collega ed inserisce i dati per connettersi alla rete Wi-Fi locale. Successivamente in automatico il dispositivo fisso si collega alla rete Wi-Fi e l'app cerca di trovare nella rete un sismometro.
 In entrambi i casi viene richiesto di consentire all'acquisizione della posizione GPS e un nome per il nuovo sismometro.
 Attivando un sismometro viene prodotta una mole consistente di dati.
+\begin{center}
+Esempio di dati ricevuti e/o inviati dal dispositivo
+\end{center}
+\begin{lstlisting}
+timereq = 1597913685108
+timesync = 1597913685108;1597913683476;15979136857668
+publicip = 129.65.2.45
+localip = 192.168.0.12
+essid = wifi-locale
+rssi = -58.744674356
+bssid = aa:bb:cc:dd:ee:ff
+treshold = 27200000.0000
+temperature = 34.100000
+quake = 1597913685178;0.644563;0.353425;0.683452
+location = 40.857634274356;15.24525254252
+\end{lstlisting}
 Con una cadenza periodica (qualche minuto, dipende dal carico del sistema) vengono pubblicati: indirizzo IP locale e pubblico, indirizzo MAC e qualità del segnale della rete Wi-Fi, localizzazione e temperatura del sismometro, soglia attuale (valore utile alla rilevazione di una vibrazione).
 Quando il sismometro rileva una vibrazione viene inviata l'intensità della vibrazione.
 Un topic MQTT è dedicato al comando \textit{reboot}, ossia la possibilità di riavviare il sismometro pubblicando un messaggio.\\
