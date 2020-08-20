@@ -337,7 +337,7 @@ Questo schema è definito da dei principi \cite{rest}:
   \item \texttt{Codice su richiesta (opzionale)}: È permesso scaricare ed eseguire codice (applet o script) per snellire il client.
 \end{itemize}
 Il nucleo dello stile REST sono le \textit{risorse}.
-Una risorsa è qualsiasi informazione: un documento, una immagine, un video, un numero, una collezione di risorse...
+Una risorsa è qualsiasi informazione: un documento, una immagine, un video, un numero, una collezione di risorse.
 REST utilizza identificatori di risorse per aiutare la comunicazione tra le parti.
 Un esempio di risorsa in stile REST è: \texttt{example.domain/sensor/sensor-id/quake}, dove \texttt{sensor-id} è l'identificatore unico per un sensore.
 Tramite l'app mobile (disponibile per Android e iOS) si registrano i nuovi sismometri (sia fissi che mobili). Il sismometro interno viene registrato automaticamente quando viene scaricata l'applicazione per la prima volta. Con i sismometri fissi, quest'ultimo crea una connessione Wi-Fi chiamata \textit{SeismoCloud}. L'utente ci si collega ed inserisce i dati per connettersi alla rete Wi-Fi locale. Successivamente in automatico il dispositivo fisso si collega alla rete Wi-Fi e l'app cerca di trovare nella rete un sismometro.
@@ -439,7 +439,7 @@ Data la facilità d'uso, il grande supporto (repository con 10+K star su GitHub,
 
 \clearpage
 
-\section{Implementazione di Node-RED per SeismoCloud}
+\section{Architettura adattata a SeismoCloud}
 
 \subsection{Come funziona Node-RED}
 Può essere utilizzato in vari modi, ad esempio: su un computer in locale, tramite Docker, su un dispositivo Raspberry, oppure su alcuni sistemi Cloud (IBM Cloud, Amazon Web Services, Microsoft Azure).
