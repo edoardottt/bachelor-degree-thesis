@@ -553,17 +553,19 @@ Ogni istruzione crea un livello:
     \item RUN costruisce l'applicazione con make
     \item CMD specifica quale comando eseguire nel container
 \end{itemize}
-Una immagine Docker consiste in livelli read-only i quali rappresentano il risultato di istruzioni Docker. Una istruzione aggiunge qualcosa al livello precedente, in paticolare vengono aggiunte solo le differenze dal livello che lo precede.
+Una immagine Docker consiste in livelli read-only i quali rappresentano il risultato di istruzioni Docker. Una istruzione aggiunge qualcosa al livello precedente, in particolare vengono aggiunte solo le differenze dal livello che lo precede.
 Quando viene eseguita un'immagine e generato un container, si aggiunge un ulteriore livello sopra ai precedenti.
-Tutte le modifiche poi fatte al container in esecuzione sono eseguite su questo nuovo livello che quindi non è read-only, ma writable ed è comunemente chiamato \textit{container layer}.
+Tutte le modifiche poi fatte al container in esecuzione sono eseguite su questo nuovo livello che quindi non è read-only, ma l'unico writable ed è comunemente chiamato \textit{container layer}.
 \begin{figure}[ht]
 \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/container-layers.jpg}
 \end{figure}
-Questo tipo di architettura favorisce la condivisione di risorse. Infatti, l'unica differenza tra un container ed una immagine è il container layer. Questo fa in modo che se ho più container creati partendo dalla stessa immagine, le modifiche verranno effettuate solo nell'ultimo livello condividendo tutti i livelli sottostanti tra tutti i container\cite{aboutstoragedrivers}.
-La persistenza dei dati viene garantita dal volume (nell'esempio chiamato appunto volume). 
-È una parte del file-system che viene riservata per salvare i dati prodotti dal container in esecuzione.
+Questo tipo di architettura favorisce la condivisione di risorse. Infatti, l'unica differenza tra un container ed una immagine è il container layer. Questo fa in modo che se ho più container creati partendo dalla stessa immagine, le modifiche verranno effettuate solo nell'ultimo livello dei rispettivi container condividendo tutti i livelli sottostanti\cite{aboutstoragedrivers}.
+Dato che tutti i dati scritti dal container vengono salvati nell'ultimo livello modificabile, quando il container viene distrutto vengono persi anche i dati scritti dal container.
+La persistenza dei dati può essere garantita da due metodi differenti.
+Un \textbf{volume} è una parte del filesystem amministrata da Docker in cui solo i processi Docker possono avere accesso. Solitamente risiedono in \texttt{/var/lib/docker/volumes/}.
+Un \textbf{bind mount} differisce dal volume in due punti: ogni processo può avere accesso ai dati e può risiedere ovunque nel sistema. 
 Questo garantisce che se il container va in uno stato di errore o la macchina dove viene deployato il container si spegne, i dati vengono comunque salvati in un disco fisso.
-
+\\
 Differisce dalla \textbf{virtualizzazione} \cite{dockervsvm2} in:
 
 \begin{itemize}
