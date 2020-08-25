@@ -307,7 +307,7 @@ I sismometri sono di due tipologie: \textit{fissi} e \textit{mobili}.
 I \textbf{sismometri fissi} sono dei moduli formati da componenti elettronici a basso costo. Viene usato un chip con un modulo Wi-Fi integrato per la connessione ad Internet, nello specifico il NodeMCU/ESP8266 e un modulo con giroscopio e accelerometro, l'MPU6050.
 Sono pensati per essere fissati in modo solidale a muri portanti per una migliore rilevazione.
 I \textbf{sismometri mobili} invece utilizzano l'applicazione per smartphone, abilitando l'accelerometro interno del telefono per rilevare vibrazioni.
-Devono essere appoggiati su un piano orizzontale, per esempio un tavolo.
+Devono essere appoggiati su un piano orizzontale, per esempio un tavolo, per avere una rilevazione precisa.
 Durante la registrazione di un nuovo sismometro fisso, esso viene localizzato per conoscere la sua posizione (fondamentale al rilevamento corretto dei sismi), mentre i sismometri mobili aggiornano di continuano la loro posizione. Nonostante ciò la privacy può essere conservata mostrando il sismometro nella mappa pubblica con una finta posizione casuale nel raggio di 2km.
 I sismometri utilizzano il protocollo ISO standard \textbf{MQTT} (Message Queue Telemetry Transport) per inviare e ricevere messaggi di controllo e dati.
 
@@ -403,6 +403,10 @@ La soluzione a questo bisogno dovrebbe essere: \textit{facilmente utilizzabile, 
 
 Ad esempio una casa smart con dispositivi IoT o altre tipologie di interazione.
 
+Il vecchio sistema di EUD rende possibile, come già introdotto, la programmazione di azioni condivisa con il proprio gruppo di appartenenza.
+Questa impostazione viene ripresa nel nuovo sistema, quindi ogni membro di un gruppo deve poter accedere alla propria \textit{istanza di gruppo di Node-RED} per programmare le azioni desiderate con tutti e soli i dati dei sismometri appartenenti al gruppo.
+La ragione principale di questa scelta è che in questo modo si hanno molti più dati disponibili. Infatti, in media ogni gruppo ha una decina di sismometri attivi.
+
 \section{La soluzione proposta: Node-RED}
 
 \subsection{Candidati iniziali}
@@ -420,7 +424,7 @@ Il codice sorgente di draw.io è disponibile su GitHub. È  ben documentato, qui
 \subsection{La piattaforma Node-RED}
 Lo strumento che risolve i problemi precedentemente elencati è \textbf{Node-RED} (\href{https://nodered.org}{https://nodered.org}).
 Come draw.io è un creatore di diagrammi di flusso ed è anche open-source con repository su GitHub sotto l'organizzazione \href{https://github.com/node-red}{node-red}. È un servizio orientato all'\textit{Internet of Things}, non è uno standard ufficiale, ma è molto utilizzato nel campo.
-Qui, a differenza del precedente, esiste uno scheletro back-end, dato che è costruito utilizzando \href{https://nodejs.org}{NodeJS}. Vedremo più avanti in dettaglio come è stato progettato.
+A differenza del precedente esiste uno scheletro back-end, dato che è costruito utilizzando \href{https://nodejs.org}{NodeJS}. Vedremo più avanti in dettaglio come è stato progettato.
 La community, oltre ad essere pronta a risolvere dubbi sul forum ufficiale (\href{https://discourse.nodered.org}{discourse.nodered.org}), contribuisce attivamente al progetto implementando delle funzionalità che sono messe a disposizione di tutti tramite il famoso package manager NPM.
 Nel nome il 'node' è dato sia dal runtime NodeJS, sia dal nome che hanno gli elementi utilizzati per creare i flussi, chiamati appunto \textit{nodi}.
 \begin{figure}[H]
@@ -448,7 +452,7 @@ Data la facilità d'uso, il grande supporto (repository con 10+K star su GitHub,
 
 \subsection{Come funziona Node-RED}
 Può essere utilizzato in vari modi, ad esempio: su un computer in locale, tramite Docker, su un dispositivo Raspberry, oppure su alcuni sistemi Cloud (IBM Cloud, Amazon Web Services, Microsoft Azure).
-L'interazione con l'utente avviene tramite un browser web. 
+L'interazione con l'utente avviene completamente tramite un browser web. Viene fornita una pagina divisa in tre sezioni: un insieme di funzionalità disponibili, una sezione di lavoro e un modulo di aiuto, documentazione e debug.
 Un \textbf{nodo} è il blocco costruttivo di base di un flusso. Le funzionalità dei nodi sono scatenate da eventi esterni (richieste HTTP o altro protocollo oppure un timer) o da input ricevuti da altri nodi. Processano il messaggio ricevuto oppure ne creano uno nuovo e possono inviare messaggi ai nodi successivi nel flusso. 
 Un \textbf{nodo di configurazione} è un tipo speciale di nodo che setta delle configurazioni utili agli altri nodi, ma non fa parte di nessun flusso. Ad esempio, i nodi \textit{MQTT-in} e \textit{MQTT-out} utilizzano il nodo di configurazione \textit{MQTT-broker} che rappresenta una connessione condivisa con un broker MQTT.
 Un \textbf{flusso} è rappresentato da un tab o foglio di lavoro ed è il metodo principale per organizzare il lavoro. Informalmente un flusso rappresenta un insieme di nodi connessi fra loro.
@@ -522,12 +526,14 @@ Viene tradotto in JSON:
 \end{lstlisting}
 Dato che Node-RED ha tutti i dati in-memory, per salvare i flussi creati utilizza (di default) un file chiamato \textit{flows.json}. Questo rende molto facile condividere i progetti.
 
-\subsection{Progettazione ************MODIFICARE**********}
-Il vecchio sistema di EUD rende possibile, come già introdotto, la programmazione di azioni condivisa con il proprio gruppo di appartenenza.
-Questa impostazione viene ripresa nel nuovo sistema, quindi ogni membro di un gruppo deve poter accedere alla propria \textit{istanza di gruppo di Node-RED} per programmare le azioni desiderate con tutti e soli i dati dei sismometri appartenenti al gruppo.
-La ragione principale di questa scelta è che in questo modo si hanno molti più dati disponibili. Infatti, in media ogni gruppo ha una decina di sismometri attivi.
+\subsection{Requisiti di sistema}
+Una caratteristica del precedente sistema che viene ripresa nuovo è la divisione dei dati tra i gruppi e la condivisione di essi nel gruppo di appartenenza.
+Questa scelta consente agli utenti di avere a disposizione più dati rispetto a quelli che avrebbero utilizzando solo i propri dispositivi. \textbf{In media} un utente ha un solo dispositivo proprietario, mentre un gruppo ne ha tra i dieci ed i quindici.
+Questo consente agli utenti di avere più libertà nella scelta delle condizioni.
+Quindi un requisito fondamentale è la \textit{scissione e la replica di un sistema in più "copie" con dati differenti} (i gruppi in questo caso).
 
 \clearpage
+
 
 \subsection{Vantaggi nell'utilizzo di Docker}
 
