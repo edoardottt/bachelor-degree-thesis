@@ -158,7 +158,7 @@ captionpos=b
 
 % ======================================= ABSTRACT ================================================
 \begin{abstract}
-  abstract
+	abstract
 \end{abstract}
 \cleardoublepage
 
@@ -532,10 +532,10 @@ Docker è un progetto open-source che automatizza il deployment (consegna o rila
 \end{quoting}
 
 Il concetto di container è già disponibile in Linux per eseguire un processo \textit{sandbox}, quindi su sui possono essere limitate e gestite le risorse a lui allocate. Il problema dei container LXC (disponibili in Linux utilizzando cgroup e namespace) è che se un container viene spostato su una macchina con configurazione differente molto probabilmente non funziona. Quindi ogni container dipende dall'ambiente in cui è costruito (dipendenze esterne, configurazione di rete, memoria e
-impostazioni particolari). Docker aggiunge \textbf{portabilità} ai container, cioè utilizzando un motore Docker i container diventano indipendenti dalla macchina in cui è stato creato. Altra funzione aggiunta è il \textbf{versioning}; si può tenere traccia delle varie versioni di un container, dando la possibilità di un upgrade o downgrade. Inoltre è orientato al \textbf{riuso},     dato che ogni container può essere utilizzato come base per uno più specifico.\cite{docker-portability}.
+impostazioni particolari). Docker aggiunge \textbf{portabilità} ai container, cioè utilizzando un motore Docker i container diventano indipendenti dalla macchina in cui è stato creato. Altra funzione aggiunta è il \textbf{versioning}; si può tenere traccia delle varie versioni di un container, dando la possibilità di un upgrade o downgrade. Inoltre è orientato al \textbf{riuso},     dato che ogni container può essere utilizzato come base per uno più specifico \cite{docker-portability}.
 Docker definisce un formato unico per creare container, più nello specifico \textit{immagini}. Una immagine è il risultato dell'esecuzione di un file chiamato \textbf{Dockerfile}. Viene fornito il DockerHub, un portale dove sono presenti migliaia di immagini già pronte che possono essere utilizzate come base di partenza.
-
 Una immagine Docker consiste in livelli read-only i quali rappresentano istruzioni Docker. Una istruzione aggiunge qualcosa al livello precedente.
+%ABOUT STORAGE DRIVERS \cite{aboutstoragedrivers}
 Esempio di Dockerfile:
 \begin{lstlisting}[language=Javascript]
 FROM ubuntu:18.04
@@ -553,7 +553,50 @@ Ogni istruzione crea un livello:
 \end{itemize}
 Quando viene eseguita un'immagine e generato un container, si aggiunge un ulteriore livello sopra ai precedenti.
 Tutte le modifiche poi fatte al container in esecuzione sono eseguite su questo nuovo livello.
-Viene fornita l'immagine di base ufficiale di Node-RED scaricabile dalla repository di DockerHub (\href{https://hub.docker.com/r/nodered/node-red/}{https://hub.docker.com/r/nodered/node-red/}).
+Viene fornita l'immagine di base ufficiale di Node-RED scaricabile dalla repository di DockerHub.
+\clearpage
+
+La persistenza dei dati viene garantita dal volume (nell'esempio chiamato appunto volume). 
+È una parte del file-system che viene riservata per salvare i dati prodotti dal container in esecuzione.
+Questo garantisce che se il container va in uno stato di errore o la macchina dove viene deployato il container si spegne, i dati vengono comunque salvati in un disco fisso.
+
+Differisce dalla \textbf{virtualizzazione} \cite{dockervsvm2} in:
+
+\begin{itemize}
+    \item Deployment semplificato: permette di impacchettare l'applicativo in un singolo elemento distribuibile
+    \item Ampia portabilità: i container possono essere creati, distrutti e replicati in qualsiasi ambiente in modo semplice e veloce
+    \item Prestazioni: Sono più leggeri e veloci delle macchine virtuali perché non hanno una emulazione del sistema operativo virtuale e condividono le risorse tra i vari container
+    \item Isolamento: Per quanto un container Docker isoli i vari applicativi, una Virtual Machine garantisce un maggiore isolamento.
+\end{itemize}
+
+\begin{figure}[ht]
+\caption{Container vs Virtualizzazione}
+\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/vm-c.jpg}
+\end{figure}
+Questa divisione netta fra i container si presta molto al nostro caso. Ogni container avrà in esecuzione una instanza di node-red configurata con i dati di un determinato gruppo.
+Dato che ogni container è isolato, non ci sono problemi di dati condivisi fra i vari gruppi.
+Come si può notare dai grafici nelle prossime pagine, tratti dallo studio di \textit{Potdara et al.}\cite{dockervsvm}, ci sono molti vantaggi prestazionali nell'utilizzare i container Docker invece di macchine virtuali.
+
+\begin{figure}
+    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-1.jpg}
+    \label{fig:docker-vm-1}
+\end{figure}
+La comparazione nei test delle prestazioni della CPU è stato fatta utilizzando gli strumenti sysbench, Phoronix e Apache benchmark. È stato utilizzato il metodo del \textbf{massimo numero primo}.
+Viene dato un tempo massimo, in questo caso 60 secondi e deve essere dato in risultato il numero primo massimo minore di 50000 con 4 thread operativi.
+Per il test di compressione dati è stato utilizzato 7-Zip con un file di 10GB.
+le prestazioni della memoria RAM (utilizzando RAM speed/SMP) e un caso particolare. Come caso particolare è stato utilizzato Eigth Queen, una simulazione di un problema del gioco degli scacchi. 
+\begin{figure}
+\begin{tabular}{cc}
+  \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-2.jpg} &   \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-3.jpg} \\
+ \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-4.jpg} &   \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-5.jpg} \\
+ %Aggiungi le altre due immagini 
+\end{tabular}
+\end{figure}
+
+\clearpage
+
+Esempio di immagine utilizzata in SesimoCloud partendo dalla immagine di Node-RED su DockerHub come base(\href{https://hub.docker.com/r/nodered/node-red/}{https://hub.docker.com/r/nodered/node-red/}).
+%PERCHÉ SHA256
 \begin{lstlisting}[language=docker]
 # from nodered/node-red:1.0.6-12
 FROM nodered/node-red@sha256:82f367ab41d19e3ebd5e9b1cc62e4f615d4b4be4fa8bc83f1bf5441ba8c0d32a
@@ -574,61 +617,6 @@ RUN npm install #Tutti i nodi custom necessari
 
 CMD ["npm", "start"]
 \end{lstlisting}
-\clearpage
-
-La persistenza dei dati viene garantita dal volume (nell'esempio chiamato appunto volume). 
-È una parte del file-system che viene riservata per salvare i dati prodotti dal container in esecuzione.
-Questo garantisce che se il container va in uno stato di errore o la macchina dove viene deployato il container si spegne, i dati vengono comunque salvati in un disco fisso.
-
-Differisce dalla \textbf{virtualizzazione} in:
-
-\begin{itemize}
-    \item Deployment semplificato: permette di impacchettare l'applicativo in un singolo elemento distribuibile
-    \item Ampia portabilità: i container possono essere creati, distrutti e replicati in qualsiasi ambiente in modo semplice e veloce
-    \item Prestazioni: Sono più leggeri e veloci delle macchine virtuali perché non hanno una emulazione del sistema operativo virtuale
-\end{itemize}
-
-\begin{figure}[H]
-\caption{Container vs Virtualizzazione}
-\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/vm-c.jpg}
-\end{figure}
-Questa divisione netta fra i container si presta molto al nostro caso. Ogni container avrà in esecuzione una instanza di node-red configurata con i dati di un determinato gruppo.
-Dato che ogni container è isolato, non ci sono problemi di dati condivisi fra i vari gruppi.
-Come si può notare dai grafici nelle prossime pagine, tratti dallo studio di \textit{Potdara et al.}\cite{dockervsvm}, ci sono molti vantaggi prestazionali nell'utilizzare i container Docker invece di macchine virtuali.
-Come viene scritto nel paper, \begin{quoting}[font=itshape, begintext={``}, endtext={``}]
-Le prestazioni computazionali possono essere misurate dal numero di operazioni che il sistema performa in un dato tempo (eventi/sec) o dal tempo di completamento di un certo compito. I risultati maggiormente dipendono dal numero di core della CPU virtuale che è allocata nel server. La comparazione nei test delle prestazioni della CPU è stato fatta utilizzando gli strumenti sysbench, Phoronix e Apache benchmark.
-\end{quoting}
-
-\begin{figure}
-    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-1.jpg}
-    \label{fig:docker-vm-1}
-\end{figure}
-Sono state comparate le prestazioni della CPU, come già anticipato sopra, con Sysbench. È stato utilizzato il metodo del \textbf{massimo numero primo}.
-Viene dato un tempo massimo, in questo caso 60 secondi e deve essere dato in risultato il numero primo massimo minore di 50000 con 4 thread operativi.
-Per il test di compressione dati è stato utilizzato 7-Zip con un file di 10GB.
-le prestazioni della memoria RAM (utilizzando RAM speed/SMP) e un caso particolare. Come caso particolare è stato utilizzato Eigth Queen, una simulazione di un problema del gioco degli scacchi. 
-\begin{figure}
-\begin{tabular}{cc}
-  \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-2.jpg} &   \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-3.jpg} \\
- \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-4.jpg} &   \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-5.jpg} \\
-\end{tabular}
-\end{figure}
-
-\clearpage
-
-
-\subsection{Schema finale architettura}
-\begin{figure}[H]
-\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/architettura-seismocloud2.png}
-\end{figure}
-
-\clearpage
-
-Qui con \textbf{node-RED instance} si intende un container per un gruppo specifico.
-Il container interagisce con l'interfaccia web riguardo tutta l'interazione con l'utente.
-Interagisce con i sismometri attraverso i vari protocolli per lo scambio di dati (HyperText Transfer Protocol, Message Queue Telemetry Transport ...)
-Interagisce con gli smartphone nel caso in cui gli utenti decidono di ricevere notifiche o altri tipi di alert su telefoni cellulari (tipo messaggi telegram).
-Con il data server scambia informazioni con il broker mqtt e riceve informazioni sul gruppo (statistiche e dati dei sismometri) attraverso le API.
 Il deploy di tanti servizi può essere semplificato utilizzando \textbf{docker-compose}.
 \begin{lstlisting}[language=docker-compose-2]
 version: '3'
@@ -659,6 +647,19 @@ In questo caso appunto, vengono eseguiti due servizi node-red con immagine custo
 Con un singolo comando si possono eseguire tutti i servizi configurati in precedenza (\textit{docker-compose up}), oppure stopparli (\textit{docker-compose stop}) e con un altro farli ripartire (\textit{docker-compose restart}).
 Se, mentre tutti i servizi sono in esecuzione, si vuole modificare lo stato di uno solo è possibile farlo con i comandi di Docker.
 \clearpage
+
+\subsection{Schema finale architettura}
+\begin{figure}[H]
+\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/architettura-seismocloud2.png}
+\end{figure}
+
+\clearpage
+
+Qui con \textbf{node-RED instance} si intende un container per un gruppo specifico.
+Il container interagisce con l'interfaccia web riguardo tutta l'interazione con l'utente.
+Interagisce con i sismometri attraverso i vari protocolli per lo scambio di dati (HyperText Transfer Protocol, Message Queue Telemetry Transport ...)
+Interagisce con gli smartphone nel caso in cui gli utenti decidono di ricevere notifiche o altri tipi di alert su telefoni cellulari (tipo messaggi telegram).
+Con il data server scambia informazioni con il broker mqtt e riceve informazioni sul gruppo (statistiche e dati dei sismometri) attraverso le API.
 
 % ======================================= CHAPTER 3 ================================================
 \chapter{Implementazione delle funzionalità}
@@ -760,56 +761,61 @@ placeholder
 \begin{thebibliography}{9}
 
 \bibitem{terra}
-  \textbf{Stuttura interna della terra}.\\
-  \href{https://it.wikipedia.org/wiki/Struttura_interna_della_Terra}{https://it.wikipedia.org/wiki/Struttura\_interna\_della\_Terra}
+	\textbf{Stuttura interna della terra}.\\
+	\href{https://it.wikipedia.org/wiki/Struttura_interna_della_Terra}{https://it.wikipedia.org/wiki/Struttura\_interna\_della\_Terra}
 
 \bibitem{measure}
-  \textbf{Earthquake Magnitude, Energy Release, and Shaking Intensity}.\\
-  \href{https://www.usgs.gov/natural-hazards/earthquake-hazards/science/earthquake-magnitude-energy-release-and-shaking-intensity}{https://www.usgs.gov/natural-hazards/earthquake-hazards/science/earthquake-magnitude-energy-release-and-shaking-intensity}
+	\textbf{Earthquake Magnitude, Energy Release, and Shaking Intensity}.\\
+	\href{https://www.usgs.gov/natural-hazards/earthquake-hazards/science/earthquake-magnitude-energy-release-and-shaking-intensity}{https://www.usgs.gov/natural-hazards/earthquake-hazards/science/earthquake-magnitude-energy-release-and-shaking-intensity}
 
 \bibitem{ingv}
-  \textbf{Istituto Nazionale di Geologia e Vulcanologia}.
-  \href{http://ingv.it}{http://ingv.it}
+	\textbf{Istituto Nazionale di Geologia e Vulcanologia}.
+	\href{http://ingv.it}{http://ingv.it}
 
 \bibitem{ottimizzazione}
-  \textbf{Ottimizzazione delle risorse nell’uso di servizi in background in SeismoCloud per Android}.
-  \href{https://github.com/Enrico204/bachelor-degree-thesis}{https://github.com/Enrico204/bachelor-degree-thesis}
+	\textbf{Ottimizzazione delle risorse nell’uso di servizi in background in SeismoCloud per Android}.
+	\href{https://github.com/Enrico204/bachelor-degree-thesis}{https://github.com/Enrico204/bachelor-degree-thesis}
 
 \bibitem{berkeleyfaq}
-  \textbf{Seismo Berkeley Lab FAQ}.
-  \href{http://seismo.berkeley.edu/outreach/faq.html}{http://seismo.berkeley.edu/outreach/faq.html}
+	\textbf{Seismo Berkeley Lab FAQ}.
+	\href{http://seismo.berkeley.edu/outreach/faq.html}{http://seismo.berkeley.edu/outreach/faq.html}
 
 \bibitem{rest}
-  \textbf{REST API documentation}.
-  \href{https://restfulapi.net/}{https://restfulapi.net/}
+	\textbf{REST API documentation}.
+	\href{https://restfulapi.net/}{https://restfulapi.net/}
 
 \bibitem{wikieud}
-  \textbf{Wikipedia - End User Development}.\\
-  \href{https://en.wikipedia.org/wiki/End-user_development}{https://en.wikipedia.org/wiki/End-user\_development}
+	\textbf{Wikipedia - End User Development}.\\
+	\href{https://en.wikipedia.org/wiki/End-user_development}{https://en.wikipedia.org/wiki/End-user\_development}
 
 \bibitem{MathWorks}
-  \textbf{Publish MQTT messages and subscribe to message topics}.\\
-  \href{https://www.mathworks.com/help/supportpkg/raspberrypi/ref/publish-and-subscribe-to-mqtt-messages.html}{https://www.mathworks.com/help/supportpkg/raspberrypi/ref/publish-and-subscribe-to-mqtt-messages.html}
+	\textbf{Publish MQTT messages and subscribe to message topics}.\\
+	\href{https://www.mathworks.com/help/supportpkg/raspberrypi/ref/publish-and-subscribe-to-mqtt-messages.html}{https://www.mathworks.com/help/supportpkg/raspberrypi/ref/publish-and-subscribe-to-mqtt-messages.html}
 
 \bibitem{noderedwiki}
-  \textbf{Node-RED Wiki}.
-  \href{https://github.com/node-red/node-red/wiki}{https://github.com/node-red/node-red/wiki}
+	\textbf{Node-RED Wiki}.
+	\href{https://github.com/node-red/node-red/wiki}{https://github.com/node-red/node-red/wiki}
 
 \bibitem{nodereddoc}
-  \textbf{Node-RED Documentation}.
-  \href{https://nodered.org/docs}{https://nodered.org/docs}
-
-\bibitem{dockerdoc}
-  \textbf{Docker Documentation}.
-  \href{https://docs.docker.com/}{https://docs.docker.com/}
+	\textbf{Node-RED Documentation}.
+	\href{https://nodered.org/docs}{https://nodered.org/docs}
 
 \bibitem{wikidocker}
-  \textbf{Wikipedia - Docker}.
-  \href{https://it.wikipedia.org/wiki/Docker/}{https://it.wikipedia.org/wiki/Docker}
+	\textbf{Wikipedia - Docker}.
+	\href{https://it.wikipedia.org/wiki/Docker/}{https://it.wikipedia.org/wiki/Docker}
 
 \bibitem{docker-portability}
-  \textbf{What does Docker technology add to just plain lxc}.\\
-  \href{https://docs.docker.com/engine/faq/#what-does-docker-technology-add-to-just-plain-lxc}{https://docs.docker.com/engine/faq/\#what-does-docker-technology-add-to-just-plain-lxc}
+	\textbf{What does Docker technology add to just plain lxc}.\\
+	\href{https://docs.docker.com/engine/faq/#what-does-docker-technology-add-to-just-plain-lxc}{https://docs.docker.com/engine/faq/\#what-does-docker-technology-add-to-just-plain-lxc}
+
+\bibitem{aboutstoragedrivers}
+	\textbf{Docker docs - About storage drivers}.\\
+	\href{https://docs.docker.com/storage/storagedriver/}{https://docs.docker.com/storage/storagedriver/}
+
+\bibitem{dockervsvm2}
+    \textbf{How is Docker different from a Virtual Machine}
+    \\
+    \href{https://stackoverflow.com/questions/16047306/how-is-docker-different-from-a-virtual-machine}{https://stackoverflow.com/questions/16047306/how-is-docker-different-from-a-virtual-machine}
 
 \bibitem{dockervsvm}
     \textbf{Performance Evaluation of Docker Container and Virtual Machine}
