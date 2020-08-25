@@ -158,7 +158,7 @@ captionpos=b
 
 % ======================================= ABSTRACT ================================================
 \begin{abstract}
-	abstract
+  abstract
 \end{abstract}
 \cleardoublepage
 
@@ -534,8 +534,9 @@ Docker è un progetto open-source che automatizza il deployment (consegna o rila
 Il concetto di container è già disponibile in Linux per eseguire un processo \textit{sandbox}, quindi su sui possono essere limitate e gestite le risorse a lui allocate. Il problema dei container LXC (disponibili in Linux utilizzando cgroup e namespace) è che se un container viene spostato su una macchina con configurazione differente molto probabilmente non funziona. Quindi ogni container dipende dall'ambiente in cui è costruito (dipendenze esterne, configurazione di rete, memoria e
 impostazioni particolari). Docker aggiunge \textbf{portabilità} ai container, cioè utilizzando un motore Docker i container diventano indipendenti dalla macchina in cui è stato creato. Altra funzione aggiunta è il \textbf{versioning}; si può tenere traccia delle varie versioni di un container, dando la possibilità di un upgrade o downgrade. Inoltre è orientato al \textbf{riuso},     dato che ogni container può essere utilizzato come base per uno più specifico \cite{docker-portability}.
 Docker definisce un formato unico per creare container, più nello specifico \textit{immagini}. Una immagine è il risultato dell'esecuzione di un file chiamato \textbf{Dockerfile}. Viene fornito il DockerHub, un portale dove sono presenti migliaia di immagini già pronte che possono essere utilizzate come base di partenza.
-Una immagine Docker consiste in livelli read-only i quali rappresentano istruzioni Docker. Una istruzione aggiunge qualcosa al livello precedente.
-%ABOUT STORAGE DRIVERS \cite{aboutstoragedrivers}
+
+\vspace{0.02\textwidth}
+\begin{center}
 Esempio di Dockerfile:
 \begin{lstlisting}[language=Javascript]
 FROM ubuntu:18.04
@@ -543,19 +544,22 @@ COPY . /app
 RUN make /app
 CMD python /app/app.py
 \end{lstlisting}
+\end{center}
 Ogni istruzione crea un livello:
 
 \begin{itemize}
-    \item FROM crea un livello dall'immagine Docker di ubuntu versione 18.04
+    \item FROM crea un livello dall'immagine Docker di Ubuntu versione 18.04
     \item COPY aggiunge i file dalla cartella corrente del Docker client
     \item RUN costruisce l'applicazione con make
     \item CMD specifica quale comando eseguire nel container
 \end{itemize}
+Una immagine Docker consiste in livelli read-only i quali rappresentano il risultato di istruzioni Docker. Una istruzione aggiunge qualcosa al livello precedente, in paticolare vengono aggiunte solo le differenze dal livello che lo precede.
 Quando viene eseguita un'immagine e generato un container, si aggiunge un ulteriore livello sopra ai precedenti.
-Tutte le modifiche poi fatte al container in esecuzione sono eseguite su questo nuovo livello.
-Viene fornita l'immagine di base ufficiale di Node-RED scaricabile dalla repository di DockerHub.
-\clearpage
-
+Tutte le modifiche poi fatte al container in esecuzione sono eseguite su questo nuovo livello che quindi non è read-only, ma writable ed è comunemente chiamato \textit{container layer}.
+\begin{figure}[ht]
+\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/container-layers.jpg}
+\end{figure}
+Questo tipo di architettura favorisce la condivisione di risorse. Infatti, l'unica differenza tra un container ed una immagine è il container layer. Questo fa in modo che se ho più container creati partendo dalla stessa immagine, le modifiche verranno effettuate solo nell'ultimo livello condividendo tutti i livelli sottostanti tra tutti i container\cite{aboutstoragedrivers}.
 La persistenza dei dati viene garantita dal volume (nell'esempio chiamato appunto volume). 
 È una parte del file-system che viene riservata per salvare i dati prodotti dal container in esecuzione.
 Questo garantisce che se il container va in uno stato di errore o la macchina dove viene deployato il container si spegne, i dati vengono comunque salvati in un disco fisso.
@@ -589,7 +593,7 @@ le prestazioni della memoria RAM (utilizzando RAM speed/SMP) e un caso particola
 \begin{tabular}{cc}
   \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-2.jpg} &   \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-3.jpg} \\
  \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-4.jpg} &   \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-5.jpg} \\
- %Aggiungi le altre due immagini 
+ \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-6.jpg} &   \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-7.jpg} \\
 \end{tabular}
 \end{figure}
 
@@ -761,56 +765,56 @@ placeholder
 \begin{thebibliography}{9}
 
 \bibitem{terra}
-	\textbf{Stuttura interna della terra}.\\
-	\href{https://it.wikipedia.org/wiki/Struttura_interna_della_Terra}{https://it.wikipedia.org/wiki/Struttura\_interna\_della\_Terra}
+  \textbf{Stuttura interna della terra}.\\
+  \href{https://it.wikipedia.org/wiki/Struttura_interna_della_Terra}{https://it.wikipedia.org/wiki/Struttura\_interna\_della\_Terra}
 
 \bibitem{measure}
-	\textbf{Earthquake Magnitude, Energy Release, and Shaking Intensity}.\\
-	\href{https://www.usgs.gov/natural-hazards/earthquake-hazards/science/earthquake-magnitude-energy-release-and-shaking-intensity}{https://www.usgs.gov/natural-hazards/earthquake-hazards/science/earthquake-magnitude-energy-release-and-shaking-intensity}
+  \textbf{Earthquake Magnitude, Energy Release, and Shaking Intensity}.\\
+  \href{https://www.usgs.gov/natural-hazards/earthquake-hazards/science/earthquake-magnitude-energy-release-and-shaking-intensity}{https://www.usgs.gov/natural-hazards/earthquake-hazards/science/earthquake-magnitude-energy-release-and-shaking-intensity}
 
 \bibitem{ingv}
-	\textbf{Istituto Nazionale di Geologia e Vulcanologia}.
-	\href{http://ingv.it}{http://ingv.it}
+  \textbf{Istituto Nazionale di Geologia e Vulcanologia}.
+  \href{http://ingv.it}{http://ingv.it}
 
 \bibitem{ottimizzazione}
-	\textbf{Ottimizzazione delle risorse nell’uso di servizi in background in SeismoCloud per Android}.
-	\href{https://github.com/Enrico204/bachelor-degree-thesis}{https://github.com/Enrico204/bachelor-degree-thesis}
+  \textbf{Ottimizzazione delle risorse nell’uso di servizi in background in SeismoCloud per Android}.
+  \href{https://github.com/Enrico204/bachelor-degree-thesis}{https://github.com/Enrico204/bachelor-degree-thesis}
 
 \bibitem{berkeleyfaq}
-	\textbf{Seismo Berkeley Lab FAQ}.
-	\href{http://seismo.berkeley.edu/outreach/faq.html}{http://seismo.berkeley.edu/outreach/faq.html}
+  \textbf{Seismo Berkeley Lab FAQ}.
+  \href{http://seismo.berkeley.edu/outreach/faq.html}{http://seismo.berkeley.edu/outreach/faq.html}
 
 \bibitem{rest}
-	\textbf{REST API documentation}.
-	\href{https://restfulapi.net/}{https://restfulapi.net/}
+  \textbf{REST API documentation}.
+  \href{https://restfulapi.net/}{https://restfulapi.net/}
 
 \bibitem{wikieud}
-	\textbf{Wikipedia - End User Development}.\\
-	\href{https://en.wikipedia.org/wiki/End-user_development}{https://en.wikipedia.org/wiki/End-user\_development}
+  \textbf{Wikipedia - End User Development}.\\
+  \href{https://en.wikipedia.org/wiki/End-user_development}{https://en.wikipedia.org/wiki/End-user\_development}
 
 \bibitem{MathWorks}
-	\textbf{Publish MQTT messages and subscribe to message topics}.\\
-	\href{https://www.mathworks.com/help/supportpkg/raspberrypi/ref/publish-and-subscribe-to-mqtt-messages.html}{https://www.mathworks.com/help/supportpkg/raspberrypi/ref/publish-and-subscribe-to-mqtt-messages.html}
+  \textbf{Publish MQTT messages and subscribe to message topics}.\\
+  \href{https://www.mathworks.com/help/supportpkg/raspberrypi/ref/publish-and-subscribe-to-mqtt-messages.html}{https://www.mathworks.com/help/supportpkg/raspberrypi/ref/publish-and-subscribe-to-mqtt-messages.html}
 
 \bibitem{noderedwiki}
-	\textbf{Node-RED Wiki}.
-	\href{https://github.com/node-red/node-red/wiki}{https://github.com/node-red/node-red/wiki}
+  \textbf{Node-RED Wiki}.
+  \href{https://github.com/node-red/node-red/wiki}{https://github.com/node-red/node-red/wiki}
 
 \bibitem{nodereddoc}
-	\textbf{Node-RED Documentation}.
-	\href{https://nodered.org/docs}{https://nodered.org/docs}
+  \textbf{Node-RED Documentation}.
+  \href{https://nodered.org/docs}{https://nodered.org/docs}
 
 \bibitem{wikidocker}
-	\textbf{Wikipedia - Docker}.
-	\href{https://it.wikipedia.org/wiki/Docker/}{https://it.wikipedia.org/wiki/Docker}
+  \textbf{Wikipedia - Docker}.
+  \href{https://it.wikipedia.org/wiki/Docker/}{https://it.wikipedia.org/wiki/Docker}
 
 \bibitem{docker-portability}
-	\textbf{What does Docker technology add to just plain lxc}.\\
-	\href{https://docs.docker.com/engine/faq/#what-does-docker-technology-add-to-just-plain-lxc}{https://docs.docker.com/engine/faq/\#what-does-docker-technology-add-to-just-plain-lxc}
+  \textbf{What does Docker technology add to just plain lxc}.\\
+  \href{https://docs.docker.com/engine/faq/#what-does-docker-technology-add-to-just-plain-lxc}{https://docs.docker.com/engine/faq/\#what-does-docker-technology-add-to-just-plain-lxc}
 
 \bibitem{aboutstoragedrivers}
-	\textbf{Docker docs - About storage drivers}.\\
-	\href{https://docs.docker.com/storage/storagedriver/}{https://docs.docker.com/storage/storagedriver/}
+  \textbf{Docker docs - About storage drivers}.\\
+  \href{https://docs.docker.com/storage/storagedriver/}{https://docs.docker.com/storage/storagedriver/}
 
 \bibitem{dockervsvm2}
     \textbf{How is Docker different from a Virtual Machine}
