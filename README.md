@@ -5,7 +5,7 @@
 ![latex-logo](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/made-with-latex.svg)
 ![overleaf](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/overleaf.svg)
 
-[![Direct pdf download](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/button.png)](example.com) (now not working)
+[![Direct pdf download](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/button.png)](https://edoardoottavianelli.it) (now not working)
 
 Get Started 🎉
 -------
