@@ -590,7 +590,8 @@ Come si può notare dai grafici nelle prossime pagine, tratti dallo studio di \t
 La comparazione nei test delle prestazioni della CPU è stato fatta utilizzando gli strumenti sysbench, Phoronix e Apache benchmark. È stato utilizzato il metodo del \textbf{massimo numero primo}.
 Viene dato un tempo massimo, in questo caso 60 secondi e deve essere dato in risultato il numero primo massimo minore di 50000 con 4 thread operativi.
 Per il test di compressione dati è stato utilizzato 7-Zip con un file di 10GB.
-le prestazioni della memoria RAM (utilizzando RAM speed/SMP) e un caso particolare. Come caso particolare è stato utilizzato Eigth Queen, una simulazione di un problema del gioco degli scacchi. 
+Le prestazioni della memoria RAM (utilizzando RAM speed/SMP) sono state misurate con gli strumenti INTmark e FLOAT mark che misurano le prestazioni massime possibili di cache e memoria mentre leggono e scrivono blocchi individuali di dati.
+In un ulteriore test è stato utilizzato un caso particolare, cioè Eigth Queen, una simulazione di un problema del gioco degli scacchi.
 \begin{figure}
 \begin{tabular}{cc}
   \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-2.jpg} &   \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-3.jpg} \\
@@ -598,11 +599,13 @@ le prestazioni della memoria RAM (utilizzando RAM speed/SMP) e un caso particola
  \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-6.jpg} &   \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-7.jpg} \\
 \end{tabular}
 \end{figure}
+Come possiamo notare dai grafici, le prestazioni dei container Docker sono di gran lunga superiori rispetto a virtual machine. Dato che l'immagine del nostro sistema è identica per tutti i container si ha un netto miglioramento delle performance utilizzando container perché tutti i container condividono la stessa immagine di base.
 
-\clearpage
+\vspace{0.02\textwidth}
+\begin{center}
+Esempio di immagine utilizzata in SeismoCloud partendo dalla immagine di Node-RED su DockerHub come base(\href{https://hub.docker.com/r/nodered/node-red/}{https://hub.docker.com/r/nodered/node-red/}).
+\end{center}
 
-Esempio di immagine utilizzata in SesimoCloud partendo dalla immagine di Node-RED su DockerHub come base(\href{https://hub.docker.com/r/nodered/node-red/}{https://hub.docker.com/r/nodered/node-red/}).
-%PERCHÉ SHA256
 \begin{lstlisting}[language=docker]
 # from nodered/node-red:1.0.6-12
 FROM nodered/node-red@sha256:82f367ab41d19e3ebd5e9b1cc62e4f615d4b4be4fa8bc83f1bf5441ba8c0d32a
@@ -610,7 +613,7 @@ FROM nodered/node-red@sha256:82f367ab41d19e3ebd5e9b1cc62e4f615d4b4be4fa8bc83f1bf
 # Qui vengono settate tutte le variabili d'ambiente
 ENV VAR="hello-world"
 
-# Vengono creati i volumi per la persistenza dei dati
+# Vengono indicati i volumi per la persistenza dei dati
 VOLUME /volume
 
 # Tutte le cartelle vengono copiate nell'immagine
@@ -623,6 +626,10 @@ RUN npm install #Tutti i nodi custom necessari
 
 CMD ["npm", "start"]
 \end{lstlisting}
+La seconda riga differisce dall'immagine definita nel Dockerfile di esempio per un codice dopo la definizione dell'immagine di partenza.
+Questo codice è un formato da due campi:\\ \texttt{algoritmo:valore-esadecimale}.
+
+
 Il deploy di tanti servizi può essere semplificato utilizzando \textbf{docker-compose}.
 \begin{lstlisting}[language=docker-compose-2]
 version: '3'
