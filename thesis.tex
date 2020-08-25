@@ -384,30 +384,7 @@ Ad esempio, si può ricevere un messaggio automatico tramite Telegram ogni volta
 % ======================================= CHAPTER 2 ================================================
 \chapter{Architettura del sistema}
 
-\section{Sistema Legacy}
-
-Come è stato accennato nella descrizione dell'architettura del sistema (Cap 1.3), è possibile programmare della azioni quando si verificano determinate condizioni.
-Sostanzialmente le condizioni sono due: quando n sismometri vibrano/sono accesi, oppure la notifica di un Earthquake Early Warning.
-Le possibilità per il metodo di notifica sono quattro: un messaggio tramite Telegram, una notifica push ai membri del gruppo, un widget e la pubblicazione di una API.
-
-\begin{figure}[H]
-\caption{Vecchio sistema EUD}
-\label{VecchioEUD}
-\includegraphics[width=1\textwidth]{Chapter-1/eud-vecchio.jpg}
-\end{figure}
-Visto che i dati prodotti sono tanti, sarebbe molto utile ampliare il range di condizioni ad un più vasto campo, tenendo in conto anche di tutti i dati che non vengono considerati in questo sistema.
-Sarebbe molto più utile lasciare completa \textbf{libertà all'utente} (sotto alcune restrizioni di sicurezza) integrando il sismometro con l'ambiente locale. 
-Potrei quindi decidere di riavviare il mio sismometro ogni volta che la temperatura supera i 50$^{\circ}$C. Oppure mandare una mail, pubblicare un tweet e scaricare un file quando vengono rilevate tre vibrazioni nello stesso minuto.
-Il tutto non deve risultare complesso, deve essere possibile l'utilizzo per utenti non esperti in informatica o elettronica, ma allo stesso tempo i più competenti devono poter sfruttare le loro abilità.
-La soluzione a questo bisogno dovrebbe essere: \textit{facilmente utilizzabile, sicura, affidabile e performante}.
-
-Ad esempio una casa smart con dispositivi IoT o altre tipologie di interazione.
-
-Il vecchio sistema di EUD rende possibile, come già introdotto, la programmazione di azioni condivisa con il proprio gruppo di appartenenza.
-Questa impostazione viene ripresa nel nuovo sistema, quindi ogni membro di un gruppo deve poter accedere alla propria \textit{istanza di gruppo di Node-RED} per programmare le azioni desiderate con tutti e soli i dati dei sismometri appartenenti al gruppo.
-La ragione principale di questa scelta è che in questo modo si hanno molti più dati disponibili. Infatti, in media ogni gruppo ha una decina di sismometri attivi.
-
-\section{La soluzione proposta: Node-RED}
+\section{Scelta dello strumento di sviluppo}
 
 \subsection{Candidati iniziali}
 
@@ -531,6 +508,16 @@ Una caratteristica del precedente sistema che viene ripresa nuovo è la division
 Questa scelta consente agli utenti di avere a disposizione più dati rispetto a quelli che avrebbero utilizzando solo i propri dispositivi. \textbf{In media} un utente ha un solo dispositivo proprietario, mentre un gruppo ne ha tra i dieci ed i quindici.
 Questo consente agli utenti di avere più libertà nella scelta delle condizioni.
 Quindi un requisito fondamentale è la \textit{scissione e la replica di un sistema in più "copie" con dati differenti} (i gruppi in questo caso).
+I requisiti non funzionali che devono essere rispettati sono:
+
+\begin{itemize}
+    \item Funzionalità: Devono essere garantite le funzionalità presenti nel precedente sistema ed in più ampliare dove possibile con le richieste (valutate dal team di sviluppo) degli utenti.
+    \item Usabilità: Il sistema deve risultare semplice e utilizzabile ad un pubblico più vasto possibile. Verrà testata la usabilità con test qualitativi e quantitativi.
+    \item Affidabilità: Deve essere garantita la sicurezza dei dati e la privacy degli utenti. Il sistema deve essere costruito seguendo \textit{privacy by design}.
+    \item Prestazioni: Il sistema non deve sprecare risorse (sia di memoria, sia computazionali) e deve essere progettato con molta attenzione alle performance. 
+\end{itemize}
+L'usabilità verrà discussa nel capitolo 3 e nel capitolo 5,
+l'affidabilità nel capitolo 4.
 
 \clearpage
 
@@ -538,10 +525,16 @@ Quindi un requisito fondamentale è la \textit{scissione e la replica di un sist
 \subsection{Vantaggi nell'utilizzo di Docker}
 
 Lo strumento che più soddisfa i requisiti imposti è \textbf{Docker}.
-È uno dei sistemi più noti per il deployment di applicazioni software, incapsula i programmi all'interno di contenitori astraendo dal sistema operativo sottostante.
-Utilizza i \textit{container}, cioè un insieme di più processi isolati dal resto del sistema.
-I container sono utili perché sono altamente portabili in tutti gli ambienti e restano integri dallo sviluppo ai test.
-Viene costruita un'immagine, ossia un file chiamato Dockerfile, che definisce tutte le dipendenze ed i file necessari per creare un container.
+È uno dei sistemi più noti per il deployment di applicazioni software. Dalla pagina Wikipedia che descrive Docker
+\cite{wikidocker}:
+\begin{quoting}[font=itshape, begintext={``}, endtext={``}]
+Docker è un progetto open-source che automatizza il deployment (consegna o rilascio al cliente, con relativa installazione e messa in funzione o esercizio, di un'applicazione o di un sistema software tipicamente all'interno di un sistema informatico aziendale) di applicazioni all'interno di contenitori software, fornendo un'astrazione aggiuntiva grazie alla virtualizzazione a livello di sistema operativo di Linux. Docker utilizza le funzionalità di isolamento delle risorse del kernel Linux come ad esempio cgroup e namespace per consentire a "container" indipendenti di coesistere sulla stessa istanza di Linux, evitando l'installazione e la manutenzione di una macchina virtuale.
+\end{quoting}
+
+Il concetto di container è già disponibile in Linux per eseguire un processo \textit{sandbox}, quindi su sui possono essere limitate e gestite le risorse a lui allocate. Il problema dei container LXC (disponibili in Linux utilizzando cgroup e namespace) è che se un container viene spostato su una macchina con configurazione differente molto probabilmente non funziona. Quindi ogni container dipende dall'ambiente in cui è costruito (dipendenze esterne, configurazione di rete, memoria e
+impostazioni particolari). Docker aggiunge \textbf{portabilità} ai container, cioè utilizzando un motore Docker i container diventano indipendenti dalla macchina in cui è stato creato. Altra funzione aggiunta è il \textbf{versioning}; si può tenere traccia delle varie versioni di un container, dando la possibilità di un upgrade o downgrade. Inoltre è orientato al \textbf{riuso},     dato che ogni container può essere utilizzato come base per uno più specifico.\cite{docker-portability}.
+Docker definisce un formato unico per creare container, più nello specifico \textit{immagini}. Una immagine è il risultato dell'esecuzione di un file chiamato \textbf{Dockerfile}. Viene fornito il DockerHub, un portale dove sono presenti migliaia di immagini già pronte che possono essere utilizzate come base di partenza.
+
 Una immagine Docker consiste in livelli read-only i quali rappresentano istruzioni Docker. Una istruzione aggiunge qualcosa al livello precedente.
 Esempio di Dockerfile:
 \begin{lstlisting}[language=Javascript]
@@ -670,6 +663,30 @@ Se, mentre tutti i servizi sono in esecuzione, si vuole modificare lo stato di u
 % ======================================= CHAPTER 3 ================================================
 \chapter{Implementazione delle funzionalità}
 
+\section{Sistema Legacy}
+
+Come è stato accennato nella descrizione dell'architettura del sistema (Cap 1.3), è possibile programmare della azioni quando si verificano determinate condizioni.
+Sostanzialmente le condizioni sono due: quando n sismometri vibrano/sono accesi, oppure la notifica di un Earthquake Early Warning.
+Le possibilità per il metodo di notifica sono quattro: un messaggio tramite Telegram, una notifica push ai membri del gruppo, un widget e la pubblicazione di una API.
+
+\begin{figure}[H]
+\caption{Vecchio sistema EUD}
+\label{VecchioEUD}
+\includegraphics[width=1\textwidth]{Chapter-1/eud-vecchio.jpg}
+\end{figure}
+Visto che i dati prodotti sono tanti, sarebbe molto utile ampliare il range di condizioni ad un più vasto campo, tenendo in conto anche di tutti i dati che non vengono considerati in questo sistema.
+Sarebbe molto più utile lasciare completa \textbf{libertà all'utente} (sotto alcune restrizioni di sicurezza) integrando il sismometro con l'ambiente locale. 
+Potrei quindi decidere di riavviare il mio sismometro ogni volta che la temperatura supera i 50$^{\circ}$C. Oppure mandare una mail, pubblicare un tweet e scaricare un file quando vengono rilevate tre vibrazioni nello stesso minuto.
+Il tutto non deve risultare complesso, deve essere possibile l'utilizzo per utenti non esperti in informatica o elettronica, ma allo stesso tempo i più competenti devono poter sfruttare le loro abilità.
+La soluzione a questo bisogno dovrebbe essere: \textit{facilmente utilizzabile, sicura, affidabile e performante}.
+
+Ad esempio una casa smart con dispositivi IoT o altre tipologie di interazione.
+
+Il vecchio sistema di EUD rende possibile, come già introdotto, la programmazione di azioni condivisa con il proprio gruppo di appartenenza.
+Questa impostazione viene ripresa nel nuovo sistema, quindi ogni membro di un gruppo deve poter accedere alla propria \textit{istanza di gruppo di Node-RED} per programmare le azioni desiderate con tutti e soli i dati dei sismometri appartenenti al gruppo.
+La ragione principale di questa scelta è che in questo modo si hanno molti più dati disponibili. Infatti, in media ogni gruppo ha una decina di sismometri attivi.
+
+
 \section{Difficoltà e limiti nell'uso di Node-RED}
 
 placeholder
@@ -767,8 +784,8 @@ placeholder
   \href{https://restfulapi.net/}{https://restfulapi.net/}
 
 \bibitem{wikieud}
-  \textbf{Wikipedia - End User Development}.
-  \href{https://en.wikipedia.org/wiki/End-user_development}{https://en.wikipedia.org/wiki/End-user_development}
+  \textbf{Wikipedia - End User Development}.\\
+  \href{https://en.wikipedia.org/wiki/End-user_development}{https://en.wikipedia.org/wiki/End-user\_development}
 
 \bibitem{MathWorks}
   \textbf{Publish MQTT messages and subscribe to message topics}.\\
@@ -785,6 +802,14 @@ placeholder
 \bibitem{dockerdoc}
   \textbf{Docker Documentation}.
   \href{https://docs.docker.com/}{https://docs.docker.com/}
+
+\bibitem{wikidocker}
+  \textbf{Wikipedia - Docker}.
+  \href{https://it.wikipedia.org/wiki/Docker/}{https://it.wikipedia.org/wiki/Docker}
+
+\bibitem{docker-portability}
+  \textbf{What does Docker technology add to just plain lxc}.\\
+  \href{https://docs.docker.com/engine/faq/#what-does-docker-technology-add-to-just-plain-lxc}{https://docs.docker.com/engine/faq/\#what-does-docker-technology-add-to-just-plain-lxc}
 
 \bibitem{dockervsvm}
     \textbf{Performance Evaluation of Docker Container and Virtual Machine}
