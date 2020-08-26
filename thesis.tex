@@ -656,22 +656,18 @@ services:
     volumes:
       - ./volume:/volume
 \end{lstlisting}
-Compose è uno strumento per definire ed eseguire applicazioni Docker multi-container.
+Compose è uno strumento per definire ed eseguire applicazioni Docker multi-container. Si usa un file di tipo YAML per definire tutti i componenti ed impostare il servizio.
+Vengono creati i file Dockerfile relativi a tutte le immagini che devono essere costruite ed un file \texttt{docker-compose.yml}.
 In questo caso appunto, vengono eseguiti due servizi node-red con immagine customizzata (seismocloud-nodered) per due differenti gruppi.
 Con un singolo comando si possono eseguire tutti i servizi configurati in precedenza (\textit{docker-compose up}), oppure stopparli (\textit{docker-compose stop}) e con un altro farli ripartire (\textit{docker-compose restart}).
 Se, mentre tutti i servizi sono in esecuzione, si vuole modificare lo stato di uno solo è possibile farlo con i comandi di Docker.
-
+\clearpage
 Qui con \textbf{node-RED instance} si intende un container per un gruppo specifico.
-Il container interagisce con l'interfaccia web riguardo tutta l'interazione con l'utente.
-Interagisce con i sismometri attraverso i vari protocolli per lo scambio di dati (HyperText Transfer Protocol, Message Queue Telemetry Transport ...)
+Il container interagisce con l'interfaccia web per garantire l' autenticazione di un utente; interagisce con i sismometri attraverso i vari protocolli per lo scambio di dati (HyperText Transfer Protocol, Message Queue Telemetry Transport).
 Interagisce con gli smartphone nel caso in cui gli utenti decidono di ricevere notifiche o altri tipi di alert su telefoni cellulari (tipo messaggi telegram).
 Con il data server scambia informazioni con il broker mqtt e riceve informazioni sul gruppo (statistiche e dati dei sismometri) attraverso le API.
-
-\clearpage
-
-\subsection{Schema finale architettura}
-\begin{figure}[H]
-\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/architettura-seismocloud2.png}
+\begin{figure}[ht]
+\includegraphics[width=0.9\textwidth]{relazione-tirocinio/Chapter-2/architettura-seismocloud2.png}
 \end{figure}
 
 \clearpage
