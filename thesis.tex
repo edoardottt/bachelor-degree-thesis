@@ -590,7 +590,7 @@ Come si può notare dai grafici nelle prossime pagine, tratti dallo studio di \t
 La comparazione nei test delle prestazioni della CPU è stato fatta utilizzando gli strumenti sysbench, Phoronix e Apache benchmark. È stato utilizzato il metodo del \textbf{massimo numero primo}.
 Viene dato un tempo massimo, in questo caso 60 secondi e deve essere dato in risultato il numero primo massimo minore di 50000 con 4 thread operativi.
 Per il test di compressione dati è stato utilizzato 7-Zip con un file di 10GB.
-Le prestazioni della memoria RAM (utilizzando RAM speed/SMP) sono state misurate con gli strumenti INTmark e FLOAT mark che misurano le prestazioni massime possibili di cache e memoria mentre leggono e scrivono blocchi individuali di dati.
+Le prestazioni della memoria RAM (utilizzando RAM speed/SMP) sono state misurate con gli strumenti INTmark e FLOATmark che misurano le prestazioni massime possibili di cache e memoria mentre leggono e scrivono blocchi individuali di dati.
 In un ulteriore test è stato utilizzato un caso particolare, cioè Eigth Queen, una simulazione di un problema del gioco degli scacchi.
 \begin{figure}
 \begin{tabular}{cc}
@@ -628,8 +628,9 @@ CMD ["npm", "start"]
 \end{lstlisting}
 La seconda riga differisce dall'immagine definita nel Dockerfile di esempio per un codice dopo la definizione dell'immagine di partenza.
 Questo codice è un formato da due campi:\\ \texttt{algoritmo:valore-esadecimale}.
+In questo caso l'algoritmo utilizzato è \texttt{sha256}. Viene calcolato lo stesso algoritmo su tutti i livelli che compongono l'immagine, successivamente viene creato un file \texttt{Manifest}, a cui poi viene calcolato lo stessp algoritmo di hash che corrisponde al digest dell'immagine. Ovviamente questo hash serve a verificare che effettivamente quello che ho scaricato corrisponde all'immagine voluta. Non utilizzando un hash, ma come scritto prima un tag (ubuntu:\texttt{18:04}) scarico una immagine ma non verifico il contenuto che appunto potrebbe essere manomesso. 
 
-
+\vspace{0.02\textwidth}
 Il deploy di tanti servizi può essere semplificato utilizzando \textbf{docker-compose}.
 \begin{lstlisting}[language=docker-compose-2]
 version: '3'
@@ -659,6 +660,13 @@ Compose è uno strumento per definire ed eseguire applicazioni Docker multi-cont
 In questo caso appunto, vengono eseguiti due servizi node-red con immagine customizzata (seismocloud-nodered) per due differenti gruppi.
 Con un singolo comando si possono eseguire tutti i servizi configurati in precedenza (\textit{docker-compose up}), oppure stopparli (\textit{docker-compose stop}) e con un altro farli ripartire (\textit{docker-compose restart}).
 Se, mentre tutti i servizi sono in esecuzione, si vuole modificare lo stato di uno solo è possibile farlo con i comandi di Docker.
+
+Qui con \textbf{node-RED instance} si intende un container per un gruppo specifico.
+Il container interagisce con l'interfaccia web riguardo tutta l'interazione con l'utente.
+Interagisce con i sismometri attraverso i vari protocolli per lo scambio di dati (HyperText Transfer Protocol, Message Queue Telemetry Transport ...)
+Interagisce con gli smartphone nel caso in cui gli utenti decidono di ricevere notifiche o altri tipi di alert su telefoni cellulari (tipo messaggi telegram).
+Con il data server scambia informazioni con il broker mqtt e riceve informazioni sul gruppo (statistiche e dati dei sismometri) attraverso le API.
+
 \clearpage
 
 \subsection{Schema finale architettura}
@@ -667,12 +675,6 @@ Se, mentre tutti i servizi sono in esecuzione, si vuole modificare lo stato di u
 \end{figure}
 
 \clearpage
-
-Qui con \textbf{node-RED instance} si intende un container per un gruppo specifico.
-Il container interagisce con l'interfaccia web riguardo tutta l'interazione con l'utente.
-Interagisce con i sismometri attraverso i vari protocolli per lo scambio di dati (HyperText Transfer Protocol, Message Queue Telemetry Transport ...)
-Interagisce con gli smartphone nel caso in cui gli utenti decidono di ricevere notifiche o altri tipi di alert su telefoni cellulari (tipo messaggi telegram).
-Con il data server scambia informazioni con il broker mqtt e riceve informazioni sul gruppo (statistiche e dati dei sismometri) attraverso le API.
 
 % ======================================= CHAPTER 3 ================================================
 \chapter{Implementazione delle funzionalità}
