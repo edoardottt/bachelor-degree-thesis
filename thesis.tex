@@ -195,7 +195,7 @@ Continuando verso l'esterno, troviamo il \textbf{mantello terrestre}, che si div
 È composto da diversi metalli ed è difficile stabilire la temperatura dato i moti convettivi del calore, ma si stima intorno ai 500$^{\circ}$C a confine con la crosta terrestre e 3000$^{\circ}$C a confine con il nucleo.
 Infine abbiamo la \textbf{crosta terrestre}, che partendo dalla superficie, arriva fino a 70 km di profondità.
 Insieme, il \textit{mantello superiore} e la \textit{crosta terrestre} formano la \textbf{litosfera}.
-La litosfera è suddivisa in una decina di placche tettoniche principali e altre numerose placche di minori dimensioni (figura 1.2). Queste placche ``galleggiano" sullo strato immediatamente sottostante del mantello superiore.\cite{terra}
+La litosfera è suddivisa in una decina di placche tettoniche principali e altre numerose placche di minori dimensioni (figura \ref{fig:placchetettoniche}). Queste placche ``galleggiano" sullo strato immediatamente sottostante del mantello superiore.\cite{terra}
 
 Esse, data la forte pressione e le alte temperature, subiscono sforzi di enormi dimensioni che formano i \textbf{terremoti}.
 I terremoti sono vibrazioni della crosta terrestre, provocate dallo spostamento  di una o più placche nella litosfera.
@@ -317,7 +317,7 @@ I sismometri utilizzano il protocollo ISO standard \textbf{MQTT} (Message Queue 
 \includegraphics[width=1\textwidth]{Chapter-1/mqtt.jpg}
 \end{figure}
 Viene utilizzato questo protocollo perché è stato progettato per i dispositivi IoT, dato che questi ultimi hanno, solitamente, una batteria con piccola capienza ed in generale risorse limitate. Rispetto al precedente protocollo HTTP, esso invia messaggi ad alta affidabilità, ha una bassa latenza ed un basso overhead\cite{ottimizzazione}. In MQTT, il \texttt{topic} è una stringa UTF-8 che un broker utilizza per filtrare i messaggi. 
-Si può considerare come una etichetta che viene affissa a dei valori che si riferiscono tutti allo stesso argomento. Un broker è il responsabile della comunicazione tra i vari client connessi. I topic hanno una gerarchia basata a livelli. Ogni livello è separato da uno slash. 
+Si può considerare come una etichetta che viene affissa a dei valori che si riferiscono tutti allo stesso argomento. Un broker è il responsabile della comunicazione tra i vari client connessi. I topic hanno una gerarchia basata a livelli ed ogni livello è separato da uno slash. 
 Ad esempio il topic che si riferisce alla temperatura del sismometro con identificativo $34$ potrebbe essere \texttt{sensor/34/temperature}.
 Dato che MQTT è un protocollo di tipo \textit{publish/subscribe}, i client possono pubblicare dati relativi ad un topic, i quali verranno ricevuti dai client che sono iscritti a quel determinato topic.
 I client sono liberi di scegliere le azioni da compiere: possono solamente iscriversi ad alcuni topic (o a tutti), oppure solamente pubblicare dati su topic senza iscriversi, oppure possono eseguire entrambe le operazioni.
@@ -330,7 +330,7 @@ Per i messaggi inviati tramite HTTP viene utilizzato lo stile architetturale \te
 Questo schema è definito da dei principi \cite{rest}:
 \begin{itemize}
   \item \texttt{Client-Server}: Separare l'interfaccia dalla logica dei dati aumenta la portabilità del sistema.
-  \item \texttt{Stateless}: Ogni richiesta dal client al server non deve basarsi su altri dati se non quelli interni alla richiesta
+  \item \texttt{Stateless}: Ogni richiesta dal client al server non deve basarsi su altri dati se non quelli interni alla richiesta.
   \item \texttt{Cacheable}: I dati, se possibile, devono essere salvati nella cache del client per utilizzi futuri.
   \item \texttt{Interfacce uniformi}: Prediligere identificazione delle risorse; manipolazione delle risorse tramite rappresentazioni; messaggi auto-esplicativi; hypermedia come motore dello stato dell'applicazione.
   \item \texttt{Sistema a livelli}: un sistema composto da più livelli indipendenti rende il sistema modulare.
@@ -340,8 +340,8 @@ Il nucleo dello stile REST sono le \textit{risorse}.
 Una risorsa è qualsiasi informazione: un documento, una immagine, un video, un numero, una collezione di risorse.
 REST utilizza identificatori di risorse per aiutare la comunicazione tra le parti.
 Un esempio di risorsa in stile REST è: \texttt{example.domain/sensor/sensor-id/quake}, dove \texttt{sensor-id} è l'identificatore unico per un sensore.
-Tramite l'app mobile (disponibile per Android e iOS) si registrano i nuovi sismometri (sia fissi che mobili). Il sismometro interno viene registrato automaticamente quando viene scaricata l'applicazione per la prima volta. Con i sismometri fissi, quest'ultimo crea una connessione Wi-Fi chiamata \textit{SeismoCloud}. L'utente ci si collega ed inserisce i dati per connettersi alla rete Wi-Fi locale. Successivamente in automatico il dispositivo fisso si collega alla rete Wi-Fi e l'app cerca di trovare nella rete un sismometro.
-In entrambi i casi viene richiesto di consentire all'acquisizione della posizione GPS e un nome per il nuovo sismometro.
+Tramite l'app mobile (disponibile per Android e iOS) si registrano i nuovi sismometri (sia fissi che mobili). Il sismometro interno viene registrato automaticamente quando viene scaricata l'applicazione per la prima volta. Il sismometro fisso invece crea una connessione Wi-Fi chiamata \textit{SeismoCloud}. L'utente ci si collega ed inserisce i dati per connettersi alla rete Wi-Fi locale. Successivamente in automatico il dispositivo fisso si collega alla rete Wi-Fi e l'app cerca di trovare nella rete un sismometro.
+In entrambi i casi viene richiesto di consentire all'acquisizione della posizione GPS ed un nome per il nuovo sismometro.
 Attivando un sismometro viene prodotta una mole consistente di dati.
 \begin{center}
 Esempio di dati ricevuti e/o inviati dal dispositivo
@@ -363,9 +363,9 @@ Con una cadenza periodica (qualche minuto, dipende dal carico del sistema) vengo
 Quando il sismometro rileva una vibrazione viene inviata l'intensità della vibrazione.
 Un topic MQTT è dedicato al comando \textit{reboot}, ossia la possibilità di riavviare il sismometro pubblicando un messaggio.\\
 Inoltre è possibile visualizzare la lista dei propri sismometri, una mappa aggiornata in tempo reale con i sismometri attivi e i terremoti recenti, una lista di terremoti con relativa magnitudo, posizione e profondità dell'ipocentro (ordinati cronologicamente) e infine alcuni informazioni utili.
-È disponibile anche una interfaccia web è possibile visualizzare tutte le informazioni prima citate ed in più una dashboard personalizzata.
-Nella dashboard personale è possibile visualizzare due grafici che mostrano il tempo di utilizzo assoluto e settimanale di ogni sismometro attivo.
-Dopo l'effettiva autenticazione (tramite password o QRCode) si entra nella parte privata, ossia relativa ad un determinato \textit{gruppo} (insiemi di sismometri raggruppati per locazione).
+È disponibile anche una interfaccia web dove è possibile visualizzare tutte le informazioni prima citate ed in più una dashboard personalizzata.
+In quest'ultima è possibile visualizzare due grafici che mostrano il tempo di utilizzo assoluto e settimanale di ogni sismometro attivo.
+Dopo l'effettiva autenticazione (tramite password o QRCode) si entra nell'area privata, ossia relativa ad un determinato \textit{gruppo} (insiemi di sismometri raggruppati per locazione).
 Qui, oltre alle funzionalità citate, è presente un sistema di \textbf{EUD} (End User Development).
 Dalla pagina Wikipedia \cite{wikieud}:
 \begin{quoting}[font=itshape, begintext={``}, endtext={``}]
