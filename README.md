@@ -1,4 +1,4 @@
-## Titolo
+## Design e Sviluppo del sistema di End User Development in SeismoCloud
 
 ![latex-logo](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/made-with-latex.svg)
 ![overleaf](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/overleaf.svg)
