@@ -626,8 +626,8 @@ RUN npm install #Tutti i nodi custom necessari
 CMD ["npm", "start"]
 \end{lstlisting}
 La seconda riga differisce dall'immagine definita nel Dockerfile di esempio per un codice dopo la definizione dell'immagine di partenza.
-Questo codice è un formato da due campi:\\ \texttt{algoritmo:valore-esadecimale}.
-In questo caso l'algoritmo utilizzato è \texttt{sha256}. Viene calcolato lo stesso algoritmo su tutti i livelli che compongono l'immagine, successivamente viene creato un file \texttt{Manifest}, a cui poi viene calcolato lo stessp algoritmo di hash che corrisponde al digest dell'immagine. Ovviamente questo hash serve a verificare che effettivamente quello che ho scaricato corrisponde all'immagine voluta. Non utilizzando un hash, ma come scritto prima un tag (ubuntu:\texttt{18:04}) scarico una immagine ma non verifico il contenuto che appunto potrebbe essere manomesso. 
+Questo codice è formato da due campi:\\ \texttt{algoritmo:valore-esadecimale}.
+In questo caso l'algoritmo utilizzato è \texttt{sha256}. Viene calcolato lo stesso algoritmo su tutti i livelli che compongono l'immagine, successivamente viene creato un file \texttt{Manifest}, a cui poi viene calcolato lo stesso algoritmo di hash che corrisponde al digest dell'immagine. Ovviamente questo hash serve a verificare che effettivamente quello che è stato scaricato corrisponde all'immagine desiderata. Non utilizzando un hash, ma come scritto prima un tag (ubuntu:\texttt{18:04}) scarico una immagine ma non verifico il contenuto che appunto potrebbe essere manomesso. 
 
 \vspace{0.02\textwidth}
 Il deploy di tanti servizi può essere semplificato utilizzando \textbf{docker-compose}.
@@ -664,8 +664,8 @@ Se, mentre tutti i servizi sono in esecuzione, si vuole modificare lo stato di u
 
 Qui con \textbf{node-RED instance} si intende un container per un gruppo specifico.
 Il container interagisce con l'interfaccia web per garantire l' autenticazione di un utente; interagisce con i sismometri attraverso i vari protocolli per lo scambio di dati (HyperText Transfer Protocol, Message Queue Telemetry Transport).
-Interagisce con gli smartphone nel caso in cui gli utenti decidono di ricevere notifiche o altri tipi di alert su telefoni cellulari (tipo messaggi telegram).
-Con il data server scambia informazioni con il broker mqtt e riceve informazioni sul gruppo (statistiche e dati dei sismometri) attraverso le API.
+Interagisce con gli smartphone nel caso in cui gli utenti decidono di ricevere notifiche push o altri tipi di alert (messaggi Telegram o altra applicazione).
+Con il data server scambia informazioni attraverso il broker mqtt e riceve informazioni sul gruppo (statistiche e dati dei sismometri) attraverso le API.
 \begin{figure}[ht]
 \includegraphics[width=0.9\textwidth]{relazione-tirocinio/Chapter-2/architettura-seismocloud2.png}
 \end{figure}
@@ -675,8 +675,8 @@ Con il data server scambia informazioni con il broker mqtt e riceve informazioni
 
 \section{Sistema Legacy}
 
-Come è stato accennato nella descrizione dell'architettura del sistema SeismoCloud (Cap 1.3), è presente un sistema di End User Development. In particolare è possibile programmare della azioni quando si verificano determinate condizioni.
-Sostanzialmente le condizioni sono tre: quando $n$ (o un solo) sismometri vibrano/sono accesi, quando un sismometro entra in una scuola, oppure la notifica di un Earthquake Early Warning.
+Come è stato accennato nella descrizione dell'architettura del sistema SeismoCloud (Cap 1.3), è presente un sistema di End User Development. In particolare è possibile programmare della azioni quando si verificano determinate condizioni pur non avendo competenze in programmazione software.
+Le condizioni disponibili sono tre: quando $n$ (o un solo) sismometri vibrano/sono accesi, quando un sismometro entra in una scuola, oppure la notifica di un Earthquake Early Warning.
 Le possibilità per il metodo di notifica sono quattro: un messaggio tramite Telegram, una notifica push ai membri del gruppo, un widget e la pubblicazione di una API.
 \begin{figure}[ht]
 \label{legacy1}
@@ -684,17 +684,17 @@ Le possibilità per il metodo di notifica sono quattro: un messaggio tramite Tel
 \end{figure}
 Visto che i dati prodotti sono tanti, sarebbe molto utile ampliare il range di condizioni ad un più vasto campo, tenendo in conto anche di tutti i dati che non vengono considerati in questo sistema, ma che vengono comunque collezionati dai sismometri (temperatura, indirizzi IP, soglia di Quake, rssi, reboot..).
 Sarebbe ancora più utile lasciare completa \textbf{libertà all'utente} (sotto alcune restrizioni di sicurezza) integrando il sismometro con l'ambiente locale potenziando così le funzionalità e l'utilità di un sismometro.
-Quindi, un primo problema del sistema legacy di EUD è sicuramente la rigidità nelle azioni possibilmente create dall'utente.
-Con Node-RED, possono essere costruite tantissime azioni automatizzate dato il vasto campo di funzionalità offerte.
-Si potrebbe quindi decidere di riavviare il mio sismometro ogni volta che la temperatura supera i 50$^{\circ}$C. Oppure mandare una mail, pubblicare un tweet e scaricare un file quando vengono rilevate tre vibrazioni nello stesso minuto.
+Quindi, un primo problema del sistema legacy di EUD è sicuramente la rigidità nelle azioni messe a disposizione per l'utente.
+Con Node-RED, possono essere costruite tantissime azioni automatizzate dato l'elevato numero di funzionalità offerte.
+Si potrebbe quindi decidere di riavviare un sismometro ogni volta che la temperatura supera i 50$^{\circ}$C. Oppure mandare una mail, pubblicare un tweet e scaricare un file quando vengono rilevate tre vibrazioni nello stesso minuto.
 Un ulteriore vantaggio è l'integrazione con i dispositivi smart/IoT. Node-RED è stato ideato e viene mantenuto come strumento per la programmazione flow-based per ambienti IoT/industriali. Ad esempio se si possiede qualche dispositivo per una smart home (telecamere, smart TV, frigorifero etc...) possono essere collegati al sismometro ed automatizzati basandosi anche su eventi sismici.
 Il tutto non deve risultare complesso, deve essere possibile l'utilizzo per utenti non esperti in informatica o elettronica, ma allo stesso tempo i più competenti devono poter sfruttare le loro abilità.
 La soluzione a questo bisogno dovrebbe essere: \textit{facilmente utilizzabile, sicura, affidabile e performante}.
-Un vantaggio sicuramente del precedente sistema è l'elevata \textbf{usabilità}. Infatti, essendo disponibili poche funzionalità e quindi pochi bottoni è molto intuitiva da comprendere.
-Questa facilità d'uso deve essere mantenuta anche nel nuovo sistema per non escludere utenti non tecnologicamente competenti.
+Senza ombra di dubbio un punto di forza del precedente sistema è l'elevata \textbf{usabilità}. Infatti, essendo disponibili poche funzionalità e quindi pochi pulsanti è molto facile da comprendere.
+Questa facilità d'uso deve essere mantenuta anche nel nuovo sistema per non escludere utenti non tecnicamente competenti.
 Il vecchio sistema di EUD rende possibile, come già introdotto, la programmazione di azioni condivisa con il proprio gruppo di appartenenza.
-Questa impostazione viene ripresa nel nuovo sistema, quindi ogni membro di un gruppo deve poter accedere alla propria \textit{istanza di gruppo di Node-RED} per programmare le azioni desiderate con tutti e soli i dati dei sismometri appartenenti al gruppo.
-La ragione principale di questa scelta è che in questo modo si hanno molti più dati disponibili. Infatti, in media ogni gruppo ha una decina di sismometri attivi.
+Questa impostazione viene ripresa nel nuovo sistema, quindi ogni membro di un gruppo deve poter accedere alla propria \textit{istanza di gruppo di Node-RED} per programmare le azioni desiderate con tutti e soli i sismometri appartenenti al gruppo. Le azioni si possono basare su dati provenienti da tutta la rete.
+La ragione principale di questa scelta è che in questo modo si hanno molti più dati disponibili.
 
 \begin{figure}[ht]
 \label{legacy2}
@@ -704,7 +704,34 @@ La ragione principale di questa scelta è che in questo modo si hanno molti più
 
 \section{Difficoltà e limiti nell'uso di Node-RED}
 
-placeholder
+L'immagine di partenza di Node-RED fornisce alcune funzionalità di base. Nella palette di sinistra sono presenti sei sezioni (common, function, network, sequence, parser, storage) che raggruppano i vari nodi in base all'argomento di appartenenza. È stato già anticipato che questo strumento viene utilizzato nell'industria e ha un grande potenziale, possono essere programmate un vasto range di azioni utilizzando molte tecnologie e protocolli differenti. Sono presenti anche azioni che non possono essere programmate ad \textit{alto livello}, cioè si deve scendere nei tecnicismi della tecnologia utilizzata. Un esempio di ciò è l'\textbf{invio di una richiesta di sottoscrizione ad un topic SeismoCloud verso il broker mqtt}. 
+
+\begin{figure}[hbt]
+    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-3/mqtt-legacy-1.jpg}
+    \label{fig:mqtt-legacy-1}
+\end{figure}
+
+Il problema che si nota qui è l'elevato numero di impostazioni e settaggi che l'utente deve inserire per configurare correttamente un client MQTT per ricevere un solo tipo di dato.
+Vengono richieste competenze in questa specifica tecnologia e non solo (anche nozioni generali di reti). Ad esempio, si deve inserire l'indirizzo IP del server (in questo caso scelto appositamente non esistente come esempio) \texttt{256.256.256.256}, la porta di riferimento \texttt{1883}, un client ID ed un keep alive time. Se si vuole anche configurare una connessione sicura tramite \textit{SSL/TSL} devono essere configurati anche i relativi parametri per la cifratura dei dati.
+Se il server è protetto da username e password (come nel caso SeismoCloud), c'è un tab anche per quello. Quindi qui c'è anche un problema di sicurezza: per fornire dati agli utenti devo fornire loro anche le informazioni di autenticazione ed accesso al server.
+Inoltre, ovviamente, l'utente deve essere a conoscenza di come sono formati tutti i topic di cui ha bisogno.
+Se inoltre si vogliono pubblicare messaggi e non solamente riceverli si hanno a disposizione più tipologie di messaggi per comunicare con il server.
+Il protocollo MQTT inoltre ha il particolare \textit{Quality of Service} che funziona in questo modo:
+Si può settare un valore numerico (0 , 1 o 2) che corrisponde al grado di accuratezza ed affidabilità nella consegna dei messaggi.
+
+\begin{itemize}
+    \item QoS 0: Con questa impostazione si ha un servizio \textit{orientato alle prestazioni con il minor impiego di energia}. Il client non riceve feedback dell'avvenuta consegna del messaggio.
+    \item QoS 1: Quando si riceve  un messaggio con QoS uguale ad 1, si deve inviare un messaggio di acknowledgment che certifica che la ricezione è correttamente avvenuta. Specularmente, se si invia un messaggio con QoS 1 allora devo aspettare il feedback. Nel caso di un problema di rete (ad esempio congestione) e il mittente non riceve in un determinato lasso di tempo l'acknowledgment rinvierà di nuovo il messaggio. \textit{Questo può portare ad avere messaggi duplicati}.
+    \item QoS 2: È la modalità più costosa in termini di sforzo (in modo relativo, il protocollo è progettato per una buona gestione delle risorse). Vengono inviati più messaggi per confermare la ricezione ed evitare eventuali duplicati.
+\end{itemize}
+Ovviamente non esiste un valore QoS migliore in assoluto, ma dipende dal messaggio e dallo scopo di esso.
+Inoltre questo fa comprendere quante competenze sono richieste per l'invio di un messaggio con protocollo MQTT.
+Ne esistono differenti di protocolli disponibili, quindi la conoscenza tecnica richiesta è elevata pur non richiedendo esperienza in programmazione attraversi dei linguaggi.
+
+\begin{figure}[hbt]
+    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-3/mqtt-legacy-2.jpg}
+    \label{fig:mqtt-legacy-2}
+\end{figure}
 
 \clearpage
 
@@ -714,11 +741,6 @@ placeholder
 
 \clearpage
 
-\section{Ottimizzazione delle prestazioni}
-
-placeholder
-
-\clearpage
 
 % ======================================= CHAPTER 4 ================================================
 \chapter{Sicurezza e protezione dei dati}
