@@ -1,15 +1,15 @@
 ## Design e Sviluppo del sistema di End User Development in SeismoCloud
 
+![latex-logo](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/made-with-latex.svg)
+![overleaf](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/overleaf.svg)
+
+[![Direct pdf download](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/button.png)](https://edoardoottavianelli.it) (now not working)
+
 #### Studente: Edoardo Ottavianelli
 
 #### Relatore: Emanuele Panizzi
 
 #### SeismoCloud Lead Dev: Enrico Bassetti
-
-![latex-logo](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/made-with-latex.svg)
-![overleaf](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/overleaf.svg)
-
-[![Direct pdf download](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/button.png)](https://edoardoottavianelli.it) (now not working)
 
 Get Started 🎉
 -------
