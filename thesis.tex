@@ -866,28 +866,68 @@ Per una efficiente usabilità del sistema è assolutamente necessaria una parte 
 In questo caso sono stati coinvolti 7 utenti non esperti ed un esperto.
 Le modalità di test sono due: in \textit{remoto} e \textit{dal vivo}. Questa scelta è motivata da vantaggi e svantaggi per una o per l'altra: da remoto si può controllare meglio tutta l'attività ``digitale" dell'utente, ad esempio i movimenti del cursore; con un test dal vivo invece si ha una maggior \textbf{NON TROVO IL TERMINE: EMPATIA? PATHOS?}, facendo così sentire l'utente più a suo agio e controllando meglio le reazioni naturali del corpo.
 Sono state utilizzate diverse tecniche: \textbf{think aloud} (all'utente viene chiesto di pensare a voce alta ed esprimere tutte le emozioni, sensazioni e pensieri che ha durante tutta la durata del test), \textbf{cooperative evaluation} (utente e somministratore del test si pongono domande a vicenda ed esprimono i loro giudizi sull'esperienza d'uso), \textbf{post-task walkthrough} (finito il test, indipendentemente dal tipo effettuato, vengono poste delle domande per comprendere i risultati. Si hanno due opzioni 1) appena finito il test, dove l'utente ha ben chiare le sue opinioni, ma il somministratore non ha tempo di pensare alle domande, 2) il contrario del precedente) e \textbf{expert based} (un esperto revisiona l'interfaccia e da i suoi pareri su di essa).
+Sono stati effettuate due sessioni di test con una revisione e correzione degli errori trovati appena effettuata la prima delle due.
+I task scelti da svolgere per gli utenti erano quattro (con alcune variazioni durante i vari test per capire come reagivano gli utenti):
 
+\begin{itemize}
+    \item Difficoltà Livello 1: Prendere il valore Quake del sismometro ‘edotest’ e stamparlo nella console di debug.
+    
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-5/test-1.jpg}
+        \label{fig:test1}
+    \end{figure}
+    
+    \item Difficoltà Livello 2: Stampare tutte le informazioni del sismometro ‘edotest’ nella console di debug ogni volta che si riceve un segnale Quake.
+    
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-5/test-2.jpg}
+        \label{fig:test1}
+    \end{figure}
+    
+    \item Difficoltà Livello 3: Effettuare il reboot del sismometro ‘edotest’ ogni volta che la temperatura è maggiore di $x^{\circ}$C.
+    
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-5/test-3.jpg}
+        \label{fig:test1}
+    \end{figure}
+    
+    \item Difficoltà livello 4: Prendere il valore Quake del sismometro ‘edotest’, applicare ad esso un template ( ad esempio ``\texttt{Quake: <payload>}" ) e stamparlo nella console di debug con le informazioni relative agli ultimi terremoti rilevati possibilmente rilevabili dal dispositivo.
+    
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-5/test-4.jpg}
+        \label{fig:test1}
+    \end{figure}
+    
+\end{itemize}
 
-%%All the users understood how nodes are connected to form a flow, dragging and dropping nodes from the node palette to the workspace. Also searching for a specific node turned out to be a simple task for them, since the nodes are grouped by categories with different colors. 
+Effettuata la prima serie di test, con circa 15 test individuali sono stati evidenziati i seguenti problemi:
 
-%: 1) when a seismometer detects a quake, print on the debug console location and time of the vibration; 2) on regular basis, print seismometer configuration information; 3) reboot a seismometer when its temperature sensor exceeds a given threshold; 4)  
+\begin{itemize}
+    \item tasto di visualizzazione della console di debug non messo in risalto
+    \item Prima clic destro su un nodo per la configurazione, solo dopo viene fatto un doppio clic
+    \item Descrizione poco dettagliata dei valori del sismometro
+    \item SeismometerAttributes è vago per indicare i dati relativi ai sismometri, meglio SeismometerData
+\end{itemize}
 
-%Different kinds of tests (live and remote session) and techniques have been used to test the interface: the think-aloud technique, cooperative evaluation, post-task walkthroughs and expert based. We have used these techniques to better understand users' thoughts and intentions.
+Il primo problema nasce dal fatto che alcune funzionalità del sistema di End User Development per SeismoCloud non sono ancora state sviluppate. Perciò la disponibiltà di azioni è limitata a poche scelte. La console di debug una volta sviluppate o integrate (alcune funzionalità ``finali", quindi di notifica utente o nel senso di azione finale, sono già fornite dai vari produttori di servizi Web o da alcuni volenterosi sviluppatori Open Source: Telegram, Twitter, Email, integrazione con oggetti per smart-home) le funzionalità finali sarà solo uno strumento di utilità per controllare appunto se ci sono errori nei flussi progettati. Per questo motivo non è stato ritenuto un errore da risolvere.
 
-%Five non-technical skilled users and one expert were involved for a total of 13 test cases. Sets of tasks of varying difficulty (four categories) have been selected for users to perform.
+Il secondo problema è stato rilevato maggiormente durante i test da remoto, dove il controllo del cursore dell'utente è più intenso. Quando un utente doveva selezionare un nodo per configurare le impostazioni di base (nome del nodo, sismometro selezionato) 4 dei 7 utenti hanno in prima battuta provato un clic destro sul nodo, che non ha nessun effetto, e poi in seconda battuta un doppio clic sinistro, che è appunto l'azione corretta.
 
-%All the users understood how nodes are connected to form a flow, dragging and dropping nodes from the node palette to the workspace. Also searching for a specific node turned out to be a simple task for them, since the nodes are grouped by categories with different colors. All users were able to complete the low-medium level tasks without significant problems, although sometimes it took more time than we expected.
+La terza criticità era la descrizione di alcuni nodi, per esempio, uno di questi era il nodo \textbf{BSSID}. Questo termine indica l'indirizzo MAC di un punto di accesso alla rete dove il sismometro si connette.
+Il problema è stato rilevato chiedendo (durante la tipologia di test \textit{cooperative evaluation}) agli utenti se, una volta configurato il nodo, avessero capito che tipologia di dati stavano usando, o quanto meno sapessero dare una spiegazione sommaria.
+Tutti gli utenti non competenti hanno risposto che il nodo restituisce un valore in output, ma che non avevano capito minimamente la tipologia di dato.
 
-%The first issue was detected when an user had to select a seismometer: 3 of 5 users tried to perform a right click on the node, only the second choice have been the double left click (correct option). We are working on a pull-request to the official repository of Node-RED to add this feature.
+L'ultimo problema è stato rilevato dal somministratore dei test, dato che il titolo ``Seismometer attributes" non era adatto e soprattutto non entrava nel box ad esso dedicato.
 
-%The second issue is the description of some nodes, for example, one of these was the \textit{BSSID} node( \textit{MAC address} of the network access point to whom the seismometer is connected).
-%This problem was found asking the users if they were understanding what they were doing. All the non-skilled users replied they understood that node returned a value, but the meaning wasn't clear.
+Tutti gli utenti hanno compreso come i nodi devono essere collegati per formare un flusso, prendendo e rilasciando i nodi dalla palette dei nodi allo spazio di lavoro. Data la differenziazione in categorie per argomenti differenti, cercare un singolo nodo sulla palette è risultato un facile compito. Tutti gli utenti hanno completato i compiti di basso e medio livello senza grandi problemi, anche se ci è voluto più tempo del previsto per i compiti di alta difficoltà.
 
-% - Thinking Aloud
 % - Successo/fallimento 
 % - Tempo per completare il task
 
-\clearpage
 
 \section{Conclusioni}
 
