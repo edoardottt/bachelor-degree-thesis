@@ -864,7 +864,7 @@ placeholder
 
 Per una efficiente usabilità del sistema è assolutamente necessaria una parte accurata di test.
 In questo caso sono stati coinvolti 7 utenti non esperti ed un esperto.
-Le modalità di test sono due: in \textit{remoto} e \textit{dal vivo}. Questa scelta è motivata da vantaggi e svantaggi per una o per l'altra: da remoto si può controllare meglio tutta l'attività ``digitale" dell'utente, ad esempio i movimenti del cursore; con un test dal vivo invece si ha una maggior \textbf{NON TROVO IL TERMINE: EMPATIA? PATHOS?}, facendo così sentire l'utente più a suo agio e controllando meglio le reazioni naturali del corpo.
+Le modalità di test sono due: in \textit{remoto} e \textit{dal vivo}. Questa scelta è motivata da vantaggi e svantaggi per una o per l'altra: da remoto si può controllare meglio tutta l'attività ``digitale" dell'utente, ad esempio i movimenti del cursore; con un test dal vivo invece si ha un maggior coinvolgimento da entrambe le parti, facendo così sentire l'utente più a suo agio e riuscendo a captare meglio le sue reazioni.
 Sono state utilizzate diverse tecniche: \textbf{think aloud} (all'utente viene chiesto di pensare a voce alta ed esprimere tutte le emozioni, sensazioni e pensieri che ha durante tutta la durata del test), \textbf{cooperative evaluation} (utente e somministratore del test si pongono domande a vicenda ed esprimono i loro giudizi sull'esperienza d'uso), \textbf{post-task walkthrough} (finito il test, indipendentemente dal tipo effettuato, vengono poste delle domande per comprendere i risultati. Si hanno due opzioni 1) appena finito il test, dove l'utente ha ben chiare le sue opinioni, ma il somministratore non ha tempo di pensare alle domande, 2) il contrario del precedente) e \textbf{expert based} (un esperto revisiona l'interfaccia e da i suoi pareri su di essa) \cite{hcibook}.
 Sono stati effettuate due sessioni di test con una revisione e correzione degli errori trovati appena effettuata la prima delle due.
 I task scelti da svolgere per gli utenti erano quattro (con alcune variazioni durante i vari test per capire come reagivano gli utenti):
@@ -941,11 +941,19 @@ Continueremo ad ascoltare gli utenti di SeismoCloud ricevendo feedback utili e p
 
 \section{Sviluppi futuri}
 
-- integrazione social network
+\subsection{Integrazione social network}
 
-- interfaccia web sicura per accesso
+L'introduzione di azioni che utilizzano le API di social network o funzioni di notifica è molto utile. In particolare, esiste già un modulo NPM pronto e maturo (Versione 8.6.4) per Telegram (\href{https://flows.nodered.org/node/node-red-contrib-telegrambot}{https://flows.nodered.org/node/node-red-contrib-telegrambot}), per Twitter \\(\href{https://flows.nodered.org/node/node-red-node-twitter}{https://flows.nodered.org/node/node-red-node-twitter}) e per Facebook \\(\href{https://flows.nodered.org/node/node-red-contrib-facebook}{https://flows.nodered.org/node/node-red-contrib-facebook}).
+Sono molto utili per condividere dati, ma soprattutto per notificare ad un bacino molto ampio di utenza facile da raggiungere EarthQuake Early Warning.
 
-- utilizzo di un solo client mqtt condiviso
+\subsection{Integrazione dispositivi IoT per smart-home}
+
+Come è stato introdotto nel capitolo 2.1, una funzionalità interessante sarebbe l'integrazione con dispositivi per una smart-home. Anche qui data l'alto contributo della community esistono moduli pronti all'uso (necessaria configurazione). Ad esempio integrazione con Alexa (\href{https://flows.nodered.org/node/node-red-contrib-alexa-smart-home}{https://flows.nodered.org/node/node-red-contrib-alexa-smart-home}).
+L'utente ha completa libertà (privilegiando l'usabilità e la sicurezza) di programmare da sé programmi che si interfacciano con dispositivi hardware creati personalmente. Ad esempio, programmare un GPIO ad emettere un segnale quando avviene una certa condizione.
+
+\subsection{Ottimizzazione delle prestazioni tramite la condivisione di un solo client MQTT}
+
+Un ristretto limite prestazionale è dato dall'utilizzo di tanti client MQTT quanti sono i nodi presenti nel workspace. La libreria MQTT utilizzata offre la disponibilità di assegnare un identificativo univoco per ogni client. Inoltre, con le variabili a differente scope (Node, Flow e Global definite nel paragrafo 2.2) è possibile condividere lo stesso client per azioni differenti.
 
 \clearpage
 
