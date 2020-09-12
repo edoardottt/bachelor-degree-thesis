@@ -868,17 +868,46 @@ Le modalità di test sono due: in \textit{remoto} e \textit{dal vivo}. Questa sc
 Sono state utilizzate diverse tecniche: \textbf{think aloud} (all'utente viene chiesto di pensare a voce alta ed esprimere tutte le emozioni, sensazioni e pensieri che ha durante tutta la durata del test), \textbf{cooperative evaluation} (utente e somministratore del test si pongono domande a vicenda ed esprimono i loro giudizi sull'esperienza d'uso), \textbf{post-task walkthrough} (finito il test, indipendentemente dal tipo effettuato, vengono poste delle domande per comprendere i risultati. Si hanno due opzioni 1) appena finito il test, dove l'utente ha ben chiare le sue opinioni, ma il somministratore non ha tempo di pensare alle domande, 2) il contrario del precedente) e \textbf{expert based} (un esperto revisiona l'interfaccia e da i suoi pareri su di essa).
 
 
+%%All the users understood how nodes are connected to form a flow, dragging and dropping nodes from the node palette to the workspace. Also searching for a specific node turned out to be a simple task for them, since the nodes are grouped by categories with different colors. 
+
+%: 1) when a seismometer detects a quake, print on the debug console location and time of the vibration; 2) on regular basis, print seismometer configuration information; 3) reboot a seismometer when its temperature sensor exceeds a given threshold; 4)  
+
+%Different kinds of tests (live and remote session) and techniques have been used to test the interface: the think-aloud technique, cooperative evaluation, post-task walkthroughs and expert based. We have used these techniques to better understand users' thoughts and intentions.
+
+%Five non-technical skilled users and one expert were involved for a total of 13 test cases. Sets of tasks of varying difficulty (four categories) have been selected for users to perform.
+
+%All the users understood how nodes are connected to form a flow, dragging and dropping nodes from the node palette to the workspace. Also searching for a specific node turned out to be a simple task for them, since the nodes are grouped by categories with different colors. All users were able to complete the low-medium level tasks without significant problems, although sometimes it took more time than we expected.
+
+%The first issue was detected when an user had to select a seismometer: 3 of 5 users tried to perform a right click on the node, only the second choice have been the double left click (correct option). We are working on a pull-request to the official repository of Node-RED to add this feature.
+
+%The second issue is the description of some nodes, for example, one of these was the \textit{BSSID} node( \textit{MAC address} of the network access point to whom the seismometer is connected).
+%This problem was found asking the users if they were understanding what they were doing. All the non-skilled users replied they understood that node returned a value, but the meaning wasn't clear.
+
+% - Thinking Aloud
+% - Successo/fallimento 
+% - Tempo per completare il task
+
 \clearpage
 
 \section{Conclusioni}
 
 placeholder
+%We'll insert more specific information about nodes and values they manipulate, keeping in mind our target audience.
+
+%To conclude, from the tests we have done, the work is proceeding in the right direction.
+%We have found the most obvious problems, the solutions to overcome them are ready, and we are planning to apply them in the near future. We'll keep listening our users on their needs and evaluate the functionalities to add, keeping it simple, understandable and well-usable.
 
 \clearpage
 
 \section{Sviluppi futuri}
 
-placeholder
+- gpio
+
+- interfaccia web sicura per accesso
+
+- integrazione social network
+
+- utilizzo di un solo client mqtt condiviso
 
 \clearpage
 
