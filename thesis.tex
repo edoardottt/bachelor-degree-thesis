@@ -865,7 +865,7 @@ placeholder
 Per una efficiente usabilità del sistema è assolutamente necessaria una parte accurata di test.
 In questo caso sono stati coinvolti 7 utenti non esperti ed un esperto.
 Le modalità di test sono due: in \textit{remoto} e \textit{dal vivo}. Questa scelta è motivata da vantaggi e svantaggi per una o per l'altra: da remoto si può controllare meglio tutta l'attività ``digitale" dell'utente, ad esempio i movimenti del cursore; con un test dal vivo invece si ha una maggior \textbf{NON TROVO IL TERMINE: EMPATIA? PATHOS?}, facendo così sentire l'utente più a suo agio e controllando meglio le reazioni naturali del corpo.
-Sono state utilizzate diverse tecniche: \textbf{think aloud} (all'utente viene chiesto di pensare a voce alta ed esprimere tutte le emozioni, sensazioni e pensieri che ha durante tutta la durata del test), \textbf{cooperative evaluation} (utente e somministratore del test si pongono domande a vicenda ed esprimono i loro giudizi sull'esperienza d'uso), \textbf{post-task walkthrough} (finito il test, indipendentemente dal tipo effettuato, vengono poste delle domande per comprendere i risultati. Si hanno due opzioni 1) appena finito il test, dove l'utente ha ben chiare le sue opinioni, ma il somministratore non ha tempo di pensare alle domande, 2) il contrario del precedente) e \textbf{expert based} (un esperto revisiona l'interfaccia e da i suoi pareri su di essa).
+Sono state utilizzate diverse tecniche: \textbf{think aloud} (all'utente viene chiesto di pensare a voce alta ed esprimere tutte le emozioni, sensazioni e pensieri che ha durante tutta la durata del test), \textbf{cooperative evaluation} (utente e somministratore del test si pongono domande a vicenda ed esprimono i loro giudizi sull'esperienza d'uso), \textbf{post-task walkthrough} (finito il test, indipendentemente dal tipo effettuato, vengono poste delle domande per comprendere i risultati. Si hanno due opzioni 1) appena finito il test, dove l'utente ha ben chiare le sue opinioni, ma il somministratore non ha tempo di pensare alle domande, 2) il contrario del precedente) e \textbf{expert based} (un esperto revisiona l'interfaccia e da i suoi pareri su di essa) \cite{hcibook}.
 Sono stati effettuate due sessioni di test con una revisione e correzione degli errori trovati appena effettuata la prima delle due.
 I task scelti da svolgere per gli utenti erano quattro (con alcune variazioni durante i vari test per capire come reagivano gli utenti):
 
@@ -923,29 +923,25 @@ Tutti gli utenti non competenti hanno risposto che il nodo restituisce un valore
 
 L'ultimo problema è stato rilevato dal somministratore dei test, dato che il titolo ``Seismometer attributes" non era adatto e soprattutto non entrava nel box ad esso dedicato.
 
-Tutti gli utenti hanno compreso come i nodi devono essere collegati per formare un flusso, prendendo e rilasciando i nodi dalla palette dei nodi allo spazio di lavoro. Data la differenziazione in categorie per argomenti differenti, cercare un singolo nodo sulla palette è risultato un facile compito. Tutti gli utenti hanno completato i compiti di basso e medio livello senza grandi problemi, anche se ci è voluto più tempo del previsto per i compiti di alta difficoltà.
+La seconda sessione di test è stata effettuata dopo aver parzialmente risolto i problemi della prima. È stata aggiunta una descrizione molto più dettagliata per tutti i nodi di cui risultava ambiguo il significato ed è stato modificato il nome ``SeismoAttributes" con ``SeismometerData". Le modifiche sono state sottoposte ai test e hanno avuto esito positivo.
 
-% - Successo/fallimento 
-% - Tempo per completare il task
-
+Tutti gli utenti hanno compreso come i nodi devono essere collegati per formare un flusso, prendendo e rilasciando i nodi dalla palette dei nodi allo spazio di lavoro. Data la differenziazione in categorie per argomenti differenti (e colorati in modo differente), cercare un singolo nodo sulla palette è risultato un facile compito. Tutti gli utenti hanno completato i compiti di basso e medio livello senza problemi significativi, anche se ci è voluto più tempo del previsto per i compiti di alta difficoltà.
 
 \section{Conclusioni}
 
-placeholder
-%We'll insert more specific information about nodes and values they manipulate, keeping in mind our target audience.
+Dai risultati che sono stati ottenuti si sta procedendo nella giusta direzione.
+Sono stati trovati i problemi più evidenti ed è stata applicata una soluzione efficace.
 
-%To conclude, from the tests we have done, the work is proceeding in the right direction.
-%We have found the most obvious problems, the solutions to overcome them are ready, and we are planning to apply them in the near future. We'll keep listening our users on their needs and evaluate the functionalities to add, keeping it simple, understandable and well-usable.
+
+We'll keep listening our users on their needs and evaluate the functionalities to add, keeping it simple, understandable and well-usable.
 
 \clearpage
 
 \section{Sviluppi futuri}
 
-- gpio
+- integrazione social network
 
 - interfaccia web sicura per accesso
-
-- integrazione social network
 
 - utilizzo di un solo client mqtt condiviso
 
@@ -1028,6 +1024,11 @@ placeholder
     \textbf{Best practices for writing Dockerfiles}
     \\
     \href{https://docs.docker.com/develop/develop-images/dockerfile_best-practices/}{https://docs.docker.com/develop/develop-images/dockerfile\_best-practices/}
+
+\bibitem{hcibook}
+    \textbf{Human Computer Interaction Book - Evaluation techniques}
+    \\
+    \href{https://www.hcibook.com/e3-docs/slides/notes-pdf/e3-chap-09-6up.pdf}{https://www.hcibook.com/e3-docs/slides/notes-pdf/e3-chap-09-6up.pdf}
 
 \end{thebibliography}
 
