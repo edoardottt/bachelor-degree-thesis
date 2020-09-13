@@ -921,7 +921,7 @@ La terza criticità era la descrizione di alcuni nodi, per esempio, uno di quest
 Il problema è stato rilevato chiedendo (durante la tipologia di test \textit{cooperative evaluation}) agli utenti se, una volta configurato il nodo, avessero capito che tipologia di dati stavano usando, o quanto meno sapessero dare una spiegazione sommaria.
 Tutti gli utenti non competenti hanno risposto che il nodo restituisce un valore in output, ma che non avevano capito minimamente la tipologia di dato.
 
-L'ultimo problema è stato rilevato dal somministratore dei test, dato che il titolo ``SeismometerAttributes" non era adatto e soprattutto non entrava nel box ad esso dedicato.
+L'ultimo problema è stato rilevato dal somministratore dei test, dato che il titolo ``SeismometerAttributes" non era adatto a descrivere in modo comprensibile le funzionalità coinvolte e soprattutto non entrava nel box ad esso dedicato.
 
 La seconda sessione di test è stata effettuata dopo aver parzialmente risolto i problemi della prima. È stata aggiunta una descrizione molto più dettagliata per tutti i nodi di cui risultava ambiguo il significato ed è stato modificato il nome ``SeismometerAttributes" con ``SeismometerData". Le modifiche sono state sottoposte ai test e hanno avuto esito positivo.
 
@@ -932,9 +932,10 @@ Tutti gli utenti hanno compreso come i nodi devono essere collegati per formare 
 Dai risultati che sono stati ottenuti si sta procedendo nella giusta direzione.
 Abbiamo visto come poter progettare e implementare un sistema di End User Development \textbf{sicuro, efficiente e facilmente usabile}.
 Sono stati trovati i problemi più evidenti ed è stata applicata una soluzione efficace ad alcuni, per altri si sta continuando a lavorarci.
+Come si nota dalle implementazioni tecniche apportate descritte nel capitolo 3 e dai test svolti, l'interfaccia risulta usabile e richiede la minima configurazione dell'utente per programmare anche azioni complesse senza avere una conoscenza tecnica né di programmazione, né di protocolli di rete.
 L'applicativo è stabile, è stato testato più volte con gli utenti, ma soprattutto internamente nel team di sviluppo.
-Come abbiamo visto nel capitolo 4 è anche sicuro e i dati della rete e degli utenti rimangono protetti.
-Continueremo ad ascoltare gli utenti di SeismoCloud ricevendo feedback utili e proposte di servizi utili cercando di far rimanere il sistema comprensibile ed usabile.
+Come abbiamo visto nel capitolo 4 è anche sicuro e i dati della rete di sismometri SeismoCloud e le informazioni personali degli utenti rimangono protetti.
+Continueremo ad ascoltare gli utenti di SeismoCloud ricevendo feedback utili e proposte di servizi cercando di far rimanere il sistema comprensibile ed usabile.
 \textbf{POI?}
 
 \clearpage
@@ -944,16 +945,19 @@ Continueremo ad ascoltare gli utenti di SeismoCloud ricevendo feedback utili e p
 \subsection{Integrazione social network}
 
 L'introduzione di azioni che utilizzano le API di social network o funzioni di notifica è molto utile. In particolare, esiste già un modulo NPM pronto e maturo (Versione 8.6.4) per Telegram (\href{https://flows.nodered.org/node/node-red-contrib-telegrambot}{https://flows.nodered.org/node/node-red-contrib-telegrambot}), per Twitter \\(\href{https://flows.nodered.org/node/node-red-node-twitter}{https://flows.nodered.org/node/node-red-node-twitter}) e per Facebook \\(\href{https://flows.nodered.org/node/node-red-contrib-facebook}{https://flows.nodered.org/node/node-red-contrib-facebook}).
-Sono molto utili per condividere dati, ma soprattutto per notificare ad un bacino molto ampio di utenza facile da raggiungere EarthQuake Early Warning.
+Sono molto utili per condividere dati, ma soprattutto per notificare ad un bacino molto ampio di utenza facile da raggiungere EarthQuake Early Warning. 
 
 \subsection{Integrazione dispositivi IoT per smart-home}
 
 Come è stato introdotto nel capitolo 2.1, una funzionalità interessante sarebbe l'integrazione con dispositivi per una smart-home. Anche qui data l'alto contributo della community esistono moduli pronti all'uso (necessaria configurazione). Ad esempio integrazione con Alexa (\href{https://flows.nodered.org/node/node-red-contrib-alexa-smart-home}{https://flows.nodered.org/node/node-red-contrib-alexa-smart-home}).
-L'utente ha completa libertà (privilegiando l'usabilità e la sicurezza) di programmare da sé programmi che si interfacciano con dispositivi hardware creati personalmente. Ad esempio, programmare un GPIO ad emettere un segnale quando avviene una certa condizione.
+Oltre ai vari soliti dispositivi smart (luci, elettrodomestici, TV...) l'utente ha completa libertà (privilegiando l'usabilità e la sicurezza) di programmare da sé programmi che si interfacciano con dispositivi hardware creati personalmente. Ad esempio, programmare un GPIO (General Purpose Input/Output) ad emettere un segnale quando avviene una certa condizione. Quest'ultimo poi potrà essere utilizzato per interfacciarsi con dispositivi che hanno bisogno di essere spenti o accesi in determinate condizioni di sicurezza (generatore elettrico, valvola del gas), dato che il GPIO ha solo due stati.
 
 \subsection{Ottimizzazione delle prestazioni tramite la condivisione di un solo client MQTT}
 
-Un ristretto limite prestazionale è dato dall'utilizzo di tanti client MQTT quanti sono i nodi presenti nel workspace. La libreria MQTT utilizzata offre la disponibilità di assegnare un identificativo univoco per ogni client. Inoltre, con le variabili a differente scope (Node, Flow e Global definite nel paragrafo 2.2) è possibile condividere lo stesso client per azioni differenti.
+Un ristretto limite prestazionale è dato dall'utilizzo di tanti client MQTT quanti sono i nodi presenti nel workspace. La libreria MQTT utilizzata offre la disponibilità di assegnare un identificativo univoco per ogni client.
+L'odierna implementazione istanzia un client MQTT ogni volta che viene creato un nodo, e viene distrutto quando il nodo viene cancellato dal workspace.
+In generale data la brevità dei messaggi trasferiti e l'implementazione orientata all'efficienza del protocollo MQTT, l'applicativo non ne risente molto; ma con il crescere dei gruppi, degli utenti e quindi dei dispositivi coinvolti si potrebbero aver problemi di scalabilità, per questo un unico client potrebbe aiutare l'efficienza del sistema.
+Inoltre, con le variabili a differente scope (Node, Flow e Global definite nel paragrafo 2.2) è possibile condividere in modo facile lo stesso client per azioni differenti.
 
 \clearpage
 
