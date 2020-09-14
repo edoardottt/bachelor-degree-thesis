@@ -821,7 +821,7 @@ Viene poi assegnato un colore al nodo in dicitura esadecimale uguale per tutti i
 
 \subsection{Configurazione Node-RED}
 
-Quando Node-RED viene eseguito deve essere presente il file \texttt{settings.js} dove vengono settate tutte le configurazioni.
+Quando Node-RED viene eseguito deve essere presente il file \texttt{settings.js} dove vengono settate tutte le configurazioni\cite{noderedconfig}.
 Sono disponibili cinque sezioni di configurazione: configurazione del runtime, dell'editor e dei suoi temi, della dashboard e dei nodi.
 Questo file offre molte possibilità di configurazione, ma qui vengono esposte solo quelle utilizzate nel sistema EUD di SeismoCloud.
 Come è stato spiegato nel paragrafo 2.2, i flussi creati vengono salvati tramite un file JSON che può essere settato tramite il valore \texttt{flowFile: $<$flowsfilename$>$.json}.
@@ -923,7 +923,7 @@ in millisecondi sono definiti i tempi di riconnessione e timeout per i vari prot
   debugMaxLength: 1000,
 \end{lstlisting}
 
-\subsection{Implementazione di nodi che usano MQTT per i dati relativi ai sismometri}
+\subsection{Implementazione di nodi che utilizzano MQTT per i dati relativi ai sismometri}
 
 Spiegazione nodi MQTT, codice e semplificazione rispetto a prima ().
 
@@ -1107,10 +1107,6 @@ Inoltre, con le variabili a differente scope (Node, Flow e Global definite nel p
   \textbf{Node-RED Wiki}.
   \href{https://github.com/node-red/node-red/wiki}{https://github.com/node-red/node-red/wiki}
 
-\bibitem{nodereddoc}
-  \textbf{Node-RED Documentation}.
-  \href{https://nodered.org/docs}{https://nodered.org/docs}
-
 \bibitem{wikidocker}
   \textbf{Wikipedia - Docker}.
   \href{https://it.wikipedia.org/wiki/Docker/}{https://it.wikipedia.org/wiki/Docker}
@@ -1142,6 +1138,11 @@ Inoltre, con le variabili a differente scope (Node, Flow e Global definite nel p
     \textbf{Human Computer Interaction Book - Evaluation techniques}
     \\
     \href{https://www.hcibook.com/e3-docs/slides/notes-pdf/e3-chap-09-6up.pdf}{https://www.hcibook.com/e3-docs/slides/notes-pdf/e3-chap-09-6up.pdf}
+    
+\bibitem{noderedconfig}
+    \textbf{Node-RED Docs: Configuration }
+    \\
+    \href{https://nodered.org/docs/user-guide/runtime/configuration}{https://nodered.org/docs/user-guide/runtime/configuration}
 
 \end{thebibliography}
 
