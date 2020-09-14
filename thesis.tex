@@ -136,8 +136,7 @@ captionpos=b
 
 \FSSCandidato{Edoardo Ottavianelli}
 \FSSMatricola{1756005}
-\FSSRelatore{Emanuele Panizzi}
-\FSSCorrelatore{}
+\FSSRelatore{Prof. Emanuele Panizzi}
 \FSSAnnoAccademico{2019/2020}
 
 
@@ -820,13 +819,82 @@ Viene poi assegnato un colore al nodo in dicitura esadecimale uguale per tutti i
     \label{fig:lower-case-2}
 \end{figure}
 
-\subsection{Configurazione del runtime Node-RED}
+\subsection{Configurazione Node-RED}
 
-file settings.js e tutte le modifiche | variabili d'ambiente |  
+Quando Node-RED viene eseguito deve essere presente il file \texttt{settings.js} dove vengono settate tutte le configurazioni.
+Sono disponibili cinque sezioni di configurazione: configurazione del runtime, dell'editor e dei suoi temi, della dashboard e dei nodi.
+Questo file offre molte possibilità di configurazione, ma qui vengono esposte solo quelle utilizzate nel sistema EUD di SeismoCloud.
+Come è stato spiegato nel paragrafo 2.2, i flussi creati vengono salvati tramite un file JSON che può essere settato tramite il valore \texttt{flowFile: $<$flowsfilename$>$.json}.
+I nodi vengono cercati dal runtime all'interno della cartella definita da \texttt{nodesDir} (default \texttt{\$HOME/.node-red/nodes}).
+È possibile definire una porta dedicata al servizio, di default è 1880.
+Sono disponibili vari livelli di logging:
+\begin{itemize}
+    \item fatal: Solo gli errori che rendono l'applicativo inutilizzabile sono registrati
+    \item error: Registra gli errori che sono ritenuti fatali per una particolare richiesta + fatal errors
+    \item warn: Registra problemi che non sono fatali + errors + fatal errors
+    \item info: Registra informazioni riguardo l'esecuzione generale dell'applicativo + warn + error + fatal errors
+    \item debug: Registra informazioni più verbose rispetto ad info + info + warn + error + fatal errors
+    \item trace: Registra log dettagliati + debug + info + warn + error + fatal errors
+\end{itemize}
+
+Come si può facilmente notare \texttt{fatal} corrisponde al meno verboso e gradualmente si aumenta fino ad arrivare a loggare ogni singola informazione. Di default il livello è settato ad \texttt{info}; viene lasciato quest'ultimo perché essendo un sistema appena creato e non maturo è fondamentale una attività intensa dei log, utili a fornire feedback e segnalare eventuali errori; non viene utilizzato il \texttt{debug} perché troppo verboso e non adatto.
+
+Per quanto riguarda la configurazione dell'editor, qui si ha la possibilità di settare le categorie per i nodi. Di default sono presenti: \texttt{['subflows', 'common', 'function', 'network', 'sequence', 'parser', 'storage']}; nel sistema invece sono state rimosse le categorie \texttt{storage} e \texttt{network} (nel capitolo 4 vengono analizzate in dettaglio le motivazioni) e sono state aggiunte le categorie \texttt{SeismometerData} e \texttt{apiSeismocloud}.
+
+Queste sono le configurazioni disponibili per il tema dell'editor, utili soprattutto per una alta comprensibilità dell'interfaccia.
+\begin{lstlisting}[language=Javascript]
+editorTheme: {
+    page: {
+        title: "SeismoCloud EUD",
+        favicon: "/absolute/path/to/theme/icon",
+        css: "/absolute/path/to/custom/css/file",
+        scripts: [ "/absolute/path/to/custom/script/file", "/another/script/file"]
+    },
+    header: {
+        title: "SeismoCloud EUD",
+        image: "/absolute/path/to/header/image", // or null to remove image
+        url: "https://www.seismocloud.com/" // optional url to make the header text/image a link to this url
+    },
+    deployButton: {
+        type:"simple",
+        label:"Save",
+        icon: "/absolute/path/to/deploy/button/image" // or null to remove image
+    },
+    menu: { // Hide unwanted menu items by id. see packages/node_modules/@node-red/editor-client/src/js/red.js:loadEditor for complete list
+        "menu-item-import-library": false,
+        "menu-item-export-library": false,
+        "menu-item-keyboard-shortcuts": false,
+        "menu-item-help": {
+            label: "Alternative Help Link Text",
+            url: "http://example.com"
+        }
+    },
+    userMenu: false, // Hide the user-menu even if adminAuth is enabled
+    login: {
+        image: "/absolute/path/to/login/page/big/image" // a 256x256 image
+    },
+    logout: {
+        redirect: "http://example.com"
+    },
+    palette: {
+        editable: false, // Enable/disable the Palette Manager
+        catalogues: [   // Alternative palette manager catalogues
+            'https://catalogue.nodered.org/catalogue.json'
+        ],
+        theme: [ // Override node colours - rules test against category/type by RegExp.
+            { category: ".*", type: ".*", color: "#f0f" }
+        ]
+    },
+    projects: {
+        enabled: false // Enable the projects feature
+    }
+},
+\end{lstlisting}
+
 
 \subsection{Implementazione di nodi che usano MQTT per i dati relativi ai sismometri}
 
-Spiegazione nodi MQTT, codice e semplificazione rispetto a prima.
+Spiegazione nodi MQTT, codice e semplificazione rispetto a prima ().
 
 \subsection{Implementazione di nodi che utilizzano API SeismoCloud per statistiche e informazioni sul sistema}
 
