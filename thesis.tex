@@ -864,33 +864,56 @@ editorTheme: {
         "menu-item-import-library": false,
         "menu-item-export-library": false,
         "menu-item-keyboard-shortcuts": false,
-        "menu-item-help": {
-            label: "Alternative Help Link Text",
-            url: "http://example.com"
-        }
+        //"menu-item-help": {
+            //label: "Alternative Help Link Text",
+            //url: "http://example.com"
+        //}
     },
     userMenu: false, // Hide the user-menu even if adminAuth is enabled
-    login: {
-        image: "/absolute/path/to/login/page/big/image" // a 256x256 image
-    },
-    logout: {
-        redirect: "http://example.com"
-    },
     palette: {
         editable: false, // Enable/disable the Palette Manager
-        catalogues: [   // Alternative palette manager catalogues
-            'https://catalogue.nodered.org/catalogue.json'
-        ],
-        theme: [ // Override node colours - rules test against category/type by RegExp.
-            { category: ".*", type: ".*", color: "#f0f" }
-        ]
+        //theme: [ // Override node colours - rules test against category/type by RegExp.
+        //    { category: ".*", type: ".*", color: "#f0f" }
+        //]
     },
     projects: {
         enabled: false // Enable the projects feature
     }
 },
 \end{lstlisting}
+È possibile aggiungere un titolo personalizzato alla pagina Web, una icona, del codice css e degli script personalizzati.
+Nell'interfaccia c'è un header che ospita una immagine che può funzionare da link, nel nostro caso rimanda al sito SeismoCloud.
+In alto a destra nell'interfaccia, il tasto Deploy (che appunto effettua il deploy dell'applicativo) è rinominato in \texttt{Save} perché più comprensibile ad un pubblico non esperto.
+Nel menu è possibile far comparire o non comparire alcune funzionalità, nel caso SeismoCloud sono utili e perciò sono lasciate attive (ad esempio la possibilità di esportare ed importare flussi pronti tramite il file in formato json. Vari gruppi possono condividere un flusso complesso cambiando pochi dettagli). 
+È stato disabilitato il palette manager perché consentiva di aggiungere nodi esterni alla palette tramite Internet, potenzialmente un problema di sicurezza (analizzato nel capitolo 4).
+Anche la funzionalità projects per ora è disabilitata perché non necessaria, almeno per le prime release del sistema (Projects permette di avere un supporto per \texttt{Version Control System} come GitHub etc..).
 
+Queste sono invece le impostazioni di configurazione dei nodi: in millisecondi sono definiti i tempi di riconnessione e timeout per i vari protocolli e relative richieste.
+\begin{lstlisting}[language=Javascript]
+  // Retry time in milliseconds for MQTT connections
+  mqttReconnectTime: 15000,
+
+  // Retry time in milliseconds for Serial port connections
+  serialReconnectTime: 15000,
+
+  // Retry time in milliseconds for TCP socket connections
+  socketReconnectTime: 10000,
+
+  // Timeout in milliseconds for TCP server socket connections
+  //  defaults to no timeout
+  socketTimeout: 10000,
+
+  // Maximum number of messages to wait in queue while attempting to connect to TCP socket
+  //  defaults to 1000
+  tcpMsgQueueSize: 1000,
+
+  // Timeout in milliseconds for HTTP request connections
+  //  defaults to 120 seconds
+  httpRequestTimeout: 10000,
+
+  // The maximum length, in characters, of any message sent to the debug sidebar tab
+  debugMaxLength: 1000,
+\end{lstlisting}
 
 \subsection{Implementazione di nodi che usano MQTT per i dati relativi ai sismometri}
 
