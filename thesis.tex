@@ -840,6 +840,13 @@ Sono disponibili vari livelli di logging:
 Come si può facilmente notare \texttt{fatal} corrisponde al meno verboso e gradualmente si aumenta fino ad arrivare a loggare ogni singola informazione. Di default il livello è settato ad \texttt{info}; viene lasciato quest'ultimo perché essendo un sistema appena creato e non maturo è fondamentale una attività intensa dei log, utili a fornire feedback e segnalare eventuali errori; non viene utilizzato il \texttt{debug} perché troppo verboso e non adatto.
 
 Per quanto riguarda la configurazione dell'editor, qui si ha la possibilità di settare le categorie per i nodi. Di default sono presenti: \texttt{['subflows', 'common', 'function', 'network', 'sequence', 'parser', 'storage']}; nel sistema invece sono state rimosse le categorie \texttt{storage} e \texttt{network} (nel capitolo 4 vengono analizzate in dettaglio le motivazioni) e sono state aggiunte le categorie \texttt{SeismometerData} e \texttt{apiSeismocloud}.
+I nodi che rientrano nelle categorie \texttt{network} e \texttt{storage} sono eliminati con questo comando:
+\begin{lstlisting}
+//EXCLUDING NODES FROM PALETTE:
+  nodesExcludes: ['32-udp.js', '31-tcpin.js', '22-websocket.js', '21-httprequest.js', '21-httpin.js',
+    '10-mqtt.js', '06-httpproxy.js', '05-tls.js', '90-exec.js', 'node-red-node-tail', '10-file.js',
+    '23-watch.js'],
+\end{lstlisting}
 
 Queste sono le configurazioni disponibili per il tema dell'editor, utili soprattutto per una alta comprensibilità dell'interfaccia.
 \begin{lstlisting}[language=Javascript]
@@ -888,7 +895,8 @@ Nel menu è possibile far comparire o non comparire alcune funzionalità, nel ca
 È stato disabilitato il palette manager perché consentiva di aggiungere nodi esterni alla palette tramite Internet, potenzialmente un problema di sicurezza (analizzato nel capitolo 4).
 Anche la funzionalità projects per ora è disabilitata perché non necessaria, almeno per le prime release del sistema (Projects permette di avere un supporto per \texttt{Version Control System} come GitHub etc..).
 
-Queste sono invece le impostazioni di configurazione dei nodi: in millisecondi sono definiti i tempi di riconnessione e timeout per i vari protocolli e relative richieste.
+Queste sono invece le impostazioni di configurazione dei nodi:
+in millisecondi sono definiti i tempi di riconnessione e timeout per i vari protocolli e relative richieste.
 \begin{lstlisting}[language=Javascript]
   // Retry time in milliseconds for MQTT connections
   mqttReconnectTime: 15000,
