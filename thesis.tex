@@ -985,7 +985,7 @@ Viene poi creata una funzione callback in risposta ad un evento di connessione: 
       })
     });
 \end{lstlisting}
-Dalla riga 60 in poi vengono definite tutte le altre funzioni callback per gli altri eventi: quando viene ricevuto un messaggio, quando avviene un errore di connessione dati MQTT o un errore della configurazione del nodi e quando il nodo viene distrutto dall'utente. Infine viene aggiunto alle API runtime di NOde-RED il nodo \texttt{RssiNode} con il nome di \textit{rssi}.
+Dalla riga 60 in poi vengono definite tutte le altre funzioni callback per gli altri eventi: quando viene ricevuto un messaggio, quando avviene un errore di connessione dati MQTT o un errore della configurazione del nodi e quando il nodo viene distrutto dall'utente. Infine viene aggiunto alle API runtime di Node-RED il nodo \texttt{RssiNode} con il nome di \textit{rssi}.
 \begin{lstlisting}[language=Javascript,firstnumber=60]
         //===== on message event, log on console and send msg =====
         client.on('message', function (topic, message) {
@@ -1034,7 +1034,13 @@ In questo snippet di codice viene definito il menù a tendina che permette di sc
 </script>
 \end{lstlisting}
 
-\textbf{FOTO DEL MENU IMPOSTAZIONI NOME NODO E DISPOSITIVO, SEMPLIFICAZIONE PER L'UTENTE}
+\begin{figure}[ht]
+    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-3/menu.jpg}
+    \caption{Dati necessari per la configurazione di un nodo SeismoCloud}
+    \label{fig:menu}
+\end{figure}
+
+\clearpage
 
 Tramite il file \texttt{package.json} invece vengono definite impostazioni di base per il modulo.
 \begin{lstlisting}
@@ -1059,6 +1065,15 @@ Tramite il file \texttt{package.json} invece vengono definite impostazioni di ba
   "license": "ISC"
 }
 \end{lstlisting}
+
+\begin{figure}[ht]
+    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-3/rssi-1.jpg}
+    \label{fig:rssi-1}
+\end{figure}
+\begin{figure}[ht]
+    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-3/rssi-2.jpg}
+    \label{fig:rssi-2}
+\end{figure}
 
 I nodi che hanno un compito speciale sono \textbf{Alive} e \textbf{Reboot}.
 Il nodo Alive quando viene caricato dal runtime esegue una chiamata alle API di SeismoCloud e ottiene tutti i dati dei sismometri che sono registrati nel gruppo selezionato per utilizzarli nei controlli e nella condivisione con gli altri nodi.
