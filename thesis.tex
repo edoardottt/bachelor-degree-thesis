@@ -934,38 +934,120 @@ Molti valori che vengono inseriti (e poi ripetuti nel caso di più nodi che util
 Qui è presente la lista dei vari nodi creati per il sistema EUD di SeismoCloud; sono tutti moduli NPM che rispettano la definizione di modulo definita precedentemente in questo paragrafo.
 
 \begin{itemize}
-    \item node-red-contrib-rssi (Input: 0, Output: 1): L'indicatore di potenza del segnale ricevuto (RSSI) è una misura stimata di quanto bene un dispositivo può ricevere segnali dal punto di accesso a cui è collegato.
-    \item node-red-contrib-bssid (Input: 0, Output: 1):  BSSID identifica l'insieme di servizi di base del dispositivo. Il più delle volte è associato all'indirizzo MAC del punto di accesso a cui è collegato.
-    \item node-red-contrib-essid (Input: 0, Output: 1): Nome del punto di accesso alla rete a cui è collegato il dispositivo.
-    \item node-red-contrib-localip: L'indirizzo Ip nella rete locale del dispositivo.
-    \item node-red-contrib-publicip (Input: 0, Output: 1): L'indirizzo Ip pubblico su Internet del dispositivo.
-    \item node-red-contrib-threshold (Input: 0, Output: 1): Soglia utile al calcolo di un EarthQuake Early Warning.
-    \item node-red-contrib-alive (Input: 0, Output: 1): Segnale che indica che il dispositivo è attivo al momento. 
-    \item node-red-contrib-timesync (Input: 0, Output: 1): Valore utile alla sincronizzazione temporale del dispositivo.
-    \item node-red-contrib-quake (Input: 0, Output: 1): Segnalazione di una vibrazione del dispositivo. 
-    \item node-red-contrib-disconnect (Input: 0, Output: 1): Segnale inviato quando un dispositivo viene disconnesso.
-    \item node-red-contrib-reboot (Input: 1, Output: 1): Segnala il riavvio del dispositivo. 
-    \item node-red-contrib-temperature (Input: 0, Output: 1): Valore che indica la temperatura del dispositivo in $^{\circ}$C.
-    \item node-red-contrib-probespeed (Input: 0, Output: 1): ?
-    \item node-red-contrib-sigma (Input: 0, Output: 1): ?
-    \item node-red-contrib-stream (Input: 0, Output: 1): ?
+    \item node-red-contrib-rssi (Input: 0, Output: 1): Questo nodo produce in output l'indicatore di potenza del segnale ricevuto (RSSI), una misura stimata di quanto bene un dispositivo può ricevere segnali dal punto di accesso a cui è collegato.
+    \item node-red-contrib-bssid (Input: 0, Output: 1): Questo nodo produce in output il BSSID, che identifica l'insieme di servizi di base del dispositivo. Il più delle volte è associato all'indirizzo MAC del punto di accesso a cui è collegato.
+    \item node-red-contrib-essid (Input: 0, Output: 1): Questo nodo restituisce il nome del punto di accesso alla rete a cui è collegato il dispositivo.
+    \item node-red-contrib-localip (Input: 0, Output: 1): Questo nodo restituisce l'indirizzo Ip nella rete locale del dispositivo.
+    \item node-red-contrib-publicip (Input: 0, Output: 1): Questo nodo produce in output l'indirizzo Ip pubblico su Internet del dispositivo.
+    \item node-red-contrib-threshold (Input: 0, Output: 1): Questo nodo restituisce la soglia utile al calcolo di un Earthquake Early Warning.
+    \item node-red-contrib-alive (Input: 0, Output: 1): Questo nodo segnala che il dispositivo è attivo al momento. 
+    \item node-red-contrib-timesync (Input: 0, Output: 1): Questo nodo sincronizza il timer del dispositivo.
+    \item node-red-contrib-timereq (Input: 0, Output: 1): Questo nodo aiuta il precedente nella sincronizzazione.
+    \item node-red-contrib-quake (Input: 0, Output: 1): Questo nodo produce in output i valori di una vibrazione del dispositivo. 
+    \item node-red-contrib-disconnect (Input: 0, Output: 1): Questo nodo restituisce il segnale inviato quando un dispositivo viene disconnesso.
+    \item node-red-contrib-reboot (Input: 1, Output: 1): Questo nodo segnala il riavvio del dispositivo. 
+    \item node-red-contrib-temperature (Input: 0, Output: 1): Questo nodo restituisce il valore che indica la temperatura del dispositivo in $^{\circ}$C.
+    \item node-red-contrib-probespeed (Input: 0, Output: 1): Questo nodo setta la velocità della sonda in Hz
+    \item node-red-contrib-sigma (Input: 0, Output: 1): Questo nodo restituisce il valore \texttt{sigma} (utile al rilevamento di possibili scosse)
+\item node-red-contrib-stream (Input: 0, Output: 1): Questo nodo restituisce (\texttt{on} / \texttt{off}) l'impostazione di ricezione dati dal server
     \item node-red-contrib-streamdata (Input: 0, Output: 1): ?
 \end{itemize}
+
+Tutti questi dati vengono inviati e ricevuti tramite il protocollo MQTT dal server e dal client. La maggior parte delle informazioni di configurazione non cambia, quindi sono stati creati per la maggiore parte di essi (tranne reboot e alive, spiegata in seguito la motivazione) nodi che funzionano allo stesso modo.
+Dato che Node-RED utilizza NodeJS come runtime, il linguaggio utilizzato è Javascript e la libreria che aggiunge funzionalità riguardanti MQTT è MQTT.js (\href{https://github.com/mqttjs}{https://github.com/mqttjs}).
+La scelta è motivata dal codice open-source, dalla attiva community di utenti e sviluppatori e dalla maturità del progetto.
+Per la seguente spiegazione viene preso come esempio \textbf{node-red-contrib-rssi}.
+Il nucleo delle funzionalità è all'interno del file Javadcript, in questo caso \texttt{rssi.js}.
+Dalla riga 1 alla riga 5 viene creato il nodo con le configurazioni di base (config) e vengono istanziate alcune variabili per facilità di lettura.
+\begin{lstlisting}[language=Javascript]
+module.exports = function (RED) {
+  function RssiNode(config) {
+    RED.nodes.createNode(this, config);
+    var node = this;
+    var seismometer = config.seismometer
+\end{lstlisting}
+\clearpage
+Qui dalla riga 39 alla 52 viene creato effettivamente il client MQTT e settato il topic. In questo caso il valore \texttt{seismometer} è il codice identificativo del sismometro.
+Viene poi creata una funzione callback in risposta ad un evento di connessione: quando il client MQTT si connette si deve iscrivere al topic selezionato, se il tutto va a buon fine viene loggata l'informazione, altrimenti stampato l'errore.
+\begin{lstlisting}[language=Javascript, firstnumber=39]
+    //===== Connect the client to the server and  define the topic =====
+    var client = mqtt.connect(mqtt.IClientOptions);
+    var topic = 'sensor/' + seismometer + '/rssi';
+    
+    //====== on connect event, subscribe to the topic =====
+    client.on('connect', function () {
+        client.subscribe(topic, function (err) {
+            if (!err) {
+          node.log("Client succesfully subscribed to " + topic + " !");
+        } else {
+          console.log(err)
+        }
+      })
+    });
+\end{lstlisting}
+Dalla riga 60 in poi vengono definite tutte le altre funzioni callback per gli altri eventi: quando viene ricevuto un messaggio, quando avviene un errore di connessione dati MQTT o un errore della configurazione del nodi e quando il nodo viene distrutto dall'utente. Infine viene aggiunto alle API runtime di NOde-RED il nodo \texttt{RssiNode} con il nome di \textit{rssi}.
+\begin{lstlisting}[language=Javascript,firstnumber=60]
+        //===== on message event, log on console and send msg =====
+        client.on('message', function (topic, message) {
+          node.log("Message received from " + topic + ":" + message.toString());
+          var msg = { payload: message.toString() };
+          node.send(msg);
+        });
+
+        //======= on error event, log on console ========
+        client.stream.on('error', function () {
+          node.log("MQTT ERROR on " + topic);
+        });
+
+        //== on error event, log error on console and display error status ==
+        node.on("error", function (err) {
+          node.status({ fill: "red", shape: "ring", text: "node-red:common.status.error" });
+          node.error(err.toString());
+        });
+
+        //======== on close event, log on console and destroy client ========
+        node.on('close', function () {
+          client.end()
+          node.log("Client succesfully unsubscribed by " + topic + " !");
+        });
+      });
+    });
+  }
+  RED.nodes.registerType("rssi", RssiNode);
+}
+\end{lstlisting}
+\clearpage
+
+Il codice mostrato sopra definisce le funzionalità del nodo, per impostare il layout abbiamo bisogno di un file HTML, in questo caso \textbf{rssi.html}.
+In questo snippet di codice viene definito il menù a tendina che permette di scegliere tra i vari sismometri del gruppo il sismometro selezionato.
+\begin{lstlisting}[language=Javascript,firstnumber=45]
+<script type="text/html" data-template-name="rssi">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+          <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+    <label for="node-input-seismometer"><i class="icon-tag"></i> Seismometer</label>
+        <select id="node-input-seismometer">
+        </select>
+    </div>
+</script>
+\end{lstlisting}
 
 \subsection{Implementazione di nodi che utilizzano API SeismoCloud per statistiche e informazioni sul sistema}
 
 Spiegazione nodi API, codice, funzionalità offerte e semplificazione rispetto a prima (immagini).
 
 \begin{itemize}
-    \item node-red-contrib-get-seismometer-info 
-    \item node-red-contrib-list-earthquakes 
-    \item node-red-contrib-get-all-seismometers-in-group
-    \item node-red-contrib-get-weekly-ranking-for-all-devices-in-group
-    \item node-red-contrib-general-statistics-for-groups
-    \item node-red-contrib-weekly-statistics-for-groups
-    \item node-red-contrib-get-activity-intervals-for-seismometers
-    \item node-red-contrib-get-statistics-for-active-seismometers-in-the-latest-minutes
-    \item node-red-contrib-get-all-perceptible-earthquakes
+    \item node-red-contrib-get-seismometer-info (Input: 1, Output: 1): 
+    \item node-red-contrib-list-earthquakes (Input: 1, Output: 1): 
+    \item node-red-contrib-get-all-seismometers-in-group (Input: 1, Output: 1):
+    \item node-red-contrib-get-weekly-ranking-for-all-devices-in-group (Input: 1, Output: 1):
+    \item node-red-contrib-general-statistics-for-groups (Input: 1, Output: 1):
+    \item node-red-contrib-weekly-statistics-for-groups (Input: 1, Output: 1):
+    \item node-red-contrib-get-activity-intervals-for-seismometers (Input: 1, Output: 1):
+    \item node-red-contrib-get-statistics-for-active-seismometers-in-the-latest-minutes (Input: 1, Output: 1):
+    \item node-red-contrib-get-all-perceptible-earthquakes (Input: 1, Output: 1):
 \end{itemize}
 
 \subsection{COMMON FOLDER?}
