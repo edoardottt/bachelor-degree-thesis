@@ -1034,20 +1034,63 @@ In questo snippet di codice viene definito il menù a tendina che permette di sc
 </script>
 \end{lstlisting}
 
+\textbf{FOTO DEL MENU IMPOSTAZIONI NOME NODO E DISPOSITIVO, SEMPLIFICAZIONE PER L'UTENTE}
+
+Tramite il file \texttt{package.json} invece vengono definite impostazioni di base per il modulo.
+\begin{lstlisting}
+{
+  "name": "red-contrib-rssi",
+  "version": "1.0.0",
+  "description": "This node returns periodically information about Received signal strength indication. INPUT: 0 | OUTPUT: 1 (string)",
+  "main": "rssi.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "mqtt": "3.0.0",
+    "url-parse": "1.4.7"
+  },
+  "node-red": {
+    "nodes": {
+      "rssi": "rssi.js"
+    }
+  },
+  "author": "edoardottt",
+  "license": "ISC"
+}
+\end{lstlisting}
+
+I nodi che hanno un compito speciale sono \textbf{Alive} e \textbf{Reboot}.
+Il nodo Alive quando viene caricato dal runtime esegue una chiamata alle API di SeismoCloud e ottiene tutti i dati dei sismometri che sono registrati nel gruppo selezionato per utilizzarli nei controlli e nella condivisione con gli altri nodi.
+Il nodo reboot invece quando riceve in input qualcosa (non ci sono controlli, può essere una stringa, un numero, in generale un valore qualsiasi) pubblica un messaggio (in questo caso un semplice ''y") sul topic dedicato al sismometro selezionato per effettuare il riavvio dello stesso.
+\begin{lstlisting}[language=Javascript, firstnumber=80]
+    //== on input event, publish a message on this topic ==
+    node.on('input', function (msg) {
+        var message = "y"
+        client.publish(topic, message, function (err) {
+            if (!err) {
+            node.log("Client succesfully published to " + topic + " !");
+            var msg = { payload: "reboot" };
+            node.send(msg);
+          }
+        })
+    });
+\end{lstlisting}
+
 \subsection{Implementazione di nodi che utilizzano API SeismoCloud per statistiche e informazioni sul sistema}
 
 Spiegazione nodi API, codice, funzionalità offerte e semplificazione rispetto a prima (immagini).
 
 \begin{itemize}
-    \item node-red-contrib-get-seismometer-info (Input: 1, Output: 1): 
-    \item node-red-contrib-list-earthquakes (Input: 1, Output: 1): 
-    \item node-red-contrib-get-all-seismometers-in-group (Input: 1, Output: 1):
-    \item node-red-contrib-get-weekly-ranking-for-all-devices-in-group (Input: 1, Output: 1):
-    \item node-red-contrib-general-statistics-for-groups (Input: 1, Output: 1):
-    \item node-red-contrib-weekly-statistics-for-groups (Input: 1, Output: 1):
-    \item node-red-contrib-get-activity-intervals-for-seismometers (Input: 1, Output: 1):
-    \item node-red-contrib-get-statistics-for-active-seismometers-in-the-latest-minutes (Input: 1, Output: 1):
-    \item node-red-contrib-get-all-perceptible-earthquakes (Input: 1, Output: 1):
+    \item node-red-contrib-get-seismometer-info (Input: 1, Output: 1): Questo nodo quando riceve un input restituisce le informazioni del dispositivo selezionato.
+    \item node-red-contrib-list-earthquakes (Input: 1, Output: 1): Questo nodo quando riceve un input restituisce la lista dei terremoti (di default avvenuti nelle ultime quattro settimane).
+    \item node-red-contrib-get-all-seismometers-in-group (Input: 1, Output: 1): Questo nodo quando riceve un input restituisce le informazioni di tutti i sismometri registrati nel gruppo di cui l'utente fa parte. 
+    \item node-red-contrib-get-weekly-ranking-for-all-devices-in-group (Input: 1, Output: 1): Questo nodo quando riceve un input restituisce una classifica dei dispositivi più attivi nell'ultima settimana.
+    \item node-red-contrib-general-statistics-for-groups (Input: 1, Output: 1): Questo nodo quando riceve un input restituisce le statistiche generali per il gruppo di cui l'utente fa parte.
+    \item node-red-contrib-weekly-statistics-for-groups (Input: 1, Output: 1): Questo nodo quando riceve un input restituisce le statistiche per i gruppi nell'ultima settimana.
+    \item node-red-contrib-get-activity-intervals-for-seismometers (Input: 1, Output: 1): Questo nodo quando riceve un input restituisce i 100 intervalli di attività più recenti per il sismometro selezionato.
+    \item node-red-contrib-get-statistics-for-active-seismometers-in-the-latest-minutes (Input: 1, Output: 1): Questo nodo quando riceve un input restituisce le statistiche dei sismometri attivi negli ultimi cinque minuti.
+    \item node-red-contrib-get-all-perceptible-earthquakes (Input: 1, Output: 1): Questo nodo quando riceve un input restituisce tutti i terremoti che potrebbero essere stati percepiti da uno o più sismometri all'interno del gruppo di cui l'utente fa parte.
 \end{itemize}
 
 \subsection{COMMON FOLDER?}
