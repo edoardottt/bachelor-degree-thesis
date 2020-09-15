@@ -927,23 +927,29 @@ in millisecondi sono definiti i tempi di riconnessione e timeout per i vari prot
 
 Spiegazione nodi MQTT, codice e semplificazione rispetto a prima (immagini).
 
+Come spiegato nel paragrafo 3.2 (Difficoltà e limiti nell'uso di Node-RED), un utente che non ha competenze tecniche informatiche potrebbe avere grandi difficoltà nel configurare un'azione piuttosto semplice.
+L'obiettivo del lavoro svolto è di semplificare il più possibile la creazione di flussi Node-RED riducendo al minimo le competenze richieste e la configurazione da parte dell'utente.
+Molti valori che vengono inseriti (e poi ripetuti nel caso di più nodi che utilizzano il protocollo MQTT) sono già a conoscenza del sistema SeismoCloud, perciò si è optato per la creazione di nodi customizzati che hanno già all'interno tutte le informazioni note.
+
+Qui è presente la lista dei vari nodi creati per il sistema EUD di SeismoCloud; sono tutti moduli NPM che rispettano la definizione di modulo definita precedentemente in questo paragrafo.
+
 \begin{itemize}
-    \item node-red-contrib-rssi
-    \item node-red-contrib-bssid
-    \item node-red-contrib-localip
-    \item node-red-contrib-publicip
-    \item node-red-contrib-threshold
-    \item node-red-contrib-alive
-    \item node-red-contrib-timesync
-    \item node-red-contrib-quake
-    \item node-red-contrib-disconnect
-    \item node-red-contrib-reboot
-    \item node-red-contrib-temperature
-    \item node-red-contrib-probespeed
-    \item node-red-contrib-sigma
-    \item node-red-contrib-stream
-    \item node-red-contrib-streamdata
-    \item node-red-contrib-essid
+    \item node-red-contrib-rssi (Input: 0, Output: 1): L'indicatore di potenza del segnale ricevuto (RSSI) è una misura stimata di quanto bene un dispositivo può ricevere segnali dal punto di accesso a cui è collegato.
+    \item node-red-contrib-bssid (Input: 0, Output: 1):  BSSID identifica l'insieme di servizi di base del dispositivo. Il più delle volte è associato all'indirizzo MAC del punto di accesso a cui è collegato.
+    \item node-red-contrib-essid (Input: 0, Output: 1): Nome del punto di accesso alla rete a cui è collegato il dispositivo.
+    \item node-red-contrib-localip: L'indirizzo Ip nella rete locale del dispositivo.
+    \item node-red-contrib-publicip (Input: 0, Output: 1): L'indirizzo Ip pubblico su Internet del dispositivo.
+    \item node-red-contrib-threshold (Input: 0, Output: 1): Soglia utile al calcolo di un EarthQuake Early Warning.
+    \item node-red-contrib-alive (Input: 0, Output: 1): Segnale che indica che il dispositivo è attivo al momento. 
+    \item node-red-contrib-timesync (Input: 0, Output: 1): Valore utile alla sincronizzazione temporale del dispositivo.
+    \item node-red-contrib-quake (Input: 0, Output: 1): Segnalazione di una vibrazione del dispositivo. 
+    \item node-red-contrib-disconnect (Input: 0, Output: 1): Segnale inviato quando un dispositivo viene disconnesso.
+    \item node-red-contrib-reboot (Input: 1, Output: 1): Segnala il riavvio del dispositivo. 
+    \item node-red-contrib-temperature (Input: 0, Output: 1): Valore che indica la temperatura del dispositivo in $^{\circ}$C.
+    \item node-red-contrib-probespeed (Input: 0, Output: 1): ?
+    \item node-red-contrib-sigma (Input: 0, Output: 1): ?
+    \item node-red-contrib-stream (Input: 0, Output: 1): ?
+    \item node-red-contrib-streamdata (Input: 0, Output: 1): ?
 \end{itemize}
 
 \subsection{Implementazione di nodi che utilizzano API SeismoCloud per statistiche e informazioni sul sistema}
