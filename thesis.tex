@@ -954,8 +954,8 @@ Qui è presente la lista dei vari nodi creati per il sistema EUD di SeismoCloud;
 \end{itemize}
 
 Tutti questi dati vengono inviati e ricevuti tramite il protocollo MQTT dal server e dal client. La maggior parte delle informazioni di configurazione non cambia, quindi sono stati creati per la maggiore parte di essi (tranne reboot e alive, spiegata in seguito la motivazione) nodi che funzionano allo stesso modo.
-Dato che Node-RED utilizza NodeJS come runtime, il linguaggio utilizzato è Javascript e la libreria che aggiunge funzionalità riguardanti MQTT è MQTT.js (\href{https://github.com/mqttjs}{https://github.com/mqttjs}).
-La scelta è motivata dal codice open-source, dalla attiva community di utenti e sviluppatori e dalla maturità del progetto.
+Dato che Node-RED utilizza NodeJS come runtime, il linguaggio utilizzato è Javascript e la libreria che aggiunge funzionalità riguardanti MQTT è \textbf{MQTT.js}.
+La scelta è motivata dal codice open-source, dalla attiva community di utenti e sviluppatori e dalla maturità del progetto \cite{mqttjs}.
 Per la seguente spiegazione viene preso come esempio \textbf{node-red-contrib-rssi}.
 Il nucleo delle funzionalità è all'interno del file Javadcript, in questo caso \texttt{rssi.js}.
 Dalla riga 1 alla riga 5 viene creato il nodo con le configurazioni di base (config) e vengono istanziate alcune variabili per facilità di lettura.
@@ -1093,9 +1093,39 @@ Spiegazione nodi API, codice, funzionalità offerte e semplificazione rispetto a
     \item node-red-contrib-get-all-perceptible-earthquakes (Input: 1, Output: 1): Questo nodo quando riceve un input restituisce tutti i terremoti che potrebbero essere stati percepiti da uno o più sismometri all'interno del gruppo di cui l'utente fa parte.
 \end{itemize}
 
-\subsection{COMMON FOLDER?}
+Per questi nodi la parte di configurazione nel file \texttt{package.json} e nel file HTML non cambia molto, ma cambia completamente il file Javascript che definisce le funzionalità.
+In questo caso (\texttt{list-earthquakes.js}) ogni volta che il nodo riceve un input viene effettuata una richiesta HTTPS al server SeismoCloud e successivamente viene restituito in output.
+\begin{lstlisting}[language=Javascript,firstnumber=20]
+    node.on('input', function (msg) {
+      const https = require('https');
+      const URL = "/earthquakes/"
+      var apiServerUrl = "API-SERVER-URL-HERE";
+      var access_token = "ACCESS-TOKEN-HERE";
 
-\clearpage
+      //HEADERS
+      const options = {
+        headers: {
+          'Host': apiServerUrl,
+          'Connection': 'keep-alive',
+          'X-Access-Token': access_token,
+        }
+      }
+      //EFFECTIVE GET REQUEST
+      https.get("https://" + apiServerUrl + URL, options, (resp) => {
+        var data = '';
+        // A chunk of data has been received.
+        resp.on('data', (chunk) => {
+          data += chunk;
+        });
+        // The whole response has been received. Send as msg.payload.
+        resp.on('end', () => {
+          node.log("Retrieved list-earthquakes");
+          var msg = { payload: data };
+          node.send(msg);
+        });
+      });
+    });
+\end{lstlisting}
 
 
 % ======================================= CHAPTER 4 ================================================
@@ -1317,6 +1347,11 @@ Inoltre, con le variabili a differente scope (Node, Flow e Global definite nel p
     \textbf{Node-RED Docs: Configuration }
     \\
     \href{https://nodered.org/docs/user-guide/runtime/configuration}{https://nodered.org/docs/user-guide/runtime/configuration}
+
+\bibitem{mqttjs}
+    \textbf{MQTT.js Docs}
+    \\
+    \href{https://github.com/mqttjs/MQTT.js/wiki}{https://github.com/mqttjs/MQTT.js/wiki}
 
 \end{thebibliography}
 
