@@ -1074,9 +1074,14 @@ Tramite il file \texttt{package.json} invece vengono definite impostazioni di ba
     \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-3/rssi-2.jpg}
     \label{fig:rssi-2}
 \end{figure}
+Le figure mostrate qui sopra raffigurano due nodi rssi inseriti nel workspace.
+Entrambi hanno un cerchio azzurro in alto a destra, mentre solo secondo ha anche un triangolo arancione.
+Il cerchio blu sta ad indicare che ancora non sono state salavate le modifiche effettuate al flusso, mentre il triangolo arancione indica la non corretta (o mancante) configurazione del nodo.
+Per configurare il nodo bisogna definire il sismometro a cui il nodo si riferisce, è necessario un doppio click sinistro sul nodo, comparirà il menu laterale (figura \ref{fig:menu}) che consente di selezionare uno tra i dispositivi nel gruppo.
+Il cerchio blu è inserito di default nell'interfaccia da Node-RED, l'altro segnale è stato aggiunto successivamente per aiutare l'utente nel processo di creazione dei flussi.
 
 I nodi che hanno un compito speciale sono \textbf{Alive} e \textbf{Reboot}.
-Il nodo Alive quando viene caricato dal runtime esegue una chiamata alle API di SeismoCloud e ottiene tutti i dati dei sismometri che sono registrati nel gruppo selezionato per utilizzarli nei controlli e nella condivisione con gli altri nodi.
+Il nodo Alive quando viene caricato dal runtime esegue una chiamata alle API di SeismoCloud per ottenere tutti i dati dei sismometri che sono registrati nel gruppo selezionato. Quest'ultimi (nome del dispositivo, identificativo alfanumerico, latitudine e longitudine, timestamp di ultima attività, tipo e versione) verranno poi messi a disposizione ed utilizzati dagli altri nodi e dal runtime stesso per eseguire dei controlli e per settare tutte le informazioni che non devono essere inserite dall'utente proprio perché il sistema ne è già a conoscenza.
 Il nodo reboot invece quando riceve in input qualcosa (non ci sono controlli, può essere una stringa, un numero, in generale un valore qualsiasi) pubblica un messaggio (in questo caso un semplice ''y") sul topic dedicato al sismometro selezionato per effettuare il riavvio dello stesso.
 \begin{lstlisting}[language=Javascript, firstnumber=80]
     //== on input event, publish a message on this topic ==
@@ -1141,6 +1146,12 @@ In questo caso (\texttt{list-earthquakes.js}) ogni volta che il nodo riceve un i
       });
     });
 \end{lstlisting}
+
+\begin{figure}[ht]
+    \includegraphics{relazione-tirocinio/Chapter-3/api-seismo.jpg}
+    \caption{Nodi custom SeismoCloud per informazioni generali della rete}
+    \label{fig:api-seismo-nodes}
+\end{figure}
 
 
 % ======================================= CHAPTER 4 ================================================
@@ -1238,14 +1249,14 @@ Tutti gli utenti hanno compreso come i nodi devono essere collegati per formare 
 \section{Conclusioni}
 
 Dai risultati che sono stati ottenuti si sta procedendo nella giusta direzione.
-Abbiamo visto come poter progettare e implementare un sistema di End User Development \textbf{sicuro, efficiente e facilmente usabile}.
-Sono stati trovati i problemi più evidenti ed è stata applicata una soluzione efficace ad alcuni, per altri si sta continuando a lavorarci.
-Come si nota dalle implementazioni tecniche apportate descritte nel capitolo 3 e dai test svolti, l'interfaccia risulta usabile e richiede la minima configurazione dell'utente per programmare anche azioni complesse senza avere una conoscenza tecnica né di programmazione, né di protocolli di rete.
-L'applicativo è stabile, è stato testato più volte con gli utenti, ma soprattutto internamente nel team di sviluppo.
-Come abbiamo visto nel capitolo 4 è anche sicuro e i dati della rete di sismometri SeismoCloud e le informazioni personali degli utenti rimangono protetti.
-Continueremo ad ascoltare gli utenti di SeismoCloud ricevendo feedback utili e proposte di servizi cercando di far rimanere il sistema comprensibile ed usabile.
-\textbf{POI?}
-
+Abbiamo visto come poter progettare ed implementare un sistema di End User Development \textbf{sicuro, efficiente e facilmente usabile}.
+Sono stati trovati i problemi più evidenti in sicurezza ed in usabilità; è stata applicata una soluzione efficace per alcuni, per altri è definito il metodo di risoluzione.
+Come si nota dalle implementazioni tecniche apportate descritte nel capitolo 3 e dai test svolti definiti in questo capitolo, l'interfaccia risulta usabile e richiede la minima configurazione dell'utente per programmare anche azioni complesse senza avere una conoscenza tecnica né di programmazione, né di protocolli di rete.
+L'applicativo è stabile, è stato testato più volte con gli utenti ed internamente nel team di sviluppo.
+Come abbiamo visto nel capitolo 4 è anche sicuro e i dati della rete di sismometri e le informazioni personali degli utenti SeismoCloud rimangono protetti.
+È stata creata una piattaforma che sarà utilizzata come base con le funzionalità necessarie ad interfacciarsi con il sistema ed i vari dispositivi connessi.
+Si continuerà ad ascoltare gli utenti SeismoCloud ricevendo feedback utili e proposte di servizi cercando di far rimanere il sistema comprensibile, sicuro ed usabile.
+Nel prossimo paragrafo vengono poi espressi alcuni percorsi da seguire per aggiungere interessanti funzionalità e continuare ad elevare l'utilità di questo sistema.
 \clearpage
 
 \section{Sviluppi futuri}
