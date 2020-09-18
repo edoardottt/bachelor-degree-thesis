@@ -1185,14 +1185,18 @@ Quindi, da qui in poi si assume che la parte di autenticazione è sicura e dentr
 
 \begin{itemize}
     \item Dipendenze nodi SeismoCloud
-    \item Controllo dell'input dell'utente
-    \item Dati sensibili nelle variabili d'ambiente (function, inject...)
-    \item e quindi poi flow-global.txt
-    \item Access Token
     \item Nodi potenzialmente pericolosi
     \item Download ed inserimento di nodi esterni (intenzionalmente o typo-squatting)
     \item Download di librerie JS esterne (e.g. child\_process)
     \item Il nodo function ha accesso al context node, flow e global
+    \item Il nodo function e la sandbox https://nodejs.org/api/vm.html
+    https://discourse.nodered.org/t/custom-node-code/248/9
+    https://discourse.nodered.org/t/payload-and-js-plain-object/12100/5
+    https://discourse.nodered.org/t/confusion-about-object-prototype/32605/5
+    \item Controllo dell'input dell'utente
+    \item Dati sensibili nelle variabili d'ambiente (function, inject...)
+    \item e quindi poi flow-global.txt
+    \item Access Token
     \item MQTT over TLS
     \item certificate pinning
 \end{itemize}
@@ -1201,7 +1205,7 @@ Quindi, da qui in poi si assume che la parte di autenticazione è sicura e dentr
 npm_config_user_agent: "npm/6.14.4 node/v12.16.2 linux x64"
 NODE_VERSION: "12.16.2"
 npm_config_bin_links: "true"
-HOSTNAME: "1c0e53a053a1"
+HOSTNAME: "1cs453a053a1"
 ACCESS_TOKEN: "ACCESS-TOKEN"
 YARN_VERSION: "1.22.4"
 npm_config_fetch_retries: "2"
