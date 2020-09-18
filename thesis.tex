@@ -1157,8 +1157,33 @@ In questo caso (\texttt{list-earthquakes.js}) ogni volta che il nodo riceve un i
 % ======================================= CHAPTER 4 ================================================
 \chapter{Sicurezza e protezione dei dati}
 
+\section{Sicurezza nella piattaforma Node-RED}
+
+Come viene scritto chiaramente nella documentazione di Node-RED \cite{securing}, non è sicuro di default.
+Vengono espressi e chiariti alcuni punti su come risolvere alcuni problemi di accesso.
+Viene anche detto però che questo è sufficiente solo se viene effettuato il deploy su un rete fidata, non il nostro caso quindi, ma comunque sono punti necessari.
+Quando il server viene avviato ovviamente viene esposto il servizio pubblicamente su Internet e quindi chiunque può accedere all'interfaccia.
+Innanzitutto Node-RED utilizza il protocollo HTTP, il quale invia i dati in chiaro che possono essere letti da chiunque sta sniffando il traffico.
+La documentazione suggerisce di utilizzare il protocollo \textbf{HTTPS}, il quale utilizza il protocollo TLS che cifra i dati sui canali di comunicazione.
+Per attivare quest'ultimo ci si deve munire di una chiave privata e di una catena di certificati in formato PEM.
+Successivamente dobbiamo inserire all'interno del file \texttt{settings.js}, questo fa si che i messaggi inviati tramite il protocollo HTTP vengano ora cifrati e spediti in modo sicuro.
+\begin{lstlisting}
+https: {
+    key: require("fs").readFileSync('privkey.pem'),
+    cert: require("fs").readFileSync('cert.pem')
+},
+\end{lstlisting}
+
+Successivamente la documentazione consiglia di inserire un metodo di autenticazione basato su username e password per gestire i vari privilegi degli amministratori, degli utenti e di chi non ha accesso al sistema.
+Devono essere create delle credenziali associate ad una classe di privilegi che vengono poi salvate nel file settings.js.
+Dato che l'interfaccia della dashboard personale di SeismoCloud è in fase di aggiornamento, la pagina che gestisce l'accesso alla parte privata di Node-RED è lasciata ad un lavoro futuro (Sottocapitolo 5.3).
+Quindi, da qui in poi si assume che la parte di autenticazione è sicura e dentro al sistema sono presenti solamente utenti SeismoCloud e non utenti non riconoscibili rispettando la buona pratica del \textbf{Principio del privilegio minimo}. Ovviamente è una forte assunzione, ma il sistema Node-RED in questo caso viene utilizzato in un modo non previsto, perciò nasconde molti errori di sicurezza che verranno esaminati meglio ed in dettaglio nei prossimi sottocapitoli.
+
+\clearpage
+
+\section{Ricerca ed analisi di vulnerabilità}
+
 \begin{itemize}
-    \item Principio del privilegio minimo
     \item Dipendenze nodi SeismoCloud
     \item Controllo dell'input dell'utente
     \item Dati sensibili nelle variabili d'ambiente (function, inject...)
@@ -1168,18 +1193,9 @@ In questo caso (\texttt{list-earthquakes.js}) ogni volta che il nodo riceve un i
     \item Download ed inserimento di nodi esterni (intenzionalmente o typo-squatting)
     \item Download di librerie JS esterne (e.g. child\_process)
     \item Il nodo function ha accesso al context node, flow e global
-    \item sandbox
+    \item MQTT over TLS
+    \item certificate pinning
 \end{itemize}
-
-\section{Sicurezza nella piattaforma Node-RED}
-
-placeholder
-
-\clearpage
-
-\section{Ricerca ed analisi di vulnerabilità}
-
-placeholder
 
 \clearpage
 
@@ -1275,7 +1291,7 @@ Nel prossimo paragrafo vengono poi espressi alcuni percorsi da seguire per aggiu
 
 \section{Sviluppi futuri}
 
-\subsection{Integrazione social network}
+\subsection{Integrazione social network e dispositivi IoT per smart home}
 
 L'introduzione di azioni che utilizzano le API di social network o funzioni di notifica è molto utile. In particolare, esiste già un modulo NPM pronto e maturo (Versione 8.6.4) per Telegram \cite{telegram-node}, per Twitter \cite{twitter-node} e per Facebook \cite{facebook-node}.
 Sono molto utili per condividere dati, ma soprattutto per notificare ad un bacino molto ampio di utenza facile da raggiungere Earthquake Early Warning. In più, per quanto riguarda Twitter e Facebook, non è nemmeno necessario conoscere dati dei destinatari del messaggio, basta condividere un messaggio automatico con le informazioni utili. Ancora più utile è la possibilità di localizzare il proprio Tweet (o post Facebook) tramite la localizzazione GPS per una più rapida ed efficace diffusione dell stesso in aree interessate all'evento sismico.
@@ -1285,8 +1301,6 @@ L'INGV ha avviato un servizio simile, questo un Tweet di esempio(\href{https://t
     \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-5/tweetINGV.jpg}
     \label{fig:tweetINGV}
 \end{figure}
-
-\subsection{Integrazione dispositivi IoT per smart-home}
 
 Come è stato introdotto nel capitolo 2.1, una funzionalità interessante sarebbe l'integrazione con dispositivi per una smart-home. Anche qui dato l'alto contributo della community esistono moduli pronti all'uso (necessaria configurazione). Ad esempio integrazione con Alexa \cite{alexa} e Google Home \cite{google-home}.
 Oltre ai soliti dispositivi smart (luci, elettrodomestici, TV...) l'utente ha completa libertà (privilegiando l'usabilità e la sicurezza) di creare da sé programmi software che si interfacciano con dispositivi hardware creati personalmente. Ad esempio, programmare un GPIO (General Purpose Input/Output) ad emettere un segnale quando avviene una certa condizione. Quest'ultimo poi potrà essere utilizzato per interfacciarsi con dispositivi che hanno bisogno di essere spenti o accesi in determinate condizioni di sicurezza (generatore elettrico, valvola del gas), dato che il GPIO ha solo due stati.
@@ -1301,6 +1315,8 @@ clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8))
 ogni volta che viene creato un nodo, e viene distrutto quando il nodo viene cancellato dal workspace.
 In generale, data la brevità dei messaggi trasferiti e l'implementazione orientata all'efficienza del protocollo MQTT, l'applicativo non ne risente molto; ma con il crescere dei gruppi, degli utenti e quindi dei dispositivi coinvolti si potrebbero aver problemi di scalabilità, per questo un unico client condiviso con i nodi del gruppo (o flusso, dipende dalle connessione simultanee possibili) potrebbe aiutare l'efficienza del sistema.
 Inoltre, con le variabili a differente scope (Node, Flow e Global definite nel paragrafo 2.2) è possibile condividere in modo facile lo stesso client per azioni differenti.
+
+\subsection{Metodo di accesso sicuro ed affidabile a SeismoCloud Node-RED}
 
 \clearpage
 
@@ -1341,7 +1357,7 @@ Inoltre, con le variabili a differente scope (Node, Flow e Global definite nel p
   \href{https://restfulapi.net/}{https://restfulapi.net/}
 
 \bibitem{wikieud}
-  \textbf{Wikipedia - End User Development}.\\
+  \textbf{Wikipedia | End User Development}.\\
   \href{https://en.wikipedia.org/wiki/End-user_development}{https://en.wikipedia.org/wiki/End-user\_development}
 
 \bibitem{MathWorks}
@@ -1353,7 +1369,7 @@ Inoltre, con le variabili a differente scope (Node, Flow e Global definite nel p
   \href{https://github.com/node-red/node-red/wiki}{https://github.com/node-red/node-red/wiki}
 
 \bibitem{wikidocker}
-  \textbf{Wikipedia - Docker}.
+  \textbf{Wikipedia | Docker}.
   \href{https://it.wikipedia.org/wiki/Docker/}{https://it.wikipedia.org/wiki/Docker}
 
 \bibitem{docker-portability}
@@ -1361,7 +1377,7 @@ Inoltre, con le variabili a differente scope (Node, Flow e Global definite nel p
   \href{https://docs.docker.com/engine/faq/#what-does-docker-technology-add-to-just-plain-lxc}{https://docs.docker.com/engine/faq/\#what-does-docker-technology-add-to-just-plain-lxc}
 
 \bibitem{aboutstoragedrivers}
-  \textbf{Docker docs - About storage drivers}.\\
+  \textbf{About storage drivers | Docker Documentation}.\\
   \href{https://docs.docker.com/storage/storagedriver/}{https://docs.docker.com/storage/storagedriver/}
 
 \bibitem{dockervsvm2}
@@ -1377,25 +1393,30 @@ Inoltre, con le variabili a differente scope (Node, Flow e Global definite nel p
     2019, Amit M Potdar, Narayan D G, Shivaraj Kengond, Mohammed Moin Mulla.
 
 \bibitem{dockerfilesbestpractices}
-    \textbf{Best practices for writing Dockerfiles}
+    \textbf{Best practices for writing Dockerfiles | Docker Documentation}
     \\
     \href{https://docs.docker.com/develop/develop-images/dockerfile_best-practices/}{https://docs.docker.com/develop/develop-images/dockerfile\_best-practices/}
 
 \bibitem{hcibook}
-    \textbf{Human Computer Interaction Book - Evaluation techniques}
+    \textbf{Human Computer Interaction Book | Evaluation techniques}
     \\
     \href{https://www.hcibook.com/e3-docs/slides/notes-pdf/e3-chap-09-6up.pdf}{https://www.hcibook.com/e3-docs/slides/notes-pdf/e3-chap-09-6up.pdf}
     
 \bibitem{noderedconfig}
-    \textbf{Node-RED Docs: Configuration }
+    \textbf{Node-RED configuration | Node-RED Documentation }
     \\
     \href{https://nodered.org/docs/user-guide/runtime/configuration}{https://nodered.org/docs/user-guide/runtime/configuration}
 
 \bibitem{mqttjs}
-    \textbf{MQTT.js Docs}
+    \textbf{MQTT.js Documentation}
     \\
     \href{https://github.com/mqttjs/MQTT.js/wiki}{https://github.com/mqttjs/MQTT.js/wiki}
-    
+
+\bibitem{securing}
+    \textbf{Securing Node-RED | Node-RED Documentation}
+    \\
+    \href{https://nodered.org/docs/user-guide/runtime/securing-node-red}{https://nodered.org/docs/user-guide/runtime/securing-node-red}
+
 \bibitem{securingNode-RED}
     \textbf{Securing IoT Apps in Node-RED | University of Gothenburg}
     \\
