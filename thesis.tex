@@ -1235,7 +1235,7 @@ Per quanto riguarda il nodo \textit{function}, che appunto consente lo stesso di
 Comunque, il codice che viene inserito qui potrebbe caricare un modulo Javascript esterno, ad esempio \textit{http}, oppure \textit{child\_process}. In questo modo si può emulare il funzionamento del nodo http nel primo caso, exec nel secondo.
 Questa funzionalità nasconde comunque ancora altre criticità che verranno mostrate in maniera dettagliata in seguito.
 
-Come abbiavo visto nel sottocapitolo 3.3, la procedura per comunicare con i sismometri ed il sistema SeismoCloud è cambiata radicalmente favorendo l'usabilità e l'accessibilità a persone non tecnicamente competenti. I nodi che sono stati creati per comunicare attraverso il protocollo MQTT con SeismoCloud richiedono solamente il nome del nodo ed il nome del sismometro.
+Come abbiamo visto nel sottocapitolo 3.3, la procedura per comunicare con i sismometri ed il sistema SeismoCloud è cambiata radicalmente favorendo l'usabilità e l'accessibilità a persone non tecnicamente competenti. I nodi che sono stati creati per comunicare attraverso il protocollo MQTT con SeismoCloud richiedono solamente il nome del nodo ed il nome del sismometro.
 Durante la ricerca degli errori si è scoperto un errore banale ma ``fastidioso". Era possibile infatti inserire un nome di un sismometro che non esisteva nel gruppo, così facendo veniva comunque creato un client MQTT e veniva messo in ascolto su un topic non esistente.
 Ovviamente la soluzione è di seguire sempre il mantra \textbf{mai fidarsi dell'input dell'utente}. La risoluzione viene dettagliata nel prossimo sottocapitolo.
 
@@ -1259,8 +1259,10 @@ Queste informazioni possono essere lette dall'interfaccia utente attraverso l'ut
     \label{fig:env_var_1}
 \end{figure}
 
-Come è stato accennato
-
+Come è stato accennato nel capitolo 3, sono disponibili alcuni modi per inviare messaggi tra i vari nodi, uno di questi è la condivisione di variabili con scope differente.
+Ci sono diversi scope: node (visibili solo al nodo), flow (visibili solo ai nodi nello stesso flusso) e global (disponibili a tutto il sistema).
+Come si legge dallo studio \textit{Securing IoT apps in Node-RED} di Olsson \cite{securing}, la quasi totalità dei nodi non utilizza variabili con scope globale o di flusso. Questo è un bene perché l'utente si aspetta che i dati fluiscano in correlazione ai flussi visuali creati e non vengano scambiati tra i nodi in modo arbitario dalle azioni create.
+Comunque, l'interfaccia da la possibilità di leggere tutte le variabili d'ambiente disponibili (incluse quelle inserite per l'uso di SeismoCloud). Queste informazioni possono dare ai malintenzionati tantissime informazioni sulle versioni dei vari componenti di sistema, sull'organizzazione dei file e su informazioni private.
 \begin{lstlisting}
 npm_config_user_agent: "npm/6.14.4 node/v12.16.2 linux x64"
 NODE_VERSION: "12.16.2"
@@ -1352,11 +1354,33 @@ INIT_CWD: "/usr/src/node-red"
 NODE_RED_HOME: "/usr/src/node-red/node_modules/node-red"
 \end{lstlisting}
 
+ACCESS TOKEN
+
+MQTT OVER TLS
+
+CERTIFICATE PINNING 
+
 \clearpage
 
 \section{Risoluzione dei problemi}
 
-placeholder
+\begin{itemize}
+    \item Dipendenze nodi SeismoCloud
+    \item Nodi potenzialmente pericolosi
+    \item Download ed inserimento di nodi esterni (intenzionalmente o typo-squatting)
+    \item Download di librerie JS esterne (e.g. child\_process)
+    \item Il nodo function ha accesso al context node, flow e global
+    \item Il nodo function e la sandbox https://nodejs.org/api/vm.html
+    https://discourse.nodered.org/t/custom-node-code/248/9
+    https://discourse.nodered.org/t/payload-and-js-plain-object/12100/5
+    https://discourse.nodered.org/t/confusion-about-object-prototype/32605/5
+    \item Controllo dell'input dell'utente
+    \item Dati sensibili nelle variabili d'ambiente (function, inject...)
+    \item e quindi poi flow-global.txt
+    \item Access Token
+    \item MQTT over TLS
+    \item certificate pinning
+\end{itemize}
 
 \clearpage
 
