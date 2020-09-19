@@ -1201,6 +1201,22 @@ Quindi, da qui in poi si assume che la parte di autenticazione è sicura e dentr
     \item certificate pinning
 \end{itemize}
 
+L'immagine Docker di Node-RED di default ha sei insiemi di nodi inseriti nella palette: common, function, network, sequence, parser, storage.
+A queste si sono aggiunte due categorie particolari per SeismoCloud: apiSeismoCloud e SeismometerData.
+Alcuni nodi già installati all'interno dell'intefaccia sono stati considerati pericolosi.
+Come già anticipato, gli utenti devono superare una fase di autenticazione, ma questi nodi vengono comunque considerati pericolosi per l'uso che ne potrebbe anche un utente di SeismoCloud. L'autenticazione certifica che l'utente appartiene effettivamente ad un gruppo, ma questo non esclude cattive intenzioni dello stesso.
+Ad esempio un nodo che è stato considerato pericoloso è il nodo \textbf{exec}. Questo nodo ha un parametro in input e restituisce tre output (Standard output, standard error e return code). Come si evince dal nome esegue comandi di sistema. 
+\begin{figure}[ht]
+    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-4/exec.jpg}
+    \label{fig:exec}
+\end{figure}
+Qua sopra in figura è riportato un esempio di uso cattivo del nodo exec. In realtà però, ci sono molti scenari più pericolosi, come ad esempio l'utilizzo della macchina su cui viene hostato il server come mittente dell'attacco e non come destinatario.
+Questo nodo fa parte della categoria function, l'unico considerato pericoloso di questa categoria.
+Gli altri sono: udp, tcpin, websocket, httprequest, httpin,
+mqtt, httpproxy, tls, tail, file,
+watch.
+
+
 \begin{lstlisting}
 npm_config_user_agent: "npm/6.14.4 node/v12.16.2 linux x64"
 NODE_VERSION: "12.16.2"
