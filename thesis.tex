@@ -1215,7 +1215,51 @@ Questo nodo fa parte della categoria function, l'unico considerato pericoloso di
 Gli altri sono: udp, tcpin, websocket, httprequest, httpin,
 mqtt, httpproxy, tls, tail, file,
 watch.
+Si nota bene che molti sono protocolli di rete e sono stati rimossi per lo stesso motivo sopra. Possono essere utilizzati in modo maligno per fare richieste non consentite o effettuare qualche azione malevola con la rete attraverso il server.
+Gli altri (tail, file e watch) sono nodi della categoria storage e si occupano di leggere, modificare e salvare file.
+Anche questi nodi possono essere utilizzati da malintenzionati per leggere file sul server o creare codice da utilizzare in seguito.
 
+Abbiamo visto che ci sono dei nodi che possono essere pericolosi se lasciati a completa disposizione dell'utente, togliendo i nodi dalla palette, è sicura l'interfaccia? No.
+
+Infatti, Node-RED mette a disposizione nella sezione di impostazioni una funzionalità molto utile (ma pericolosa per il nostro scopo) che consente all'utente di installare nodi esterni che sono disponibili nel contenitore di repository pubblico (flows.nodered.org).
+In questo modo si può ad esempio installare nodi come quello mostrato in figura che consente di eseguire codice Javascript.
+Un altro problema potrebbe essere il \textbf{typo-squatting}. L'utente potrebbe voler scaricare ed installare un nodo utile, ad esempio \textit{node-red-contrib-alexa}, ma sbaglia a digitare premendo una c al posto di una x, quindi il sistema gli suggerisce il nodo \textit{node-red-contrib-aleca}, che invece potrebbe essere un nodo malevolo (chiunque può caricare nodi sullo store ufficiale).
+
+\begin{figure}[ht]
+    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-4/install.jpg}
+    \caption{Installazione di un nodo esterno}
+    \label{fig:install}
+\end{figure}
+
+Per quanto riguarda il nodo \textit{function}, che appunto consente lo stesso di eseguire codice Javascript, viene ritenuto meno pericoloso perché viene utilizzato il modulo \textit{vm} per creare una sandbox ed eseguire il codice in maniera sicura.
+Comunque, il codice che viene inserito qui potrebbe caricare un modulo Javascript esterno, ad esempio \textit{http}, oppure \textit{child\_process}. In questo modo si può emulare il funzionamento del nodo http nel primo caso, exec nel secondo.
+Questa funzionalità nasconde comunque ancora altre criticità che verranno mostrate in maniera dettagliata in seguito.
+
+Come abbiavo visto nel sottocapitolo 3.3, la procedura per comunicare con i sismometri ed il sistema SeismoCloud è cambiata radicalmente favorendo l'usabilità e l'accessibilità a persone non tecnicamente competenti. I nodi che sono stati creati per comunicare attraverso il protocollo MQTT con SeismoCloud richiedono solamente il nome del nodo ed il nome del sismometro.
+Durante la ricerca degli errori si è scoperto un errore banale ma ``fastidioso". Era possibile infatti inserire un nome di un sismometro che non esisteva nel gruppo, così facendo veniva comunque creato un client MQTT e veniva messo in ascolto su un topic non esistente.
+Ovviamente la soluzione è di seguire sempre il mantra \textbf{mai fidarsi dell'input dell'utente}. La risoluzione viene dettagliata nel prossimo sottocapitolo.
+
+Per una veloce configurazione e deploy dei servizi si era scelto di utilizzare le variabili d'ambiente dei container Docker. In questo modo con poche parole era possibile settare i container con i giusti parametri per i differenti gruppi.
+Però alcune delle variabili settate sono \textbf{dati sensibili}, ad esempio hostname, username e password del server MQTT.
+Queste informazioni possono essere lette dall'interfaccia utente attraverso l'utilizzo del nodo Inject, oppure inserendo qualche riga di codice Javascript nel nodo Function.
+
+\begin{lstlisting}
+    msg.payload = "";
+    msg.payload = msg.payload + "API SERVER URL: " + env.get("API_SERVER_URL") + "\n";
+    msg.payload = msg.payload + "MQTT SERVER: " + env.get("MQTT_SERVER") + "\n";
+    msg.payload = msg.payload + "MQTT USER: " + env.get("MQTT_USER") + "\n";
+    msg.payload = msg.payload + "MQTT PASS: " + env.get("MQTT_PASS") + "\n";
+    msg.payload = msg.payload + "MQTT PINNING CERT: " + env.get("MQTT_PINNING_CERT");
+    return msg
+\end{lstlisting}
+
+\begin{figure}[ht]
+    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-4/env_var_1.jpg}
+    \caption{Il nodo Inject può restituire in output i valori delle variabili d'ambiente}
+    \label{fig:env_var_1}
+\end{figure}
+
+Come è stato accennato
 
 \begin{lstlisting}
 npm_config_user_agent: "npm/6.14.4 node/v12.16.2 linux x64"
