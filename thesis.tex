@@ -1179,8 +1179,6 @@ Devono essere create delle credenziali associate ad una classe di privilegi che 
 Dato che l'interfaccia della dashboard personale di SeismoCloud è in fase di aggiornamento, la pagina che gestisce l'accesso alla parte privata di Node-RED è lasciata ad un lavoro futuro (Sottocapitolo 5.3).
 Quindi, da qui in poi si assume che la parte di autenticazione è sicura e dentro al sistema sono presenti solamente utenti SeismoCloud e non utenti non riconoscibili rispettando la buona pratica del \textbf{Principio del privilegio minimo}. Ovviamente è una forte assunzione, ma il sistema Node-RED in questo caso viene utilizzato in un modo non previsto, perciò nasconde molti errori di sicurezza che verranno esaminati meglio ed in dettaglio nei prossimi sottocapitoli.
 
-\clearpage
-
 \section{Ricerca ed analisi di vulnerabilità}
 
 \begin{itemize}
@@ -1465,6 +1463,10 @@ Inoltre, con le variabili a differente scope (Node, Flow e Global definite nel p
 
 \subsection{Metodo di accesso sicuro ed affidabile a SeismoCloud Node-RED}
 
+Il sistema Node-RED è stato inizialmente progettato per essere inserito in una rete affidabile e sicura, tipicamente all'interno di una rete locale protetta da sistemi di firewall. Nel corso del tempo il progetto è maturato e ha riscosso  successo per l'elevate potenzialità dello stesso, quindi sono state sviluppate alcune tecniche per renderlo adatto in una rete pubblicamente accessibile.
+In questa sezione della documentazione di Node-RED \cite{node-red-internet} vengono espressi alcuni suggerimenti per il deploy sicuro sulla rete pubblica.
+Viene consigliato di utilizzare sempre HTTPS per cifrare i messaggi che vengono scambiati sui canali di comunicazione, di non utilizzare una porta minore di 1024 per motivi di sicurezza (richiedono privilegi elevati, non utili ma dannosi), utilizzare un reverse proxy per mascherare il server sulla rete. In ogni caso, il sistema SeismoCloud ha tra gli sviluppi in corso un ammodernamento dell'interfaccia Web privata per un gruppo e tutta la parte di accesso relativo. La parte di autenticazione ora viene gestita tramite una password o un codice QR che può essere scansionato tramite l'app SeismoCloud. L'accesso al sistema di End User Development è gestito da questa dashboard, perciò è assolutamente necessario uno studio sulla sicurezza effettiva dell'autenticazione per evitare usi scorretti dei dati che il servizio fornisce.
+
 \clearpage
 
 \refstepcounter{chapter}
@@ -1605,6 +1607,11 @@ Inoltre, con le variabili a differente scope (Node, Flow e Global definite nel p
     \href{https://flows.nodered.org/node/node-red-contrib-googlehome}{https://flows.nodered.org/node/node-red-contrib-googlehome}.
     \\
     2020, [Online, acceduto il 16/09/2020]
+
+\bibitem{node-red-internet}
+    \textbf{How to safely expose Node-RED to the Internet}
+    \\
+    \href{https://github.com/node-red/cookbook.nodered.org/wiki/How-to-safely-expose-Node-RED-to-the-Internet}{https://github.com/node-red/cookbook.nodered.org/wiki/How-to-safely-expose-Node-RED-to-the-Internet}.
 
 \end{thebibliography}
 
