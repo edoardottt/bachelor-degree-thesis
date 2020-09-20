@@ -1230,7 +1230,6 @@ Un altro problema potrebbe essere il \textbf{typo-squatting}. L'utente potrebbe 
 \end{figure}
 
 Per quanto riguarda il nodo \textit{function}, che appunto consente lo stesso di eseguire codice Javascript, viene ritenuto meno pericoloso perché viene utilizzato il modulo \textit{vm} per creare una sandbox ed eseguire il codice in maniera sicura.
-Comunque, il codice che viene inserito qui potrebbe caricare un modulo Javascript esterno, ad esempio \textit{http}, oppure \textit{child\_process}. In questo modo si può emulare il funzionamento del nodo http nel primo caso, exec nel secondo.
 Questa funzionalità nasconde comunque ancora altre criticità che verranno mostrate in maniera dettagliata in seguito.
 
 Come abbiamo visto nel sottocapitolo 3.3, la procedura per comunicare con i sismometri ed il sistema SeismoCloud è cambiata radicalmente favorendo l'usabilità e l'accessibilità a persone non tecnicamente competenti. I nodi che sono stati creati per comunicare attraverso il protocollo MQTT con SeismoCloud richiedono solamente il nome del nodo ed il nome del sismometro.
@@ -1348,6 +1347,52 @@ Sicurezza canali comunicazione (http e mqtt)
     \item certificate pinning (https://security.stackexchange.com/questions/29988/what-is-certificate-pinning)
 \end{itemize}
 
+Come è stato descritto nel precedente sottocapitolo, un problema di sicurezza sono i nodi evidenziati come possibili vettori di attacco. La soluzione in questo caso è stata la rimozione degli stessi dall'interfaccia utilizzando le impostazioni nel file \texttt{settings.js}.
+\begin{lstlisting}[language=Javascript, firstnumber=75]
+//EXCLUDING NODES FROM PALETTE:
+  nodesExcludes: ['32-udp.js', '31-tcpin.js', '22-websocket.js', '21-httprequest.js', '21-httpin.js', '10-mqtt.js', '06-httpproxy.js', '05-tls.js', '90-exec.js', 'node-red-node-tail', '10-file.js', '23-watch.js'],
+\end{lstlisting}
+Ovviamente è un grande compromesso tra la sicurezza del sistema e le funzionalità offerte. Questi nodi consentivano una grande (sproporzionata) libertà all'utente di comunicare con la rete. Comunque serviva anche qui una elevata conoscenza dei protocolli e delle reti, quindi poco utilizzabili per gli utenti SeismoCloud non esperti. Durante i prossimi sviluppi potrebbero essere utili dei rilasci di copie di questi nodi, che quindi imitano le loro funzionalità, ma adattati per eseguire richieste in sicurezza e per essere utilizzati senza una eccessiva configurazione.
+
+Però è possibile, anche eliminando questi nodi dall'interfaccia, emulare le loro funzionalità attraverso il download di nodi esterni.
+Ad esempio, si può scaricare un nodo che effettua una richiesta http, per bloccare ciò è stato inserito questo codice:
+\begin{lstlisting}[language=Javascript, firstnumber=93]
+    palette: {
+      editable: false // Enable/disable the Palette Manager
+    },
+\end{lstlisting}
+
+Riguardo l'accesso ai vari tipi di context (node, flow e global) nessuno dei nodi introdotti da SeismoCloud utilizzano questo metodo per scambiare informazioni.
+Tuttavia, alcuni dati che vengono utilizzati dal backend NodeJS vengono comunque caricati nel global context per facilità d'uso. Questo può portare come abbiamo visto ad esporre tante informazioni sul sistema e sulle variabili d'ambiente.
+È possibile nascondere questo dettaglio inserendo nel file si impostazioni:
+\begin{lstlisting}[language=Javascript, firstnumber=56]
+exportGlobalContextKeys: false,
+\end{lstlisting}
+Quindi con questa modifica, se provo a stampare nella console il risultato di \texttt{global.keys()} ottengo \texttt{ [ empty ] }.
+
+Per il controllo dell'input da parte dell'utente è stato semplicemente inserito un controllo che verifica che l'input inserito corrisponde ad un dato presente nel sistema.
+Per un utente non esperto è difficile modificare il menu a tendina precompilato con tutti i sismometri disponibili, per un utente competente in materia basta aprire la console di debug di un qualsiasi Browser e modificare il codice della pagina Web.
+\begin{lstlisting}[language=Javascript, firstnumber=34]
+    // The whole response has been received. Print out the result.
+      resp.on('end', () => {
+        var obj = JSON.parse(data)
+        for (i in obj) {
+          devices.push(obj[i])
+        }
+        var deviceIdOk = false // this indicates if the input entered is in the group seismometers
+        for (i in devices) {
+          if (devices[i]['ID_Device'] == seismometer) {
+            deviceIdOk = true
+            break
+          }
+        }
+
+        // Only if the input entered is in the known seismometers' id
+        if (deviceIdOk) {
+\end{lstlisting}
+
+
+
 \clearpage
 
 
@@ -1464,7 +1509,7 @@ Inoltre, con le variabili a differente scope (Node, Flow e Global definite nel p
 \subsection{Metodo di accesso sicuro ed affidabile a SeismoCloud Node-RED}
 
 Il sistema Node-RED è stato inizialmente progettato per essere inserito in una rete affidabile e sicura, tipicamente all'interno di una rete locale protetta da sistemi di firewall. Nel corso del tempo il progetto è maturato e ha riscosso  successo per l'elevate potenzialità dello stesso, quindi sono state sviluppate alcune tecniche per renderlo adatto in una rete pubblicamente accessibile.
-In questa sezione della documentazione di Node-RED \cite{node-red-internet} vengono espressi alcuni suggerimenti per il deploy sicuro sulla rete pubblica.
+In questa sezione Wiki di Node-RED \cite{node-red-internet} vengono espressi alcuni suggerimenti per il deploy sicuro sulla rete pubblica.
 Viene consigliato di utilizzare sempre HTTPS per cifrare i messaggi che vengono scambiati sui canali di comunicazione, di non utilizzare una porta minore di 1024 per motivi di sicurezza (richiedono privilegi elevati, non utili ma dannosi), utilizzare un reverse proxy per mascherare il server sulla rete. In ogni caso, il sistema SeismoCloud ha tra gli sviluppi in corso un ammodernamento dell'interfaccia Web privata per un gruppo e tutta la parte di accesso relativo. La parte di autenticazione ora viene gestita tramite una password o un codice QR che può essere scansionato tramite l'app SeismoCloud. L'accesso al sistema di End User Development è gestito da questa dashboard, perciò è assolutamente necessario uno studio sulla sicurezza effettiva dell'autenticazione per evitare usi scorretti dei dati che il servizio fornisce.
 
 \clearpage
