@@ -1259,7 +1259,8 @@ Queste informazioni possono essere lette dall'interfaccia utente attraverso l'ut
 Come è stato accennato nel capitolo 3, sono disponibili alcuni modi per inviare messaggi tra i vari nodi, uno di questi è la condivisione di variabili con scope differente.
 Ci sono diversi scope: node (visibili solo al nodo), flow (visibili solo ai nodi nello stesso flusso) e global (disponibili a tutto il sistema).
 Come si legge dallo studio \textit{Securing IoT apps in Node-RED} di Olsson \cite{securing}, la quasi totalità dei nodi non utilizza variabili con scope globale o di flusso. Questo è un bene perché l'utente si aspetta che i dati fluiscano in correlazione ai flussi visuali creati e non vengano scambiati tra i nodi in modo arbitario dalle azioni create.
-Comunque, l'interfaccia da la possibilità di leggere tutte le variabili d'ambiente disponibili (incluse quelle inserite per l'uso di SeismoCloud). Queste informazioni possono dare ai malintenzionati tantissime informazioni sulle versioni dei vari componenti di sistema, sull'organizzazione dei file e su informazioni private.
+Comunque, l'interfaccia da la possibilità di leggere tutte le variabili d'ambiente disponibili (incluse quelle inserite per l'uso di SeismoCloud).
+Tra queste variabili sono presenti alcune che forniscono molte informazioni sul sistema in uso (ad esempio le varie versioni di Docker, Node-RED, npm, NodeJS...), sulla distribuzione dei file tra le varie cartelle e alcuni valori critici per la sicurezza (come ad esempio utente, password e hostname del server MQTT).
 \begin{lstlisting}
 npm_config_user_agent: "npm/6.14.4 node/v12.16.2 linux x64"
 NODE_VERSION: "12.16.2"
@@ -1341,7 +1342,6 @@ Sicurezza canali comunicazione (http e mqtt)
     https://discourse.nodered.org/t/confusion-about-object-prototype/32605/5
     \item Controllo dell'input dell'utente
     \item Dati sensibili nelle variabili d'ambiente (function, inject...)
-    \item e quindi poi flow-global.txt
     \item access token
     \item mqtt over tls (https://www.hivemq.com/blog/mqtt-security-fundamentals-tls-ssl/)
     \item certificate pinning (https://security.stackexchange.com/questions/29988/what-is-certificate-pinning)
@@ -1355,7 +1355,7 @@ Come è stato descritto nel precedente sottocapitolo, un problema di sicurezza s
 Ovviamente è un grande compromesso tra la sicurezza del sistema e le funzionalità offerte. Questi nodi consentivano una grande (sproporzionata) libertà all'utente di comunicare con la rete. Comunque serviva anche qui una elevata conoscenza dei protocolli e delle reti, quindi poco utilizzabili per gli utenti SeismoCloud non esperti. Durante i prossimi sviluppi potrebbero essere utili dei rilasci di copie di questi nodi, che quindi imitano le loro funzionalità, ma adattati per eseguire richieste in sicurezza e per essere utilizzati senza una eccessiva configurazione.
 
 Però è possibile, anche eliminando questi nodi dall'interfaccia, emulare le loro funzionalità attraverso il download di nodi esterni.
-Ad esempio, si può scaricare un nodo che effettua una richiesta http, per bloccare ciò è stato inserito questo codice:
+Ad esempio, si può scaricare un nodo che effettua una richiesta http, per bloccare ciò è stato inserito questo codice. Così facendo viene disabilitata questa funzionalità.
 \begin{lstlisting}[language=Javascript, firstnumber=93]
     palette: {
       editable: false // Enable/disable the Palette Manager
@@ -1363,12 +1363,45 @@ Ad esempio, si può scaricare un nodo che effettua una richiesta http, per blocc
 \end{lstlisting}
 
 Riguardo l'accesso ai vari tipi di context (node, flow e global) nessuno dei nodi introdotti da SeismoCloud utilizzano questo metodo per scambiare informazioni.
-Tuttavia, alcuni dati che vengono utilizzati dal backend NodeJS vengono comunque caricati nel global context per facilità d'uso. Questo può portare come abbiamo visto ad esporre tante informazioni sul sistema e sulle variabili d'ambiente.
-È possibile nascondere questo dettaglio inserendo nel file si impostazioni:
+Tuttavia, alcuni dati che vengono utilizzati dal backend NodeJS vengono comunque caricati nel global context per facilità d'uso. Questo può portare, come si è precedentemente visto, ad esporre tante informazioni sul sistema e sulle variabili d'ambiente.
+È possibile nascondere questo dettaglio inserendo nel file di impostazioni:
 \begin{lstlisting}[language=Javascript, firstnumber=56]
+functionGlobalContext: {
+    // env: process.env
+  },
 exportGlobalContextKeys: false,
 \end{lstlisting}
-Quindi con questa modifica, se provo a stampare nella console il risultato di \texttt{global.keys()} ottengo \texttt{ [ empty ] }.
+Con questa modifica, non vengono caricate le variabili d'ambiente di sistema nel global context e viene disabilitata la funzione \texttt{global.keys()} che permetteva di elencare tutte le variabili d'ambiente in un solo messaggio.
+
+Comunque, rimane un problema fondamentale: il nodo Inject può comunque stampare i valori delle variabili di sistema (che sappiamo contenere dati sensibili).
+Per non rinunciare alla comodità d'uso e facilità di deploy dei servizi, le variabili di sistema vengono gestite in maniera differente dal solito.
+Questo modulo (chiamato appunto \textit{readEnv}) viene caricato dai nodi che ne hanno bisogno, legge il valore della variabile d'ambiente desiderata e: a) se il primo carattere del valore è un @, allora il contenuto rimanente del valore indica la locazione nel sistema dove risiede il valore (e.g. /secret-values/password.txt), ne legge il contenuto e se non ci sono errori restituisce il valore, altrimenti blocca l'esecuzione del programma e stampa nei log un errore. b) se il primo carattere del valore della variabile non è un @, allora legge l'intero contenuto della variabile e lo restituisce.
+In questo modo, anche se un utente riesce a stampare nell'interfaccia i valori delle variabili di sistema riuscirà a leggere i veri valori per tutte le variabili non pericolose, mentre leggerà il percorso del file in cui risiede il vero valore nell'altro caso.
+Se questi file vengono posizionati in un'unica cartella all'interno della stessa di Node-RED, questo fa si che l'utente non potrà avere nessuna informazione sulla reale struttura dei file nel backend.
+\begin{lstlisting}[language=Javascript]
+// Read the environment variable or the associated file.
+// ========
+
+module.exports = {
+  get: function (key) {
+    var envVar = process.env[key];
+    var fs = require("fs");
+    // external file
+    if (envVar[0] == "@") {
+      try {
+        var value = fs.readFileSync(envVar.substr(1));
+      } catch (err) {
+        console.error('ERROR: ', err)
+        process.exit(1)
+      }
+      return value
+    }
+    // otherwise direct value
+    return envVar
+  }
+};
+
+\end{lstlisting}
 
 Per il controllo dell'input da parte dell'utente è stato semplicemente inserito un controllo che verifica che l'input inserito corrisponde ad un dato presente nel sistema.
 Per un utente non esperto è difficile modificare il menu a tendina precompilato con tutti i sismometri disponibili, per un utente competente in materia basta aprire la console di debug di un qualsiasi Browser e modificare il codice della pagina Web.
