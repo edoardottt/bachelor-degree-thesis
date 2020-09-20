@@ -1181,24 +1181,6 @@ Quindi, da qui in poi si assume che la parte di autenticazione è sicura e dentr
 
 \section{Ricerca ed analisi di vulnerabilità}
 
-\begin{itemize}
-    \item Dipendenze nodi SeismoCloud
-    \item Nodi potenzialmente pericolosi
-    \item Download ed inserimento di nodi esterni (intenzionalmente o typo-squatting)
-    \item Download di librerie JS esterne (e.g. child\_process)
-    \item Il nodo function ha accesso al context node, flow e global
-    \item Il nodo function e la sandbox https://nodejs.org/api/vm.html
-    https://discourse.nodered.org/t/custom-node-code/248/9
-    https://discourse.nodered.org/t/payload-and-js-plain-object/12100/5
-    https://discourse.nodered.org/t/confusion-about-object-prototype/32605/5
-    \item Controllo dell'input dell'utente
-    \item Dati sensibili nelle variabili d'ambiente (function, inject...)
-    \item e quindi poi flow-global.txt
-    \item Access Token
-    \item MQTT over TLS
-    \item certificate pinning
-\end{itemize}
-
 L'immagine Docker di Node-RED di default ha sei insiemi di nodi inseriti nella palette: common, function, network, sequence, parser, storage.
 A queste si sono aggiunte due categorie particolari per SeismoCloud: apiSeismoCloud e SeismometerData.
 Alcuni nodi già installati all'interno dell'intefaccia sono stati considerati pericolosi.
@@ -1307,7 +1289,6 @@ npm_config_unsafe_perm: "true"
 npm_config_update_notifier: "true"
 npm_config_auth_type: "legacy"
 npm_config_node_version: "12.16.2"
-npm_config_tag: "latest"
 npm_config_git_tag_version: "true"
 npm_config_commit_hooks: "true"
 npm_config_shrinkwrap: "true"
@@ -1325,27 +1306,15 @@ INIT_CWD: "/usr/src/node-red"
 NODE_RED_HOME: "/usr/src/node-red/node_modules/node-red"
 \end{lstlisting}
 
-Sicurezza canali comunicazione (http e mqtt)
+Un ulteriore problema di sicurezza sono i canali di comunicazione. Abbiamo visto che Node-RED consiglia di utilizzare un certificato e una chiave per utilizzare HTTPS.
+Però anche se la connessione è cifrata, questo non vuol dire che nessun malintenzionato può comunicare con il server attraverso le API.
+Quindi si necessita di un metodo di autenticazione anche per le richieste verso il server API.
+
+Inoltre, è stato argomentato come utilizzare HTTPS per cifrare i dati senza usare il meno sicuro HTTP, ma il sistema utilizza MQTT che invia dati in chiaro sui canali di comunicazione.
+Per una connessione più sicura è necessario un metodo di cifratura dei messaggi anche sul protocollo MQTT.
 
 
 \section{Risoluzione dei problemi}
-
-\begin{itemize}
-    \item Dipendenze nodi SeismoCloud
-    \item Nodi potenzialmente pericolosi
-    \item Download ed inserimento di nodi esterni (intenzionalmente o typo-squatting)
-    \item Download di librerie JS esterne (e.g. child\_process)
-    \item Il nodo function ha accesso al context node, flow e global
-    \item Il nodo function e la sandbox https://nodejs.org/api/vm.html
-    https://discourse.nodered.org/t/custom-node-code/248/9
-    https://discourse.nodered.org/t/payload-and-js-plain-object/12100/5
-    https://discourse.nodered.org/t/confusion-about-object-prototype/32605/5
-    \item Controllo dell'input dell'utente
-    \item Dati sensibili nelle variabili d'ambiente (function, inject...)
-    \item access token
-    \item mqtt over tls (https://www.hivemq.com/blog/mqtt-security-fundamentals-tls-ssl/)
-    \item certificate pinning (https://security.stackexchange.com/questions/29988/what-is-certificate-pinning)
-\end{itemize}
 
 Come è stato descritto nel precedente sottocapitolo, un problema di sicurezza sono i nodi evidenziati come possibili vettori di attacco. La soluzione in questo caso è stata la rimozione degli stessi dall'interfaccia utilizzando le impostazioni nel file \texttt{settings.js}.
 \begin{lstlisting}[language=Javascript, firstnumber=75]
@@ -1403,8 +1372,9 @@ module.exports = {
 
 \end{lstlisting}
 
-Per il controllo dell'input da parte dell'utente è stato semplicemente inserito un controllo che verifica che l'input inserito corrisponde ad un dato presente nel sistema.
-Per un utente non esperto è difficile modificare il menu a tendina precompilato con tutti i sismometri disponibili, per un utente competente in materia basta aprire la console di debug di un qualsiasi Browser e modificare il codice della pagina Web.
+Per il controllo dell'input da parte dell'utente è stato semplicemente inserito un controllo che verifica che l'input inserito corrisponda ad un dato effettivamente presente nel sistema.
+Per un utente non esperto è difficile modificare il menu a tendina precompilato con tutti i sismometri disponibili, per un utente competente in materia, basta aprire la console di debug di un qualsiasi Browser e modificare il codice della pagina Web.
+Se l'utente non inserisce un sismometro valido, quindi molto probabilmente ha cambiato i valori tramite console, viene stampato nei log un segnale di warning.
 \begin{lstlisting}[language=Javascript, firstnumber=34]
     // The whole response has been received. Print out the result.
       resp.on('end', () => {
@@ -1424,7 +1394,74 @@ Per un utente non esperto è difficile modificare il menu a tendina precompilato
         if (deviceIdOk) {
 \end{lstlisting}
 
+Nel sottocapitolo 3.3 è stato definito il comportamento e le funzionalità dei nodi che utilizzano le API di SeismoCloud per accedere a dati della rete di sismometri.
+Per l'applicazione Android e iOS viene utilizzato un altro metodo di sicurezza, qui si è scelto di aggiungere alle richieste HTTP un token di accesso per verificare che la richiesta provenga effettivamente da un client autorizzato a ricevere ed utilizzare quei dati.
 
+I dati che vengono inviati e ricevuti tramite il protocollo MQTT sono scambiati senza nessun protocollo di cifratura. MQTT prende i dati, li incapsula in un pacchetto TCP/IP e lo invia/riceve.
+I dati inviati in questo modo possono essere intercettati da tutti i componenti dell'infrastruttura Internet in cui passa il pacchetto, oppure possono essere letti/modificati da un intruso nella rete, eseguendo appunto un attacco ``Man in the middle".
+TLS (Transport Security Layer) è un protocollo che cifra i dati e
+li invia in maniera sicura, lo stesso che viene utilizzato per cifrar ei dati da HTTP in HTTPS.
+È altamente consigliato utilizzare MQTT con l'aiuto di TLS, infatti la porta 8883 è lo standard per questo tipo di connessione. IANA (Internet Assigned Numbers Authority) lo ha chiamato  “secure-mqtt”.
+
+Dato che il sismometro non ha una memoria cosi grande e che questa azione comporterebbe uno sforzo non indifferente, viene utilizzato il certificate pinning anziché una catena di certificati come di solito accade.
+Viene passato come parametro al container Docker un certificato da considerare valido ( o meglio, ovviamente viene passato in input un valore del tipo "@percorso-dove-trovare-il-certificato" per le motivazioni di sicurezza sopra esposte) ed un modulo esterno ha il compito di leggerlo e , nel caso non ci siano errori, configurare le opzioni del client MQTT per instaurare una connessione MQTT over TLS.
+
+\begin{lstlisting}[language=Javascript]
+module.exports = {
+  setProtocol: function () {
+
+    var mqtt = require('mqtt');
+    var fs = require("fs");
+    var parse = require("url-parse");
+    var readEnv = require('./read-env');
+
+    var certificate = readEnv.get("MQTT_PINNING_CERT");
+    var mqtt_server = readEnv.get("MQTT_SERVER");
+    var mqtt_user = readEnv.get("MQTT_USER");
+    var mqtt_pass = readEnv.get("MQTT_PASS");
+    var url = parse(mqtt_server, true);
+
+    mqtt.IClientOptions = {
+      host: url.hostname,
+      username: mqtt_user,
+      password: mqtt_pass,
+      rejectUnauthorized: true,
+      servername: url.hostname
+    };
+    // MQTT OVER TLS
+    if (url.protocol == "tls") {
+      // === no certificate ===
+      if (certificate == "" || typeof certificate == "undefined") {
+        //=== client configuration ===
+        mqtt.IClientOptions.port = url.port
+        mqtt.IClientOptions.protocol = url.protocol
+      }
+      // === certificate ===
+      else {
+        //=== read certificate === 
+        try {
+          var CERT = fs.readFileSync(certificate);
+        } catch (err) {
+          console.error('ERROR: ', err)
+          process.exit(1) //mandatory (Node docs)
+        }
+        //=== client configuration ===
+        mqtt.IClientOptions.port = url.port
+        mqtt.IClientOptions.protocol = url.protocol
+        mqtt.IClientOptions.ca = [CERT]
+      }
+    }
+    // MQTT
+    else {
+      //=== client configuration ===
+      mqtt.IClientOptions.port = '8883'
+      mqtt.IClientOptions.protocol = 'mqtt'
+    }
+    return mqtt.IClientOptions
+  }
+};
+
+\end{lstlisting}
 
 \clearpage
 
