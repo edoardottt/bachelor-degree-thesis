@@ -724,7 +724,7 @@ L'immagine di partenza di Node-RED fornisce alcune funzionalità di base. Nella 
 
 Il problema che si nota qui è l'elevato numero di impostazioni e settaggi che l'utente deve inserire per configurare correttamente un client MQTT per ricevere un solo tipo di dato.
 Vengono richieste competenze in questa specifica tecnologia e non solo (anche nozioni generali di reti). Ad esempio, si deve inserire l'indirizzo IP del server (in questo caso scelto appositamente non esistente come esempio) \texttt{256.256.256.256}, la porta di riferimento \texttt{1883}, un client ID ed un keep alive time. Se si vuole anche configurare una connessione sicura tramite \textit{SSL/TSL} devono essere configurati anche i relativi parametri per la cifratura dei dati.
-Se il server è protetto da username e password (come nel caso SeismoCloud), c'è un tab anche per quello. Quindi qui c'è anche un problema di sicurezza: per fornire dati agli utenti devo fornire loro anche le informazioni di autenticazione ed accesso al server.
+Se il server è protetto da username e password (come nel caso SeismoCloud), c'è un tab anche per quello. Quindi qui c'è anche un problema di sicurezza: per fornire dati agli utenti devono essere fornite anche le informazioni di autenticazione ed accesso al server.
 Inoltre, ovviamente, l'utente deve essere a conoscenza di come sono formati tutti i topic di cui ha bisogno.
 Se inoltre si vogliono pubblicare messaggi e non solamente riceverli si hanno a disposizione più tipologie di messaggi per comunicare con il server.
 Il protocollo MQTT inoltre ha il particolare \textit{Quality of Service} che funziona in questo modo:
@@ -732,7 +732,7 @@ Si può settare un valore numerico (0 , 1 o 2) che corrisponde al grado di accur
 
 \begin{itemize}
     \item QoS 0: Con questa impostazione si ha un servizio \textit{orientato alle prestazioni con il minor impiego di energia}. Il client non riceve feedback dell'avvenuta consegna del messaggio.
-    \item QoS 1: Quando si riceve  un messaggio con QoS uguale ad 1, si deve inviare un messaggio di acknowledgment che certifica che la ricezione è correttamente avvenuta. Specularmente, se si invia un messaggio con QoS 1 allora devo aspettare il feedback. Nel caso di un problema di rete (ad esempio congestione) e il mittente non riceve in un determinato lasso di tempo l'acknowledgment rinvierà di nuovo il messaggio. \textit{Questo può portare ad avere messaggi duplicati}.
+    \item QoS 1: Quando si riceve  un messaggio con QoS uguale ad 1, si deve inviare un messaggio di acknowledgment che certifica che la ricezione è correttamente avvenuta. Specularmente, se si invia un messaggio con QoS 1 allora si deve aspettare il feedback. Nel caso di un problema di rete (ad esempio congestione) e il mittente non riceve in un determinato lasso di tempo l'acknowledgment rinvierà di nuovo il messaggio. \textit{Questo può portare ad avere messaggi duplicati}.
     \item QoS 2: È la modalità più costosa in termini di sforzo (in modo relativo, il protocollo è progettato per una buona gestione delle risorse). Vengono inviati più messaggi per confermare la ricezione ed evitare eventuali duplicati.
 \end{itemize}
 Ovviamente non esiste un valore QoS migliore in assoluto, ma dipende dal messaggio e dallo scopo di esso.
@@ -817,7 +817,7 @@ Nella riga \texttt{10} viene poi aggiunta al runtime api la funzione appena sopr
 </script>
 \end{lstlisting}
 Infine abbiamo il file HTML che definisce il layout del nodo.
-Nella riga \texttt{2} viene associata tutta la definizione delle impostazioi che segue con il nodo chiamato ``lower-case".
+Nella riga \texttt{2} viene associata tutta la definizione delle impostazioni che segue con il nodo chiamato ``lower-case".
 Viene associata una categoria al nodo alla riga \texttt{3}. La categoria è uno strumento utile per l'usabilità, infatti permette di raggruppare nodi simili sotto lo stesso insieme. In questo caso viene inserito all'interno di \textit{function} essendo una funzione Javascript che riceve e modifica l'input.
 Viene poi assegnato un colore al nodo in dicitura esadecimale uguale per tutti i nodi della stessa categoria, dei parametri di default (in questo caso solamente il nome del nodo), il numero di input e output accettati, un file PNG per associare al nodo un logo che ricorda l'azione che la funzione svolge.
 
@@ -851,7 +851,7 @@ Sono disponibili vari livelli di logging:
 
 Come si può facilmente notare \texttt{fatal} corrisponde al meno verboso e gradualmente si aumenta fino ad arrivare a loggare ogni singola informazione. Di default il livello è settato ad \texttt{info}; viene lasciato quest'ultimo perché essendo un sistema appena creato e non maturo è fondamentale una attività intensa dei log, utili a fornire feedback e segnalare eventuali errori; non viene utilizzato il \texttt{debug} perché troppo verboso e non adatto.
 
-Per quanto riguarda la configurazione dell'editor, qui si ha la possibilità di settare le categorie per i nodi. Di default sono presenti: \texttt{['subflows', 'common', 'function', 'network', 'sequence', 'parser', 'storage']}; nel sistema invece sono state rimosse le categorie \texttt{storage} e \texttt{network} (nel capitolo 4 vengono analizzate in dettaglio le motivazioni) e sono state aggiunte le categorie \texttt{SeismometerData} e \texttt{apiSeismocloud}.
+Per quanto riguarda la configurazione dell'editor, qui si ha la possibilità di settare le categorie per i nodi. Di default sono presenti: \texttt{['common', 'function', 'network', 'sequence', 'parser', 'storage']}; nel sistema invece sono state rimosse le categorie \texttt{storage} e \texttt{network} (nel capitolo 4 vengono analizzate in dettaglio le motivazioni) e sono state aggiunte le categorie \texttt{SeismometerData} e \texttt{apiSeismocloud}.
 I nodi che rientrano nelle categorie \texttt{network} e \texttt{storage} sono eliminati con questo comando:
 \begin{lstlisting}
 //EXCLUDING NODES FROM PALETTE:
@@ -937,9 +937,7 @@ in millisecondi sono definiti i tempi di riconnessione e timeout per i vari prot
 
 \subsection{Implementazione di nodi che utilizzano MQTT per i dati relativi ai sismometri}
 
-Spiegazione nodi MQTT, codice e semplificazione rispetto a prima (immagini).
-
-Come spiegato nel paragrafo 3.2 (Difficoltà e limiti nell'uso di Node-RED), un utente che non ha competenze tecniche informatiche potrebbe avere grandi difficoltà nel configurare un'azione piuttosto semplice.
+Come spiegato nel paragrafo 3.2 ``Difficoltà e limiti nell'uso di Node-RED", un utente che non ha competenze tecniche informatiche potrebbe avere grandi difficoltà nel configurare un'azione piuttosto semplice.
 L'obiettivo del lavoro svolto è di semplificare il più possibile la creazione di flussi Node-RED riducendo al minimo le competenze richieste e la configurazione da parte dell'utente.
 Molti valori che vengono inseriti (e poi ripetuti nel caso di più nodi che utilizzano il protocollo MQTT) sono già a conoscenza del sistema SeismoCloud, perciò si è optato per la creazione di nodi customizzati che hanno già all'interno tutte le informazioni note.
 
@@ -969,7 +967,7 @@ Tutti questi dati vengono inviati e ricevuti tramite il protocollo MQTT dal serv
 Dato che Node-RED utilizza NodeJS come runtime, il linguaggio utilizzato è Javascript e la libreria che aggiunge funzionalità riguardanti MQTT è \textbf{MQTT.js}.
 La scelta è motivata dal codice open-source, dalla attiva community di utenti e sviluppatori e dalla maturità del progetto \cite{mqttjs}.
 Per la seguente spiegazione viene preso come esempio \textbf{node-red-contrib-rssi}.
-Il nucleo delle funzionalità è all'interno del file Javadcript, in questo caso \texttt{rssi.js}.
+Il nucleo delle funzionalità è all'interno del file Javascript, in questo caso \texttt{rssi.js}.
 Dalla riga 1 alla riga 5 viene creato il nodo con le configurazioni di base (config) e vengono istanziate alcune variabili per facilità di lettura.
 \begin{lstlisting}[language=Javascript]
 module.exports = function (RED) {
@@ -1054,7 +1052,7 @@ In questo snippet di codice viene definito il menù a tendina che permette di sc
 
 \clearpage
 
-Tramite il file \texttt{package.json} invece vengono definite impostazioni di base per il modulo.
+Tramite il file \texttt{package.json} invece vengono definite impostazioni di base per il modulo e dipendenze esterne.
 \begin{lstlisting}
 {
   "name": "red-contrib-rssi",
@@ -1087,7 +1085,7 @@ Tramite il file \texttt{package.json} invece vengono definite impostazioni di ba
     \label{fig:rssi-2}
 \end{figure}
 Le figure mostrate qui sopra raffigurano due nodi rssi inseriti nel workspace.
-Entrambi hanno un cerchio azzurro in alto a destra, mentre solo secondo ha anche un triangolo arancione.
+Entrambi hanno un cerchio azzurro in alto a destra, mentre solo il secondo ha anche un triangolo arancione.
 Il cerchio blu sta ad indicare che ancora non sono state salavate le modifiche effettuate al flusso, mentre il triangolo arancione indica la non corretta (o mancante) configurazione del nodo.
 Per configurare il nodo bisogna definire il sismometro a cui il nodo si riferisce, è necessario un doppio click sinistro sul nodo, comparirà il menu laterale (figura \ref{fig:menu}) che consente di selezionare uno tra i dispositivi nel gruppo.
 Il cerchio blu è inserito di default nell'interfaccia da Node-RED, l'altro segnale è stato aggiunto successivamente per aiutare l'utente nel processo di creazione dei flussi.
@@ -1111,8 +1109,6 @@ Il nodo reboot invece quando riceve in input qualcosa (non ci sono controlli, pu
 
 \subsection{Implementazione di nodi che utilizzano API SeismoCloud per statistiche e informazioni sul sistema}
 
-Spiegazione nodi API, codice, funzionalità offerte e semplificazione rispetto a prima (immagini).
-
 \begin{itemize}
     \item node-red-contrib-get-seismometer-info (Input: 1, Output: 1): Questo nodo quando riceve un input restituisce le informazioni del dispositivo selezionato.
     \item node-red-contrib-list-earthquakes (Input: 1, Output: 1): Questo nodo quando riceve un input restituisce la lista dei terremoti (di default avvenuti nelle ultime quattro settimane).
@@ -1126,7 +1122,7 @@ Spiegazione nodi API, codice, funzionalità offerte e semplificazione rispetto a
 \end{itemize}
 
 Per questi nodi la parte di configurazione nel file \texttt{package.json} e nel file HTML non cambia molto, ma cambia completamente il file Javascript che definisce le funzionalità.
-In questo caso (\texttt{list-earthquakes.js}) ogni volta che il nodo riceve un input viene effettuata una richiesta HTTPS al server SeismoCloud e successivamente viene restituito in output.
+In questo caso (\texttt{list-earthquakes.js}) ogni volta che il nodo riceve un input viene effettuata una richiesta HTTPS al server SeismoCloud e successivamente viene restituita in output la risposta.
 \begin{lstlisting}[language=Javascript,firstnumber=20]
     node.on('input', function (msg) {
       const https = require('https');
@@ -1202,7 +1198,7 @@ Ad esempio un nodo che è stato considerato pericoloso è il nodo \textbf{exec}.
     \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-4/exec.jpg}
     \label{fig:exec}
 \end{figure}
-Qua sopra in figura è riportato un esempio di uso cattivo del nodo exec. In realtà però, ci sono molti scenari più pericolosi, come ad esempio l'utilizzo della macchina su cui viene hostato il server come mittente dell'attacco e non come destinatario.
+In figura è riportato un esempio di uso cattivo del nodo exec. In realtà però, ci sono molti scenari più pericolosi, come ad esempio l'utilizzo della macchina su cui viene hostato il server come mittente dell'attacco e non come destinatario.
 Questo nodo fa parte della categoria function, l'unico considerato pericoloso di questa categoria.
 Gli altri sono: udp, tcpin, websocket, httprequest, httpin,
 mqtt, httpproxy, tls, tail, file,
@@ -1211,7 +1207,7 @@ Si nota bene che molti sono protocolli di rete e sono stati rimossi per lo stess
 Gli altri (tail, file e watch) sono nodi della categoria storage e si occupano di leggere, modificare e salvare file.
 Anche questi nodi possono essere utilizzati da malintenzionati per leggere file sul server o creare codice da utilizzare in seguito.
 
-Abbiamo visto che ci sono dei nodi che possono essere pericolosi se lasciati a completa disposizione dell'utente, togliendo i nodi dalla palette, è sicura l'interfaccia? No.
+Abbiamo visto che ci sono dei nodi che possono essere pericolosi se lasciati a completa disposizione dell'utente; togliendo questi nodi dalla palette, è sicura l'interfaccia? No.
 
 Infatti, Node-RED mette a disposizione nella sezione di impostazioni una funzionalità molto utile (ma pericolosa per il nostro scopo) che consente all'utente di installare nodi esterni che sono disponibili nel contenitore di repository pubblico (flows.nodered.org).
 In questo modo si può ad esempio installare nodi come quello mostrato in figura che consente di eseguire codice Javascript.
@@ -1230,7 +1226,7 @@ Come abbiamo visto nel sottocapitolo 3.3, la procedura per comunicare con i sism
 Durante la ricerca degli errori si è scoperto un errore banale ma ``fastidioso". Era possibile infatti inserire un nome di un sismometro che non esisteva nel gruppo, così facendo veniva comunque creato un client MQTT e veniva messo in ascolto su un topic non esistente.
 Ovviamente la soluzione è di seguire sempre il mantra \textbf{mai fidarsi dell'input dell'utente}. La risoluzione viene dettagliata nel prossimo sottocapitolo.
 
-Per una veloce configurazione e deploy dei servizi si era scelto di utilizzare le variabili d'ambiente dei container Docker. In questo modo con poche parole era possibile settare i container con i giusti parametri per i differenti gruppi.
+Per una veloce configurazione e deploy dei servizi si era scelto di utilizzare le variabili d'ambiente dei container Docker. In questo modo con poche parole chiave era possibile settare i container con i giusti parametri per i differenti gruppi.
 Però alcune delle variabili settate sono \textbf{dati sensibili}, ad esempio hostname, username e password del server MQTT.
 Queste informazioni possono essere lette dall'interfaccia utente attraverso l'utilizzo del nodo Inject, oppure inserendo qualche riga di codice Javascript nel nodo Function.
 
@@ -1256,14 +1252,14 @@ Come si legge dallo studio \textit{Securing IoT apps in Node-RED} di Olsson \cit
 Comunque, l'interfaccia da la possibilità di leggere tutte le variabili d'ambiente disponibili (incluse quelle inserite per l'uso di SeismoCloud).
 Tra queste variabili sono presenti alcune che forniscono molte informazioni sul sistema in uso (ad esempio le varie versioni di Docker, Node-RED, npm, NodeJS...), sulla distribuzione dei file tra le varie cartelle e alcuni valori critici per la sicurezza (come ad esempio utente, password e hostname del server MQTT).
 \begin{lstlisting}
-npm_config_user_agent: "npm/6.14.4 node/v12.16.2 linux x64"
-NODE_VERSION: "12.16.2"
+npm_config_user_agent: "npm/6.XX.X node/v12.XX.X linux x64"
+NODE_VERSION: "12.XX.X"
 npm_config_bin_links: "true"
 HOSTNAME: "1cs453a053a1"
 ACCESS_TOKEN: "ACCESS-TOKEN"
 YARN_VERSION: "1.22.4"
 npm_node_execpath: "/usr/local/bin/node"
-NODE_RED_VERSION: "v1.0.6"
+NODE_RED_VERSION: "v1.X.X"
 SHLVL: "1"
 HOME: "/usr/src/node-red"
 npm_config_editor: "vi"
@@ -1300,7 +1296,7 @@ npm_config_searchlimit: "20"
 npm_config_unsafe_perm: "true"
 npm_config_update_notifier: "true"
 npm_config_auth_type: "legacy"
-npm_config_node_version: "12.16.2"
+npm_config_node_version: "12.XX.X"
 npm_config_git_tag_version: "true"
 npm_config_commit_hooks: "true"
 npm_config_shrinkwrap: "true"
@@ -1338,9 +1334,9 @@ Ovviamente è un grande compromesso tra la sicurezza del sistema e le funzionali
 Però è possibile, anche eliminando questi nodi dall'interfaccia, emulare le loro funzionalità attraverso il download di nodi esterni.
 Ad esempio, si può scaricare un nodo che effettua una richiesta http, per bloccare ciò è stato inserito questo codice. Così facendo viene disabilitata questa funzionalità.
 \begin{lstlisting}[language=Javascript, firstnumber=93]
-		palette: {
-			editable: false // Enable/disable the Palette Manager
-		},
+    palette: {
+      editable: false // Enable/disable the Palette Manager
+    },
 \end{lstlisting}
 
 Riguardo l'accesso ai vari tipi di context (node, flow e global) nessuno dei nodi introdotti da SeismoCloud utilizzano questo metodo per scambiare informazioni.
@@ -1348,8 +1344,8 @@ Tuttavia, alcuni dati che vengono utilizzati dal backend NodeJS vengono comunque
 È possibile nascondere questo dettaglio inserendo nel file di impostazioni:
 \begin{lstlisting}[language=Javascript, firstnumber=56]
 functionGlobalContext: {
-		// env: process.env
-	},
+    // env: process.env
+  },
 exportGlobalContextKeys: false,
 \end{lstlisting}
 Con questa modifica, non vengono caricate le variabili d'ambiente di sistema nel global context e viene disabilitata la funzione \texttt{global.keys()} che permetteva di elencare tutte le variabili d'ambiente in un solo messaggio.
@@ -1364,22 +1360,22 @@ Se questi file vengono posizionati in un'unica cartella all'interno della stessa
 // ========
 
 module.exports = {
-	get: function (key) {
-		var envVar = process.env[key];
-		var fs = require("fs");
-		// external file
-		if (envVar[0] == "@") {
-			try {
-				var value = fs.readFileSync(envVar.substr(1));
-			} catch (err) {
-				console.error('ERROR: ', err)
-				process.exit(1)
-			}
-			return value
-		}
-		// otherwise direct value
-		return envVar
-	}
+  get: function (key) {
+    var envVar = process.env[key];
+    var fs = require("fs");
+    // external file
+    if (envVar[0] == "@") {
+      try {
+        var value = fs.readFileSync(envVar.substr(1));
+      } catch (err) {
+        console.error('ERROR: ', err)
+        process.exit(1)
+      }
+      return value
+    }
+    // otherwise direct value
+    return envVar
+  }
 };
 
 \end{lstlisting}
@@ -1389,30 +1385,30 @@ Per un utente non esperto è difficile modificare il menu a tendina precompilato
 Se l'utente non inserisce un sismometro valido, quindi molto probabilmente ha cambiato i valori tramite console, viene stampato nei log un segnale di warning.
 \begin{lstlisting}[language=Javascript, firstnumber=34]
     // The whole response has been received. Print out the result.
-			resp.on('end', () => {
-				var obj = JSON.parse(data)
-				for (i in obj) {
-					devices.push(obj[i])
-				}
-				var deviceIdOk = false // this indicates if the input entered is in the group seismometers
-				for (i in devices) {
-					if (devices[i]['ID_Device'] == seismometer) {
-						deviceIdOk = true
-						break
-					}
-				}
+      resp.on('end', () => {
+        var obj = JSON.parse(data)
+        for (i in obj) {
+          devices.push(obj[i])
+        }
+        var deviceIdOk = false // this indicates if the input entered is in the group seismometers
+        for (i in devices) {
+          if (devices[i]['ID_Device'] == seismometer) {
+            deviceIdOk = true
+            break
+          }
+        }
 
-				// Only if the input entered is in the known seismometers' id
-				if (deviceIdOk) {
+        // Only if the input entered is in the known seismometers' id
+        if (deviceIdOk) {
 \end{lstlisting}
 
 Nel sottocapitolo 3.3 è stato definito il comportamento e le funzionalità dei nodi che utilizzano le API di SeismoCloud per accedere a dati della rete di sismometri.
 Per l'applicazione Android e iOS viene utilizzato un altro metodo di sicurezza, qui si è scelto di aggiungere alle richieste HTTP un token di accesso per verificare che la richiesta provenga effettivamente da un client autorizzato a ricevere ed utilizzare quei dati.
 
-I dati che vengono inviati e ricevuti tramite il protocollo MQTT sono scambiati senza nessun protocollo di cifratura. MQTT prende i dati, li incapsula in un pacchetto TCP/IP e lo invia/riceve.
+I dati che vengono inviati e ricevuti tramite il protocollo MQTT sono scambiati senza nessun protocollo di cifratura. Il client MQTT prende i dati, li incapsula in un pacchetto TCP/IP e lo invia.
 I dati inviati in questo modo possono essere intercettati da tutti i componenti dell'infrastruttura Internet in cui passa il pacchetto, oppure possono essere letti/modificati da un intruso nella rete, eseguendo appunto un attacco ``Man in the middle".
 TLS (Transport Security Layer) è un protocollo che cifra i dati e
-li invia in maniera sicura, lo stesso che viene utilizzato per cifrar ei dati da HTTP in HTTPS.
+li invia in maniera sicura, lo stesso che viene utilizzato per cifrare i dati da HTTP in HTTPS.
 È altamente consigliato utilizzare MQTT con l'aiuto di TLS, infatti la porta 8883 è lo standard per questo tipo di connessione. IANA (Internet Assigned Numbers Authority) lo ha chiamato  “secure-mqtt”.
 
 Dato che il sismometro non ha una memoria cosi grande e che questa azione comporterebbe uno sforzo non indifferente, viene utilizzato il certificate pinning anziché una catena di certificati come di solito accade.
@@ -1420,57 +1416,57 @@ Viene passato come parametro al container Docker un certificato da considerare v
 
 \begin{lstlisting}[language=Javascript]
 module.exports = {
-	setProtocol: function () {
+  setProtocol: function () {
 
-		var mqtt = require('mqtt');
-		var fs = require("fs");
-		var parse = require("url-parse");
-		var readEnv = require('./read-env');
+    var mqtt = require('mqtt');
+    var fs = require("fs");
+    var parse = require("url-parse");
+    var readEnv = require('./read-env');
 
-		var certificate = readEnv.get("MQTT_PINNING_CERT");
-		var mqtt_server = readEnv.get("MQTT_SERVER");
-		var mqtt_user = readEnv.get("MQTT_USER");
-		var mqtt_pass = readEnv.get("MQTT_PASS");
-		var url = parse(mqtt_server, true);
+    var certificate = readEnv.get("MQTT_PINNING_CERT");
+    var mqtt_server = readEnv.get("MQTT_SERVER");
+    var mqtt_user = readEnv.get("MQTT_USER");
+    var mqtt_pass = readEnv.get("MQTT_PASS");
+    var url = parse(mqtt_server, true);
 
-		mqtt.IClientOptions = {
-			host: url.hostname,
-			username: mqtt_user,
-			password: mqtt_pass,
-			rejectUnauthorized: true,
-			servername: url.hostname
-		};
-		// MQTT OVER TLS
-		if (url.protocol == "tls") {
-			// === no certificate ===
-			if (certificate == "" || typeof certificate == "undefined") {
-				//=== client configuration ===
-				mqtt.IClientOptions.port = url.port
-				mqtt.IClientOptions.protocol = url.protocol
-			}
-			// === certificate ===
-			else {
-				//=== read certificate === 
-				try {
-					var CERT = fs.readFileSync(certificate);
-				} catch (err) {
-					console.error('ERROR: ', err)
-					process.exit(1) //mandatory (Node docs)
-				}
-				//=== client configuration ===
-				mqtt.IClientOptions.port = url.port
-				mqtt.IClientOptions.protocol = url.protocol
-				mqtt.IClientOptions.ca = [CERT]
-			}
-		}
-		// MQTT
-		else {
-			//=== client configuration ===
-			mqtt.IClientOptions.port = '1883'
-			mqtt.IClientOptions.protocol = 'mqtt'
-		}
-		return mqtt.IClientOptions
-	}
+    mqtt.IClientOptions = {
+      host: url.hostname,
+      username: mqtt_user,
+      password: mqtt_pass,
+      rejectUnauthorized: true,
+      servername: url.hostname
+    };
+    // MQTT OVER TLS
+    if (url.protocol == "tls") {
+      // === no certificate ===
+      if (certificate == "" || typeof certificate == "undefined") {
+        //=== client configuration ===
+        mqtt.IClientOptions.port = url.port
+        mqtt.IClientOptions.protocol = url.protocol
+      }
+      // === certificate ===
+      else {
+        //=== read certificate === 
+        try {
+          var CERT = fs.readFileSync(certificate);
+        } catch (err) {
+          console.error('ERROR: ', err)
+          process.exit(1) //mandatory (Node docs)
+        }
+        //=== client configuration ===
+        mqtt.IClientOptions.port = url.port
+        mqtt.IClientOptions.protocol = url.protocol
+        mqtt.IClientOptions.ca = [CERT]
+      }
+    }
+    // MQTT
+    else {
+      //=== client configuration ===
+      mqtt.IClientOptions.port = '1883'
+      mqtt.IClientOptions.protocol = 'mqtt'
+    }
+    return mqtt.IClientOptions
+  }
 };
 
 \end{lstlisting}
@@ -1485,7 +1481,7 @@ module.exports = {
 
 Per una efficiente usabilità del sistema è assolutamente necessaria una parte accurata di test.
 In questo caso sono stati coinvolti 7 utenti non esperti ed un esperto.
-Questa scelta non è casuale, infatti tanti utenti non esperti servono a verificare che il sistema è adatto a persone che non hanno competenze informatiche elevate, mentre la valutazione dell'esperto serve a assicurare che le buone paratiche di usabilità ed esperienza utente vengano rispettate.
+Questa scelta non è casuale, infatti tanti utenti non esperti servono a verificare che il sistema è adatto a persone che non hanno competenze informatiche elevate, mentre la valutazione dell'esperto serve ad assicurare che le buone paratiche di usabilità ed esperienza utente vengano rispettate.
 Per quanto riguarda invece i compiti che richiedono un background tecnico, l'applicativo è stato testato internamente nel team di sviluppo per più di qualche mese.
 Le modalità di test effettuati sono due: in \textit{remoto} e \textit{dal vivo}. Questa scelta è motivata da vantaggi e svantaggi per una o per l'altra scelta: da remoto si può controllare meglio tutta l'attività ``digitale" dell'utente, ad esempio i movimenti del cursore, quindi banalmente dove si aspetterebbe di trovare alcune sezioni; con un test dal vivo invece si ha un maggior coinvolgimento da entrambe le parti, facendo così sentire l'utente più a suo agio e riuscendo a captare meglio le sue reazioni durante il test.
 Sono state utilizzate diverse tecniche: \textbf{think aloud} (all'utente viene chiesto di pensare a voce alta ed esprimere tutte le emozioni, sensazioni e pensieri che ha durante tutta la durata del test), \textbf{cooperative evaluation} (utente e somministratore del test si pongono domande a vicenda ed esprimono i loro giudizi sull'esperienza d'uso), \textbf{post-task walkthrough} (finito il test, indipendentemente dal tipo effettuato, vengono poste delle domande per comprendere i risultati. Si hanno due opzioni 1) appena finito il test, dove l'utente ha ben chiare le sue opinioni, ma il somministratore non ha tempo di pensare alle domande, 2) il contrario del precedente) e \textbf{expert based} (un esperto revisiona l'interfaccia e da i suoi pareri su di essa) \cite{hcibook}.
@@ -1564,10 +1560,19 @@ Come si nota dalle implementazioni tecniche apportate descritte nel capitolo 3 e
 L'applicativo è stabile, è stato testato più volte con gli utenti ed internamente nel team di sviluppo.
 Come si è visto nel capitolo 4 è anche sicuro e i dati della rete di sismometri e le informazioni personali degli utenti SeismoCloud rimangono protetti sia nel sistema, sia nella comunicazione tra le varie parti.
 È stata creata una piattaforma che sarà utilizzata come base con le funzionalità necessarie ad interfacciarsi con il sistema ed i vari dispositivi connessi.
-Viene definita ``base" perché non sono stati sviluppati tanit nodi che consentono azioni che potrebbero essere utili per un utente.
+Viene definita ``base" perché non sono stati sviluppati tanti nodi che consentono azioni che potrebbero essere utili per un utente.
 Il lavoro svolto fino ad ora ha prodotto un servizio pronto ad interfacciarsi con i vari componenti del sistema (sismometri, utenti e API SeismoCloud), mancano comunque delle funzionalità dette ``finali" che consentano all'utente di venir notificato o performare altre azioni automatiche.
 Nel prossimo paragrafo quindi vengono espressi alcuni percorsi da seguire per aggiungere interessanti funzionalità e continuare ad elevare l'utilità di questo sistema.
 Si continuerà ad ascoltare gli utenti SeismoCloud ricevendo feedback utili e proposte di servizi cercando di far rimanere il sistema comprensibile, sicuro ed usabile.
+
+\medskip
+
+Questo lavoro di tirocinio è stato riassunto in un paper creato insieme al Professore Emanuele Panizzi ed il Dottorando Enrico Bassetti, il quale è stato sottomesso ed accettato al Workshop EMPATHY 2020.
+\begin{figure}[hbt]
+    \centering
+    \includegraphics[width=0.9\textwidth]{relazione-tirocinio/Chapter-5/paper.jpg}
+    \label{fig:paper}
+\end{figure}
 
 \section{Sviluppi futuri}
 
@@ -1593,8 +1598,8 @@ L'attuale implementazione istanzia un client MQTT (con un identificativo randomi
 clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8))
 \end{lstlisting}
 ogni volta che viene creato un nodo, e viene distrutto quando il nodo viene cancellato dal workspace.
-In generale, data la brevità dei messaggi trasferiti e l'implementazione orientata all'efficienza del protocollo MQTT, l'applicativo non ne risente molto; ma con il crescere dei gruppi, degli utenti e quindi dei dispositivi coinvolti si potrebbero aver problemi di scalabilità, per questo un unico client condiviso con i nodi del gruppo (o flusso, dipende dalle connessione simultanee possibili) potrebbe aiutare l'efficienza del sistema.
-Inoltre, con le variabili a differente scope (Node, Flow e Global definite nel paragrafo 2.2) è possibile condividere in modo facile lo stesso client per azioni differenti.
+In generale, data la brevità dei messaggi trasferiti e l'implementazione orientata all'efficienza del protocollo MQTT, l'applicativo non ne risente molto; ma con il crescere dei gruppi, degli utenti e quindi dei dispositivi coinvolti si potrebbero aver problemi di scalabilità, per questo un unico client condiviso con i nodi del gruppo (o flusso, dipende dalle connessioni simultanee possibili) potrebbe aiutare l'efficienza del sistema.
+Inoltre, con le variabili a differente scope (Node, Flow e Global definite nel sottocapitolo 2.2) è possibile condividere in modo facile lo stesso client per azioni differenti.
 
 \subsection{Metodo di accesso sicuro ed affidabile a SeismoCloud Node-RED}
 
