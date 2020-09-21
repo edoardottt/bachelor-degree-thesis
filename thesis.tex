@@ -953,14 +953,14 @@ Qui è presente la lista dei vari nodi creati per il sistema EUD di SeismoCloud;
     \item node-red-contrib-alive (Input: 0, Output: 1): Questo nodo segnala che il dispositivo è attivo al momento. 
     \item node-red-contrib-timesync (Input: 0, Output: 1): Questo nodo sincronizza il timer del dispositivo.
     \item node-red-contrib-timereq (Input: 0, Output: 1): Questo nodo aiuta il precedente nella sincronizzazione.
-    \item node-red-contrib-quake (Input: 0, Output: 1): Questo nodo produce in output i valori di una vibrazione del dispositivo. 
+    \item node-red-contrib-quake (Input: 0, Output: 1): Questo nodo produce in output i valori di una vibrazione del dispositivo sopra la soglia. 
     \item node-red-contrib-disconnect (Input: 0, Output: 1): Questo nodo restituisce il segnale inviato quando un dispositivo viene disconnesso.
     \item node-red-contrib-reboot (Input: 1, Output: 1): Questo nodo segnala il riavvio del dispositivo. 
     \item node-red-contrib-temperature (Input: 0, Output: 1): Questo nodo restituisce il valore che indica la temperatura del dispositivo in $^{\circ}$C.
-    \item node-red-contrib-probespeed (Input: 0, Output: 1): Questo nodo setta la velocità della sonda in Hz
-    \item node-red-contrib-sigma (Input: 0, Output: 1): Questo nodo restituisce il valore \texttt{sigma} (utile al rilevamento di possibili scosse)
-\item node-red-contrib-stream (Input: 0, Output: 1): Questo nodo restituisce (\texttt{on} / \texttt{off}) l'impostazione di ricezione dati dal server
-    \item node-red-contrib-streamdata (Input: 0, Output: 1): ?
+    \item node-red-contrib-probespeed (Input: 0, Output: 1): Questo nodo setta la velocità della sonda in Hz.
+    \item node-red-contrib-sigma (Input: 0, Output: 1): Questo nodo restituisce il valore \texttt{sigma} (utile al rilevamento di possibili scosse).
+\item node-red-contrib-stream (Input: 0, Output: 1): Questo nodo restituisce (\texttt{on} / \texttt{off}) l'impostazione di ricezione dati dal server.
+    \item node-red-contrib-streamdata (Input: 0, Output: 1): Questo nodo restituisce in output i valori di tutte le vibrazioni rilevate (sia sopra che sotto la soglia) in formato \texttt{x;y;z;timestamp} dove x, y e z sono i rispettivi valori nei tre assi.
 \end{itemize}
 
 Tutti questi dati vengono inviati e ricevuti tramite il protocollo MQTT dal server e dal client. La maggior parte delle informazioni di configurazione non cambia, quindi sono stati creati per la maggiore parte di essi (tranne reboot e alive, spiegata in seguito la motivazione) nodi che funzionano allo stesso modo.
