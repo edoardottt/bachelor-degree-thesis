@@ -438,8 +438,8 @@ Data la facilità d'uso, il grande supporto (repository con 10+K star su GitHub,
 \section{Architettura adattata a SeismoCloud}
 
 \subsection{Come funziona Node-RED}
-Può essere utilizzato in vari modi, ad esempio: su un computer in locale, tramite Docker, su un dispositivo Raspberry, oppure su alcuni sistemi Cloud (IBM Cloud, Amazon Web Services, Microsoft Azure).
-L'interazione con l'utente avviene completamente tramite un browser web. Viene fornita una pagina divisa in tre sezioni: un insieme di funzionalità (nodi) disponibili, un foglio di lavoro dove poter creare i vari flussi ed un modulo di aiuto, documentazione e debug.
+Node-RED può essere utilizzato in vari modi, ad esempio: su un computer in locale, tramite Docker, su un dispositivo Raspberry, oppure su alcuni sistemi Cloud (IBM Cloud, Amazon Web Services, Microsoft Azure).
+L'interazione con l'utente avviene completamente tramite un browser. Viene fornita una pagina divisa in tre sezioni: un insieme di funzionalità (nodi) disponibili, un foglio di lavoro dove poter creare i vari flussi ed un modulo di aiuto, documentazione e debug.
 Un \textbf{nodo} è il blocco costruttivo di base di un flusso. Le funzionalità dei nodi sono scatenate da eventi esterni (richieste HTTP o altro protocollo oppure un timer) o da input ricevuti da altri nodi. Processano il messaggio ricevuto oppure ne creano uno nuovo e possono inviare messaggi ai nodi successivi nel flusso. 
 Un \textbf{nodo di configurazione} è un tipo speciale di nodo che setta delle configurazioni utili agli altri nodi, ma non fa parte di nessun flusso. Ad esempio, i nodi \textit{MQTT-in} e \textit{MQTT-out} utilizzano il nodo di configurazione \textit{MQTT-broker} che rappresenta una connessione condivisa con un broker MQTT.
 Un \textbf{flusso} è rappresentato da un tab o foglio di lavoro ed è il metodo principale per organizzare il lavoro. Informalmente un flusso rappresenta un insieme di nodi connessi fra loro.
@@ -456,7 +456,8 @@ Il \textbf{contesto} è il modo principale di condividere informazioni tra i nod
     \item Global: Visibile a tutti i nodi
 \end{itemize}
 Un \textbf{messaggio} è un oggetto JSON che viene passato attraverso i nodi. Di default si chiama \textit{msg} ed ha due campi: \textit{payload} e \textit{id}. 
-La \textbf{palette} è posizionata sulla sinistra dell'interfaccia e lista tutti i nodi presenti nel sistema. Dei nodi extra possono essere aggiunti direttamente dall'editor.
+La \textbf{palette} è posizionata sulla sinistra dell'interfaccia e lista tutti i nodi presenti nel sistema. Dei nodi extra possono essere aggiunti direttamente dall'editor attraverso la sezione impostazioni, si apre una finestra con una barra di ricerca, una volta inserito l'input vengono suggeriti dei nodi che hanno affinità con l'input.
+I nodi che vengono consigliati sono tutti sul repository ufficiale di Node-RED.
 Il \textbf{workspace} è lo spazio principale, dove tutti i nodi vengono posizionati in modo da creare degli automatismi.
 La \textbf{sidebar} è uno spazio posizionato a destra del workspace in cui ci sono degli strumenti utili, ad esempio la console di debug, l'interfaccia della configurazione dei nodi e la finestra descrittiva per ogni nodo.
 È molto orientato al riuso ed alla portabilità, infatti tutti i nodi o collezioni di nodi sono moduli Javascript che possono essere caricati e utilizzati poi da altre persone tramite NPM.
@@ -541,7 +542,7 @@ Lo strumento che più soddisfa i requisiti imposti è \textbf{Docker}.
 Docker è un progetto open-source che automatizza il deployment (consegna o rilascio al cliente, con relativa installazione e messa in funzione o esercizio, di un'applicazione o di un sistema software tipicamente all'interno di un sistema informatico aziendale) di applicazioni all'interno di contenitori software, fornendo un'astrazione aggiuntiva grazie alla virtualizzazione a livello di sistema operativo di Linux. Docker utilizza le funzionalità di isolamento delle risorse del kernel Linux come ad esempio cgroup e namespace per consentire a "container" indipendenti di coesistere sulla stessa istanza di Linux, evitando l'installazione e la manutenzione di una macchina virtuale.
 \end{quoting}
 
-Il concetto di container è già disponibile in Linux per eseguire un processo su cui possono essere limitate e gestite le risorse a lui allocate. Il problema dei container LXC (disponibili in Linux utilizzando cgroup e namespace) è che se un container viene spostato su una macchina con configurazione differente è molto probabile che non funziona, dato che ogni container dipende dall'ambiente in cui è costruito (dipendenze esterne, configurazione di rete, memoria e
+Il concetto di container è già disponibile in Linux per eseguire un processo su cui possono essere limitate e gestite le risorse a lui allocate. Il problema dei container LXC (disponibili in Linux utilizzando cgroup e namespace) è che se un container viene spostato su una macchina con configurazione differente è molto probabile che non funziona, dato che ogni container LXC dipende strettamente dall'ambiente in cui è costruito (dipendenze esterne, configurazione di rete, memoria e
 impostazioni aggiuntive). Docker aggiunge \textbf{portabilità} ai container, cioè utilizzando un motore Docker i container diventano indipendenti dalla macchina in cui è stato creato. Altra funzione aggiunta è il \textbf{versioning}; si può tenere traccia delle varie versioni di un container, dando la possibilità di un upgrade o downgrade. Inoltre è orientato al \textbf{riuso},     dato che ogni container può essere utilizzato come base per uno più specifico \cite{docker-portability}.
 Docker definisce un formato unico per creare container, più nello specifico \textit{immagini}. Una immagine è il risultato dell'esecuzione di un file chiamato \textbf{Dockerfile}. Viene fornito il DockerHub, un portale dove sono presenti migliaia di immagini già pronte che possono essere utilizzate come base di partenza.
 
@@ -569,12 +570,12 @@ Tutte le modifiche poi fatte al container in esecuzione sono eseguite su questo 
 \begin{figure}[ht]
 \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/container-layers.jpg}
 \end{figure}
-Questo tipo di architettura favorisce la condivisione di risorse, infatti se ho più container creati partendo dalla stessa immagine, le modifiche verranno effettuate solo nell'ultimo livello dei rispettivi container condividendo tutti i livelli sottostanti\cite{aboutstoragedrivers}.
+Questo tipo di architettura favorisce la condivisione di risorse, infatti se sono presenti più container creati partendo dalla stessa immagine, le modifiche verranno effettuate solo nell'ultimo livello dei rispettivi container condividendo tutti i livelli sottostanti\cite{aboutstoragedrivers}.
 Dato che tutti i dati scritti dal container vengono salvati nell'ultimo livello modificabile, quando il container viene distrutto vengono persi anche i dati scritti dal container.
 La persistenza dei dati può essere garantita da due metodi differenti.
 Un \textbf{volume} è una parte del filesystem amministrata da Docker in cui solo i processi Docker possono avere accesso. Solitamente risiedono in \texttt{/var/lib/docker/volumes/}.
 Un \textbf{bind mount} differisce dal volume in due punti: ogni processo può avere accesso ai dati e può risiedere ovunque nel sistema. 
-Questo garantisce che se il container va in uno stato di errore o la macchina dove viene deployato il container si spegne, i dati vengono comunque salvati in un disco fisso.
+Questi due metodi garantiscono che se il container va in uno stato di errore o la macchina dove viene deployato il container si spegne, i dati vengono comunque salvati in un disco fisso.
 \\
 Differisce dalla \textbf{virtualizzazione} \cite{dockervsvm2} in:
 
@@ -608,7 +609,7 @@ In un ulteriore test è stato utilizzato un caso particolare, cioè Eigth Queen,
  \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-6.jpg} &   \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-7.jpg} \\
 \end{tabular}
 \end{figure}
-Come possiamo notare dai grafici, le prestazioni dei container Docker sono di gran lunga superiori rispetto alle macchine virtuali. Dato che l'immagine del nostro sistema è identica per tutti i container si ha un netto miglioramento delle performance utilizzando container perché tutti i container condividono la stessa immagine di base.
+Come possiamo notare dai grafici, le prestazioni dei container Docker sono di gran lunga superiori rispetto alle macchine virtuali. Dato che l'immagine del nostro sistema è identica per tutti i container si ha un netto miglioramento delle performance utilizzando container perché tutti condividono la stessa immagine di base.
 
 \vspace{0.02\textwidth}
 \begin{center}
@@ -620,7 +621,7 @@ Esempio di immagine utilizzata in SeismoCloud partendo dalla immagine di Node-RE
 FROM nodered/node-red@sha256:82f367ab41d19e3ebd5e9b1cc62e4f615d4b4be4fa8bc83f1bf5441ba8c0d32a
 
 # Qui vengono settate tutte le variabili d'ambiente
-ENV VAR="hello-world"
+ENV GROUP_ID="ID_35762634"
 
 # Vengono indicati i volumi per la persistenza dei dati
 VOLUME /volume
@@ -631,13 +632,13 @@ COPY data data
 RUN chown -R node-red data
 USER node-red
 
-RUN npm install #Tutti i nodi custom necessari
+RUN npm install ... #Tutti i nodi custom necessari
 
 CMD ["npm", "start"]
 \end{lstlisting}
 La seconda riga differisce dall'immagine definita nel Dockerfile di esempio per un codice dopo la definizione dell'immagine di partenza.
 Questo codice è formato da due campi:\\ \texttt{algoritmo:valore-esadecimale}.
-In questo caso l'algoritmo utilizzato è \texttt{sha256}. Viene calcolato lo stesso algoritmo su tutti i livelli che compongono l'immagine, successivamente viene creato un file \texttt{Manifest}, a cui poi viene calcolato lo stesso algoritmo di hash che corrisponde al digest dell'immagine. Ovviamente questo hash serve a verificare che effettivamente quello che è stato scaricato corrisponde all'immagine desiderata. Non utilizzando un hash, ma come scritto prima un tag (ubuntu:\texttt{18:04}) scarico una immagine ma non verifico il contenuto che appunto potrebbe essere manomesso. 
+In questo caso l'algoritmo utilizzato è \texttt{sha256}. Viene calcolato lo stesso algoritmo su tutti i livelli che compongono l'immagine, successivamente viene creato un file \texttt{Manifest}, a cui poi viene calcolato lo stesso algoritmo di hash che corrisponde al digest dell'immagine. Ovviamente questo hash serve a verificare che effettivamente quello che è stato scaricato corrisponde all'immagine desiderata. Non utilizzando un hash, ma come scritto prima un tag (ubuntu:\texttt{18:04}) viene scaricata un'immagine ma non viene verificato il contenuto che appunto potrebbe essere manomesso. 
 
 \vspace{0.02\textwidth}
 Il deploy di tanti servizi può essere semplificato utilizzando \textbf{docker-compose}.
@@ -1337,9 +1338,9 @@ Ovviamente è un grande compromesso tra la sicurezza del sistema e le funzionali
 Però è possibile, anche eliminando questi nodi dall'interfaccia, emulare le loro funzionalità attraverso il download di nodi esterni.
 Ad esempio, si può scaricare un nodo che effettua una richiesta http, per bloccare ciò è stato inserito questo codice. Così facendo viene disabilitata questa funzionalità.
 \begin{lstlisting}[language=Javascript, firstnumber=93]
-    palette: {
-      editable: false // Enable/disable the Palette Manager
-    },
+		palette: {
+			editable: false // Enable/disable the Palette Manager
+		},
 \end{lstlisting}
 
 Riguardo l'accesso ai vari tipi di context (node, flow e global) nessuno dei nodi introdotti da SeismoCloud utilizzano questo metodo per scambiare informazioni.
@@ -1347,8 +1348,8 @@ Tuttavia, alcuni dati che vengono utilizzati dal backend NodeJS vengono comunque
 È possibile nascondere questo dettaglio inserendo nel file di impostazioni:
 \begin{lstlisting}[language=Javascript, firstnumber=56]
 functionGlobalContext: {
-    // env: process.env
-  },
+		// env: process.env
+	},
 exportGlobalContextKeys: false,
 \end{lstlisting}
 Con questa modifica, non vengono caricate le variabili d'ambiente di sistema nel global context e viene disabilitata la funzione \texttt{global.keys()} che permetteva di elencare tutte le variabili d'ambiente in un solo messaggio.
@@ -1363,22 +1364,22 @@ Se questi file vengono posizionati in un'unica cartella all'interno della stessa
 // ========
 
 module.exports = {
-  get: function (key) {
-    var envVar = process.env[key];
-    var fs = require("fs");
-    // external file
-    if (envVar[0] == "@") {
-      try {
-        var value = fs.readFileSync(envVar.substr(1));
-      } catch (err) {
-        console.error('ERROR: ', err)
-        process.exit(1)
-      }
-      return value
-    }
-    // otherwise direct value
-    return envVar
-  }
+	get: function (key) {
+		var envVar = process.env[key];
+		var fs = require("fs");
+		// external file
+		if (envVar[0] == "@") {
+			try {
+				var value = fs.readFileSync(envVar.substr(1));
+			} catch (err) {
+				console.error('ERROR: ', err)
+				process.exit(1)
+			}
+			return value
+		}
+		// otherwise direct value
+		return envVar
+	}
 };
 
 \end{lstlisting}
@@ -1388,21 +1389,21 @@ Per un utente non esperto è difficile modificare il menu a tendina precompilato
 Se l'utente non inserisce un sismometro valido, quindi molto probabilmente ha cambiato i valori tramite console, viene stampato nei log un segnale di warning.
 \begin{lstlisting}[language=Javascript, firstnumber=34]
     // The whole response has been received. Print out the result.
-      resp.on('end', () => {
-        var obj = JSON.parse(data)
-        for (i in obj) {
-          devices.push(obj[i])
-        }
-        var deviceIdOk = false // this indicates if the input entered is in the group seismometers
-        for (i in devices) {
-          if (devices[i]['ID_Device'] == seismometer) {
-            deviceIdOk = true
-            break
-          }
-        }
+			resp.on('end', () => {
+				var obj = JSON.parse(data)
+				for (i in obj) {
+					devices.push(obj[i])
+				}
+				var deviceIdOk = false // this indicates if the input entered is in the group seismometers
+				for (i in devices) {
+					if (devices[i]['ID_Device'] == seismometer) {
+						deviceIdOk = true
+						break
+					}
+				}
 
-        // Only if the input entered is in the known seismometers' id
-        if (deviceIdOk) {
+				// Only if the input entered is in the known seismometers' id
+				if (deviceIdOk) {
 \end{lstlisting}
 
 Nel sottocapitolo 3.3 è stato definito il comportamento e le funzionalità dei nodi che utilizzano le API di SeismoCloud per accedere a dati della rete di sismometri.
@@ -1419,57 +1420,57 @@ Viene passato come parametro al container Docker un certificato da considerare v
 
 \begin{lstlisting}[language=Javascript]
 module.exports = {
-  setProtocol: function () {
+	setProtocol: function () {
 
-    var mqtt = require('mqtt');
-    var fs = require("fs");
-    var parse = require("url-parse");
-    var readEnv = require('./read-env');
+		var mqtt = require('mqtt');
+		var fs = require("fs");
+		var parse = require("url-parse");
+		var readEnv = require('./read-env');
 
-    var certificate = readEnv.get("MQTT_PINNING_CERT");
-    var mqtt_server = readEnv.get("MQTT_SERVER");
-    var mqtt_user = readEnv.get("MQTT_USER");
-    var mqtt_pass = readEnv.get("MQTT_PASS");
-    var url = parse(mqtt_server, true);
+		var certificate = readEnv.get("MQTT_PINNING_CERT");
+		var mqtt_server = readEnv.get("MQTT_SERVER");
+		var mqtt_user = readEnv.get("MQTT_USER");
+		var mqtt_pass = readEnv.get("MQTT_PASS");
+		var url = parse(mqtt_server, true);
 
-    mqtt.IClientOptions = {
-      host: url.hostname,
-      username: mqtt_user,
-      password: mqtt_pass,
-      rejectUnauthorized: true,
-      servername: url.hostname
-    };
-    // MQTT OVER TLS
-    if (url.protocol == "tls") {
-      // === no certificate ===
-      if (certificate == "" || typeof certificate == "undefined") {
-        //=== client configuration ===
-        mqtt.IClientOptions.port = url.port
-        mqtt.IClientOptions.protocol = url.protocol
-      }
-      // === certificate ===
-      else {
-        //=== read certificate === 
-        try {
-          var CERT = fs.readFileSync(certificate);
-        } catch (err) {
-          console.error('ERROR: ', err)
-          process.exit(1) //mandatory (Node docs)
-        }
-        //=== client configuration ===
-        mqtt.IClientOptions.port = url.port
-        mqtt.IClientOptions.protocol = url.protocol
-        mqtt.IClientOptions.ca = [CERT]
-      }
-    }
-    // MQTT
-    else {
-      //=== client configuration ===
-      mqtt.IClientOptions.port = '1883'
-      mqtt.IClientOptions.protocol = 'mqtt'
-    }
-    return mqtt.IClientOptions
-  }
+		mqtt.IClientOptions = {
+			host: url.hostname,
+			username: mqtt_user,
+			password: mqtt_pass,
+			rejectUnauthorized: true,
+			servername: url.hostname
+		};
+		// MQTT OVER TLS
+		if (url.protocol == "tls") {
+			// === no certificate ===
+			if (certificate == "" || typeof certificate == "undefined") {
+				//=== client configuration ===
+				mqtt.IClientOptions.port = url.port
+				mqtt.IClientOptions.protocol = url.protocol
+			}
+			// === certificate ===
+			else {
+				//=== read certificate === 
+				try {
+					var CERT = fs.readFileSync(certificate);
+				} catch (err) {
+					console.error('ERROR: ', err)
+					process.exit(1) //mandatory (Node docs)
+				}
+				//=== client configuration ===
+				mqtt.IClientOptions.port = url.port
+				mqtt.IClientOptions.protocol = url.protocol
+				mqtt.IClientOptions.ca = [CERT]
+			}
+		}
+		// MQTT
+		else {
+			//=== client configuration ===
+			mqtt.IClientOptions.port = '1883'
+			mqtt.IClientOptions.protocol = 'mqtt'
+		}
+		return mqtt.IClientOptions
+	}
 };
 
 \end{lstlisting}
