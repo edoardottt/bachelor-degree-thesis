@@ -163,11 +163,11 @@ SeismoCloud è un sistema di Earthquake Early Warning, cioè una rete di sismome
 
 Dato che l'End User Development è pensato per un pubblico di non esperti, il lavoro si concentra principalmente sulla facilità d'uso dell'applicativo e sulla minima conoscenza informatica durante la configurazione delle azioni da programmare.
 Quindi è necessario un lavoro di astrazione dai tecnicismi della materia semplificando in maniera più forte possibile le funzionalità offerte.
-Questo però non deve contrastare le potenzialità del sistema, gli utenti devono avere \textbf{completa libertà nelle scelte} da loro ideate, gli utenti esperti devono comunque riuscire a programmare delle azioni complesse.
+Questo però non deve contrastare le potenzialità del sistema, gli utenti devono avere \textbf{completa libertà nelle scelte} da loro ideate, quindi i più esperti devono comunque riuscire a programmare delle azioni complesse.
 
-Oltre all'esperienza utente viene esaminata la sicurezza garantendo che: i dati che il sistema produce o di cui fa uso non vengano corrotti dall'esterno o utilizzati in maniera impropria; la privacy degli utenti che utilizzano la piattaforma viene garantita.
+Oltre all'esperienza utente viene esaminata la sicurezza garantendo che: i dati che il sistema produce o di cui fa uso non vengano corrotti dall'esterno o utilizzati in maniera impropria; la privacy degli utenti che utilizzano la piattaforma deve essere garantita.
 
-La tesi è suddivisa in quattro macrocapitoli: la \textbf{progettazione} del sistema e le scelte effettuate in fase di disegno del progetto; l'\textbf{implementazione} delle funzionalità inserite all'interno del sistema volta all'astrazione e alla semplificazione del processo di automatizzazione dei compiti; uno \textbf{studio della sicurezza} del sistema finalizzata alla ricerca ed alla risoluzione, \textit{ove possibile}, di vulnerabilità; una \textbf{fase di test} per assicurare l'esito positivo del lavoro e/oppure sottolineare eventuali criticità ancora presenti.
+La tesi è suddivisa in quattro macrocapitoli: la \textbf{progettazione} del sistema e le scelte effettuate in fase di disegno del progetto; l'\textbf{implementazione} delle funzionalità inserite all'interno del sistema concentrata sull'astrazione e sulla semplificazione del processo di automatizzazione dei compiti; uno \textbf{studio della sicurezza} del sistema finalizzata alla ricerca ed alla risoluzione, \textit{ove possibile}, di vulnerabilità; una \textbf{fase di test} per assicurare l'esito positivo del lavoro e/oppure sottolineare eventuali criticità ancora presenti.
 
 \end{abstract}
 \cleardoublepage
@@ -263,12 +263,12 @@ dove $M_0$ è il momento sismico all'ipocentro da esprimere in Newton per metro|
 Ad oggi il massimo valore magnitudo registrato è 9,5.
 
 \subsection{Strumenti di misurazione}
-Sono principalmente due: il \textbf{sismografo} ed il \textbf{sismometro}.
+Gli strumenti di misurazione dei terremoti sono principalmente due: il \textbf{sismografo} ed il \textbf{sismometro}.
 Entrambi misurano accelerazione e velocità dei movimenti del suolo, con la differenza che il sismometro misura solamente, ma non può registrare i dati; il sismografo invece oltre alla misura produce anche un grafico temporale, chiamato appunto \textit{sismogramma}.
 Uno strumento non può misurare ampie porzioni di territorio, per questo si creano delle reti che monitorano degli ampi spazi di suolo. In Italia questa rete è la \textbf{Rete Sismica Nazionale}.
 Con le tecnologie odierne, si utilizzano sismometri digitali insieme ad altri strumenti. Ad esempio, nella rete italiana, le stazioni sono composte da un sismometro, un accelerometro ed una antenna e ricevitore GPS.
 È una rete di stazioni sismiche (circa 300) disposte su tutto il territorio italiano e appena fuori dai confini.
-Per la maggioranza sono stazioni dell'INGV (Istituto Nazionale di Geologia e Vulcanologia), ma ne fanno parte anche altre piccole reti.
+Per la maggior parte sono stazioni dell'INGV (Istituto Nazionale di Geologia e Vulcanologia), ma ne fanno parte anche altre piccole reti.
 Questa rete monitora sette giorni su sette, 24 ore su 24 i movimenti del suolo e li registra, inviandoli poi ai centri di elaborazione dati di Roma, Grottaminarda e Catania.
 La concentrazione maggiore di terremoti in Italia è nell'appennino e nel sud Italia, per questo la maggior parte delle stazioni è posizionata in questi punti, come si può notare nella Figura \ref{fig:RSN}.
 
@@ -372,8 +372,8 @@ location = 40.857634274356;15.24525254252
 Con una cadenza periodica (qualche minuto, dipende dal carico del sistema) vengono pubblicati: indirizzo IP locale e pubblico, indirizzo MAC e qualità del segnale della rete Wi-Fi, localizzazione e temperatura del sismometro, soglia attuale (valore utile alla rilevazione di una vibrazione).
 Quando il sismometro rileva una vibrazione viene inviata l'intensità della vibrazione.
 Un topic MQTT è dedicato al comando \textit{reboot}, ossia la possibilità di riavviare il sismometro pubblicando un messaggio.\\
-Inoltre è possibile visualizzare la lista dei propri sismometri, una mappa aggiornata in tempo reale con i sismometri attivi e i terremoti recenti, una lista di terremoti con relativa magnitudo, posizione e profondità dell'ipocentro (ordinati cronologicamente) e infine alcuni informazioni utili.
-È disponibile anche una interfaccia web dove è possibile visualizzare tutte le informazioni prima citate ed in più una dashboard personalizzata.
+Inoltre è possibile visualizzare la lista dei propri sismometri, una mappa aggiornata in tempo reale con i sismometri attivi e i terremoti recenti, una lista di terremoti con relativa magnitudo, posizione e profondità dell'ipocentro (ordinati cronologicamente) e infine alcune informazioni utili.
+È disponibile anche un'interfaccia web dove è possibile visualizzare tutte le informazioni prima citate ed in più una dashboard personalizzata.
 In quest'ultima è possibile visualizzare due grafici che mostrano il tempo di utilizzo assoluto e settimanale di ogni sismometro attivo.
 Dopo l'effettiva autenticazione (tramite password o QRCode) si entra nell'area privata, ossia relativa ad un determinato \textit{gruppo} (insiemi di sismometri raggruppati per locazione).
 Qui, oltre alle funzionalità citate, è presente un sistema di \textbf{EUD} (End User Development).
@@ -381,7 +381,7 @@ Dalla pagina Wikipedia \cite{wikieud}:
 \begin{quoting}[font=itshape, begintext={``}, endtext={``}]
 Lo sviluppo per l'utente finale (EUD) o la programmazione per l'utente finale (EUP) si riferisce ad attività e strumenti che consentono agli utenti finali, persone che non sono sviluppatori di software professionisti, di programmare i computer. Le persone che non sono sviluppatori professionisti possono utilizzare gli strumenti EUD per creare o modificare artefatti software (descrizioni di comportamenti automatizzati) e oggetti di dati complessi senza una conoscenza significativa di un linguaggio di programmazione.
 \end{quoting}
-Ad esempio, si può ricevere un messaggio automatico tramite Telegram ogni volta che il mio sismometro vibra. Questo sistema viene spiegato meglio nel paragrafo 3.1 Sistema Legacy.
+Ad esempio, si può ricevere un messaggio automatico tramite Telegram ogni volta che il mio sismometro vibra. Questo sistema viene spiegato meglio nel sottocapitolo 3.1 ``Sistema Legacy".
 
 \begin{figure}
 \caption{Architettura di SeismoCloud}
