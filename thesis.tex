@@ -1219,7 +1219,7 @@ Un altro problema potrebbe essere il \textbf{typo-squatting}. L'utente potrebbe 
     \label{fig:install}
 \end{figure}
 
-Per quanto riguarda il nodo \textit{function}, che appunto consente lo stesso di eseguire codice Javascript, viene ritenuto meno pericoloso perché viene utilizzato il modulo \textit{vm} per creare una sandbox ed eseguire il codice in maniera sicura.
+Per quanto riguarda il nodo \textit{function}, che appunto consente lo stesso di eseguire codice Javascript, è statto attentamente analizzato e viene ritenuto meno pericoloso perché viene utilizzato il modulo \textit{vm} (di NodeJS) per creare una sandbox ed eseguire il codice in maniera sicura \cite{function}.
 Questa funzionalità nasconde comunque ancora altre criticità che verranno mostrate in maniera dettagliata in seguito.
 
 Come abbiamo visto nel sottocapitolo 3.3, la procedura per comunicare con i sismometri ed il sistema SeismoCloud è cambiata radicalmente favorendo l'usabilità e l'accessibilità a persone non tecnicamente competenti. I nodi che sono stati creati per comunicare attraverso il protocollo MQTT con SeismoCloud richiedono solamente il nome del nodo ed il nome del sismometro.
@@ -1349,6 +1349,7 @@ functionGlobalContext: {
 exportGlobalContextKeys: false,
 \end{lstlisting}
 Con questa modifica, non vengono caricate le variabili d'ambiente di sistema nel global context e viene disabilitata la funzione \texttt{global.keys()} che permetteva di elencare tutte le variabili d'ambiente in un solo messaggio.
+Ovviamente, conoscendo il nome delle variabili d'ambiente che utilizza Node-RED (ma anche npm, NodeJS e Docker) era facile anche senza l'utilizzo di questa funzione.
 
 Comunque, rimane un problema fondamentale: il nodo Inject può comunque stampare i valori delle variabili di sistema (che sappiamo contenere dati sensibili).
 Per non rinunciare alla comodità d'uso e facilità di deploy dei servizi, le variabili di sistema vengono gestite in maniera differente dal solito.
@@ -1381,8 +1382,9 @@ module.exports = {
 \end{lstlisting}
 
 Per il controllo dell'input da parte dell'utente è stato semplicemente inserito un controllo che verifica che l'input inserito corrisponda ad un dato effettivamente presente nel sistema.
-Per un utente non esperto è difficile modificare il menu a tendina precompilato con tutti i sismometri disponibili, per un utente competente in materia, basta aprire la console di debug di un qualsiasi Browser e modificare il codice della pagina Web.
-Se l'utente non inserisce un sismometro valido, quindi molto probabilmente ha cambiato i valori tramite console, viene stampato nei log un segnale di warning.
+Viene effettuata una chiamata alle API per ottenere i dati sugli utenti aggiornati in tempo reale.
+Per un utente non esperto è difficile modificare il menu a tendina precompilato con tutti i sismometri disponibili (non si può modificare con il semplice click), per un utente competente in materia, basta aprire la console di debug di un qualsiasi Browser e modificare il codice della pagina Web.
+Se l'utente non inserisce un sismometro valido, quindi molto probabilmente ha cambiato i valori tramite console, viene stampato nei log un segnale di warning e ovviamente l'azione non viene effettuata dal server.
 \begin{lstlisting}[language=Javascript, firstnumber=34]
     // The whole response has been received. Print out the result.
       resp.on('end', () => {
@@ -1390,7 +1392,7 @@ Se l'utente non inserisce un sismometro valido, quindi molto probabilmente ha ca
         for (i in obj) {
           devices.push(obj[i])
         }
-        var deviceIdOk = false // this indicates if the input entered is in the group seismometers
+        var deviceIdOk = false // this indicates if the entered input is in the group seismometers
         for (i in devices) {
           if (devices[i]['ID_Device'] == seismometer) {
             deviceIdOk = true
@@ -1398,7 +1400,7 @@ Se l'utente non inserisce un sismometro valido, quindi molto probabilmente ha ca
           }
         }
 
-        // Only if the input entered is in the known seismometers' id
+        // Only if the entered input is in the known seismometers' id
         if (deviceIdOk) {
 \end{lstlisting}
 
@@ -1407,8 +1409,8 @@ Per l'applicazione Android e iOS viene utilizzato un altro metodo di sicurezza, 
 
 I dati che vengono inviati e ricevuti tramite il protocollo MQTT sono scambiati senza nessun protocollo di cifratura. Il client MQTT prende i dati, li incapsula in un pacchetto TCP/IP e lo invia.
 I dati inviati in questo modo possono essere intercettati da tutti i componenti dell'infrastruttura Internet in cui passa il pacchetto, oppure possono essere letti/modificati da un intruso nella rete, eseguendo appunto un attacco ``Man in the middle".
-TLS (Transport Security Layer) è un protocollo che cifra i dati e
-li invia in maniera sicura, lo stesso che viene utilizzato per cifrare i dati da HTTP in HTTPS.
+TLS (Transport Security Layer) è un protocollo che cifra i dati e li invia in maniera sicura, lo stesso che viene utilizzato per cifrare i dati da HTTP in HTTPS.
+Così facendo chiunque prova a ottenere i pacchetti inviati non leggerà il reale contenuto di essi, ma dei caratteri che non hanno senso insieme, non potendo così ottenere nessuna informazione.
 È altamente consigliato utilizzare MQTT con l'aiuto di TLS, infatti la porta 8883 è lo standard per questo tipo di connessione. IANA (Internet Assigned Numbers Authority) lo ha chiamato  “secure-mqtt”.
 
 Dato che il sismometro non ha una memoria cosi grande e che questa azione comporterebbe uno sforzo non indifferente, viene utilizzato il certificate pinning anziché una catena di certificati come di solito accade.
@@ -1705,6 +1707,13 @@ Viene consigliato di utilizzare sempre HTTPS per cifrare i messaggi che vengono 
     \textbf{Securing Node-RED | Node-RED Documentation}
     \\
     \href{https://nodered.org/docs/user-guide/runtime/securing-node-red}{https://nodered.org/docs/user-guide/runtime/securing-node-red}
+    
+\bibitem{function}
+    \textbf{Function node | Node-RED GitHub}
+    \\
+    \href{https://github.com/node-red/node-red/blob/master/packages/node\_modules/@node-red/nodes/core/function/10-function.js}{https://github.com/node-red/node-red/blob/master/packages/node\_modules/@node-red/nodes/core/function/10-function.js}
+    \\
+    2020, [Online, acceduto il 16/09/2020]
 
 \bibitem{securingNode-RED}
     \textbf{Securing IoT Apps in Node-RED | University of Gothenburg}
