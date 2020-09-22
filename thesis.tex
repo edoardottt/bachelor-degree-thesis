@@ -1488,16 +1488,16 @@ module.exports = {
 
 Per una efficiente usabilità del sistema è assolutamente necessaria una parte accurata di test.
 In questo caso sono stati coinvolti 7 utenti non esperti ed un esperto.
-Questa scelta non è casuale, infatti tanti utenti non esperti servono a verificare che il sistema è adatto a persone che non hanno competenze informatiche elevate, mentre la valutazione dell'esperto serve ad assicurare che le buone paratiche di usabilità ed esperienza utente vengano rispettate.
+Questa scelta non è casuale, infatti tanti utenti non esperti servono a verificare che il sistema è adatto a persone che non hanno competenze informatiche elevate, mentre la valutazione dell'esperto serve ad assicurare che le buone pratiche di usabilità ed esperienza utente vengano rispettate.
 Per quanto riguarda invece i compiti che richiedono un background tecnico, l'applicativo è stato testato internamente nel team di sviluppo per più di qualche mese.
 Le modalità di test effettuati sono due: in \textit{remoto} e \textit{dal vivo}. Questa scelta è motivata da vantaggi e svantaggi per una o per l'altra scelta: da remoto si può controllare meglio tutta l'attività ``digitale" dell'utente, ad esempio i movimenti del cursore, quindi banalmente dove si aspetterebbe di trovare alcune sezioni; con un test dal vivo invece si ha un maggior coinvolgimento da entrambe le parti, facendo così sentire l'utente più a suo agio e riuscendo a captare meglio le sue reazioni durante il test.
-Sono state utilizzate diverse tecniche: \textbf{think aloud} (all'utente viene chiesto di pensare a voce alta ed esprimere tutte le emozioni, sensazioni e pensieri che ha durante tutta la durata del test), \textbf{cooperative evaluation} (utente e somministratore del test si pongono domande a vicenda ed esprimono i loro giudizi sull'esperienza d'uso), \textbf{post-task walkthrough} (finito il test, indipendentemente dal tipo effettuato, vengono poste delle domande per comprendere i risultati. Si hanno due opzioni 1) appena finito il test, dove l'utente ha ben chiare le sue opinioni, ma il somministratore non ha tempo di pensare alle domande, 2) il contrario del precedente) e \textbf{expert based} (un esperto revisiona l'interfaccia e da i suoi pareri su di essa) \cite{hcibook}.
+Sono state utilizzate diverse tecniche: \textbf{think aloud} (all'utente viene chiesto di pensare a voce alta ed esprimere tutte le emozioni, sensazioni e pensieri che ha durante tutta la durata del test), \textbf{cooperative evaluation} (utente e somministratore del test si pongono domande a vicenda ed esprimono i loro giudizi sull'esperienza d'uso), \textbf{post-task walkthrough} (finito il test, indipendentemente dal tipo effettuato, vengono poste delle domande per comprendere i risultati. Si hanno due opzioni: 1) appena finito il test, dove l'utente ha ben chiare le sue opinioni, ma il somministratore non ha tempo di pensare alle domande, 2) il contrario del precedente) e \textbf{expert based} (un esperto revisiona l'interfaccia e da i suoi pareri su di essa) \cite{hcibook}.
 
 Sono stati effettuate due sessioni di test con una revisione e correzione degli errori trovati appena effettuata la prima delle due.
 I task scelti da svolgere per gli utenti erano quattro (con alcune variazioni durante i vari test per capire come reagivano gli utenti) di varia difficoltà per misurare fino a che punto il sistema risultasse utilizzabile per un utente non esperto:
 
 \begin{itemize}
-    \item Difficoltà Livello 1: Prendere il valore Quake del sismometro ‘edotest’ e stamparlo nella console di debug.
+    \item Difficoltà Livello 1: Ottenere il valore Quake del sismometro ‘edotest’ e stamparlo nella console di debug.
     
     \begin{figure}[ht]
         \centering
@@ -1512,14 +1512,14 @@ I task scelti da svolgere per gli utenti erano quattro (con alcune variazioni du
         \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-5/test-2.jpg}
         \label{fig:test1}
     \end{figure}
-    \item Difficoltà Livello 3: Effettuare il reboot del sismometro ‘edotest’ ogni volta che la temperatura è maggiore di $x^{\circ}$C.
+    \item Difficoltà Livello 3: Effettuare il reboot del sismometro ‘edotest’ ogni volta che la temperatura è maggiore di $50^{\circ}$C.
     \begin{figure}[hbt]
         \centering
         \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-5/test-3.jpg}
         \label{fig:test1}
     \end{figure}
     
-    \item Difficoltà livello 4: Prendere il valore Quake del sismometro ‘edotest’, applicare ad esso un template ( ad esempio ``\texttt{Quake: <payload>}" ) e stamparlo nella console di debug con le informazioni relative agli ultimi terremoti rilevati possibilmente rilevabili dal dispositivo.
+    \item Difficoltà livello 4: Prendere il valore Quake del sismometro ‘edotest’, applicare ad esso un template ( ad esempio ``\texttt{Quake: <msg.payload>}" ) e stamparlo nella console di debug con le informazioni relative agli ultimi terremoti possibilmente rilevabili dal dispositivo selezionato.
     
     \begin{figure}[ht]
         \centering
@@ -1528,6 +1528,8 @@ I task scelti da svolgere per gli utenti erano quattro (con alcune variazioni du
     \end{figure}
     
 \end{itemize}
+
+Come detto appena sopra questi test sono solo dei formati utili per catalogarli in gruppi di varia difficoltà, le modifiche effettuate all'interno dei test sono ad esempio: rssi o altro nodo al posto del nodo Quake, interruzione del test per chiedere all'utente di spiegare in dettaglio la funzione di un nodo, oppure aprire il pannello di impostazioni per cambiare qualche configurazione. 
 
 Effettuata la prima serie di test, con circa 15 test individuali sono stati evidenziati i seguenti problemi:
 
@@ -1543,20 +1545,22 @@ Il primo problema nasce dal fatto che alcune funzionalità del sistema di End Us
 Il secondo problema è stato rilevato maggiormente durante i test da remoto, dove il controllo del cursore dell'utente è più intenso. Quando un utente doveva selezionare un nodo per configurare le impostazioni di base (nome del nodo, sismometro selezionato) 4 dei 7 utenti hanno in prima battuta provato un clic destro sul nodo, che non ha nessun effetto, e poi in seconda battuta un doppio clic sinistro, che è appunto l'azione corretta.
 
 La terza criticità era la descrizione di alcuni nodi, per esempio, uno di questi era il nodo \textbf{BSSID}. Questo termine indica l'indirizzo MAC di un punto di accesso alla rete dove il sismometro si connette.
-Il problema è stato rilevato chiedendo (durante la tipologia di test \textit{cooperative evaluation}) agli utenti se, una volta configurato il nodo, avessero capito che tipologia di dati stavano usando, o quanto meno sapessero dare una spiegazione sommaria.
-Tutti gli utenti non competenti hanno risposto che il nodo restituisce un valore in output, ma che non avevano capito minimamente la tipologia di dato.
-La risoluzione del problema è stato aggiungere dettagli alle descrizioni dei nodi, ad esempio nel caso di BSSID questo è il risultato della modifica.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-5/bssid-help.jpg}
+    \caption{nodo BSSID corretto dopo la prima sessione di test}
     \label{fig:bssid-help}
 \end{figure}
+Il problema è stato rilevato chiedendo (durante la tipologia di test \textit{cooperative evaluation}) agli utenti se, una volta configurato il nodo, avessero capito che tipologia di dati stavano usando, o quanto meno sapessero dare una spiegazione sommaria della funzione del nodo.
+Tutti gli utenti non competenti hanno risposto che il nodo restituisce un valore in output, ma che non avevano capito minimamente la tipologia di dato.
+La verifica si è estesa ai nodi meno comprensibili e che richiedono un background tecnico più forte, come ad esempio RSSI, StreamData oppure è stato richiesto di spiegare la differenza tra Local IP e Public IP.
+La risoluzione del problema è stato aggiungere dettagli alle descrizioni dei nodi che non hanno avuto esito positivo in questo test.
 
 L'ultimo problema è stato rilevato dal somministratore dei test, dato che il titolo ``SeismometerAttributes" non era adatto a descrivere in modo comprensibile le funzionalità coinvolte e soprattutto non entrava nel box ad esso dedicato.
 
-La seconda sessione di test è stata effettuata dopo aver parzialmente risolto i problemi della prima. È stata aggiunta una descrizione molto più dettagliata per tutti i nodi di cui risultava ambiguo il significato ed è stato modificato il nome ``SeismometerAttributes" con ``SeismometerData". Le modifiche sono state sottoposte ai test e hanno avuto esito positivo.
+La seconda sessione di test è stata effettuata dopo aver parzialmente risolto i problemi della prima. È stata aggiunta una descrizione molto più dettagliata per tutti i nodi di cui risultava ambiguo il significato ed è stato modificato il nome ``SeismometerAttributes" con ``SeismometerData". Le modifiche sono state sottoposte ai test che sono stati ripetuti sia cambiando gli utenti coinvolti, sia con gli stessi che avevano effettuato i test precedentemente. Le modifiche hanno avuto esito positivo, quindi i test non si sono concentrati su questo fattore, quanto più sulla creazione di flussi.
 
-Tutti gli utenti hanno compreso come i nodi devono essere collegati per formare un flusso, prendendo e rilasciando i nodi dalla palette dei nodi allo spazio di lavoro. Data la differenziazione in categorie per argomenti differenti (e colorati in modo differente), cercare un singolo nodo sulla palette è risultato un facile compito. Tutti gli utenti hanno completato i compiti di basso e medio livello senza problemi significativi, anche se ci è voluto più tempo del previsto per i compiti di alta difficoltà.
+Tutti gli utenti hanno compreso come i nodi devono essere collegati per formare un flusso, prendendo e rilasciando i nodi dalla palette allo spazio di lavoro, molto utile in questo caso la texture del foglio di lavoro che imita un foglio a quadretti. Data la differenziazione in categorie per argomenti differenti (e colorati in modo differente), cercare un singolo nodo sulla palette è risultato un facile compito. Tutti gli utenti hanno completato i compiti di basso e medio livello senza problemi significativi, anche se ci è voluto più tempo del previsto per i compiti di alta difficoltà.
 
 \section{Conclusioni}
 
@@ -1572,7 +1576,7 @@ Il lavoro svolto fino ad ora ha prodotto un servizio pronto ad interfacciarsi co
 Nel prossimo paragrafo quindi vengono espressi alcuni percorsi da seguire per aggiungere interessanti funzionalità e continuare ad elevare l'utilità di questo sistema.
 Si continuerà ad ascoltare gli utenti SeismoCloud ricevendo feedback utili e proposte di servizi cercando di far rimanere il sistema comprensibile, sicuro ed usabile.
 
-\medskip
+\clearpage
 
 Questo lavoro di tirocinio è stato riassunto in un paper creato insieme al Professore Emanuele Panizzi ed il Dottorando Enrico Bassetti, il quale è stato sottomesso ed accettato al Workshop EMPATHY 2020.
 \begin{figure}[hbt]
@@ -1587,7 +1591,7 @@ Questo lavoro di tirocinio è stato riassunto in un paper creato insieme al Prof
 
 L'introduzione di azioni che utilizzano le API di social network o funzioni di notifica è molto utile. In particolare, esiste già un modulo NPM pronto e maturo (Versione 8.6.4) per Telegram \cite{telegram-node}, per Twitter \cite{twitter-node} e per Facebook \cite{facebook-node}.
 Sono molto utili per condividere dati, ma soprattutto per notificare ad un bacino molto ampio di utenza facile da raggiungere Earthquake Early Warning. In più, per quanto riguarda Twitter e Facebook, non è nemmeno necessario conoscere dati dei destinatari del messaggio, basta condividere un messaggio automatico con le informazioni utili. Ancora più utile è la possibilità di localizzare il proprio Tweet (o post Facebook) tramite la localizzazione GPS per una più rapida ed efficace diffusione dell stesso in aree interessate all'evento sismico.
-L'INGV ha avviato un servizio simile, questo un Tweet di esempio(\href{https://twitter.com/ingvterremoti/status/1259681114920230912}{https://twitter.com/ingvterremoti/status/1259681114920230912}):
+L'INGV ha avviato un servizio simile, questo un Tweet di esempio(\href{https://twitter.com/ingvterremoti/status/1259681114920230912}{https://twitter.com/ingvterremoti/status/1259681114920230912}).
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-5/tweetINGV.jpg}
