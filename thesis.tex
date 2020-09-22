@@ -1324,15 +1324,16 @@ Per una connessione più sicura è necessario un metodo di cifratura dei messagg
 
 \section{Risoluzione dei problemi}
 
-Come è stato descritto nel precedente sottocapitolo, un problema di sicurezza sono i nodi evidenziati come possibili vettori di attacco. La soluzione in questo caso è stata la rimozione degli stessi dall'interfaccia utilizzando le impostazioni nel file \texttt{settings.js}.
+Come è stato descritto nel precedente sottocapitolo, un problema di sicurezza sono i nodi evidenziati come possibili vettori di attacco (nodi appartenenti alla categoria storage, che si occupano di leggere, modificare e creare file, network, che contiene nodi che utilizzano vari protocolli per comunicare sulla rete ed il nodo exec, unico della categoria function). La soluzione in questo caso è stata la rimozione degli stessi dall'interfaccia utilizzando le impostazioni nel file \texttt{settings.js}.
 \begin{lstlisting}[language=Javascript, firstnumber=75]
 //EXCLUDING NODES FROM PALETTE:
   nodesExcludes: ['32-udp.js', '31-tcpin.js', '22-websocket.js', '21-httprequest.js', '21-httpin.js', '10-mqtt.js', '06-httpproxy.js', '05-tls.js', '90-exec.js', 'node-red-node-tail', '10-file.js', '23-watch.js'],
 \end{lstlisting}
-Ovviamente è un grande compromesso tra la sicurezza del sistema e le funzionalità offerte. Questi nodi consentivano una grande (sproporzionata) libertà all'utente di comunicare con la rete. Comunque serviva anche qui una elevata conoscenza dei protocolli e delle reti, quindi poco utilizzabili per gli utenti SeismoCloud non esperti. Durante i prossimi sviluppi potrebbero essere utili dei rilasci di copie di questi nodi, che quindi imitano le loro funzionalità, ma adattati per eseguire richieste in sicurezza e per essere utilizzati senza una eccessiva configurazione.
+Ovviamente è un grande compromesso tra la sicurezza del sistema e le funzionalità offerte. Questi nodi consentivano una grande (sproporzionata) libertà all'utente di comunicare con la rete. Potevano essere effettuate richieste verso la maggior parte dei servizi web avendo a disposizione molti protocolli (mqtt per i dispositivi IoT, http per i servizi Web), comunque necessitano una elevata conoscenza dei protocolli e delle reti, quindi poco utilizzabili per gli utenti SeismoCloud non esperti. Durante i prossimi sviluppi potrebbero essere utili dei rilasci di copie di questi nodi, che quindi imitano le loro funzionalità, ma adattati per eseguire richieste in sicurezza e per essere utilizzati senza una eccessiva configurazione.
 
-Però è possibile, anche eliminando questi nodi dall'interfaccia, emulare le loro funzionalità attraverso il download di nodi esterni.
-Ad esempio, si può scaricare un nodo che effettua una richiesta http, per bloccare ciò è stato inserito questo codice. Così facendo viene disabilitata questa funzionalità.
+Purtroppo però è possibile, anche eliminando questi nodi dall'interfaccia, emulare le loro funzionalità attraverso il download di nodi esterni.
+Ovviamente questa è una funzionalità molto utile in Node-RED per la maggior parte dei campi dove viene utilizzato (ad esempio nell'industria, automatizzando processi. Invece di scrivere nuovo codice posso ottenere le stesse funzionalità già prodotte e collaudate dalla comunità Node-RED), mentre per il caso SeismoCloud è una vulnerabilità che consente di ottenere grandi privilegi sulla piattaforma.
+Ad esempio, si può scaricare un nodo che effettua una richiesta http, oppure un nodo che attraverso la libreria \textit{child\_process}, esegue un fork di un processo per eseguire codice Shell sulla macchina ospitante. Per bloccare ciò è stato inserito questo codice. Così facendo viene disabilitata questa funzionalità.
 \begin{lstlisting}[language=Javascript, firstnumber=93]
     palette: {
       editable: false // Enable/disable the Palette Manager
@@ -1383,6 +1384,7 @@ module.exports = {
 
 Per il controllo dell'input da parte dell'utente è stato semplicemente inserito un controllo che verifica che l'input inserito corrisponda ad un dato effettivamente presente nel sistema.
 Viene effettuata una chiamata alle API per ottenere i dati sugli utenti aggiornati in tempo reale.
+La risposta della chiamata API contiene l'identificativo alfanumerico del dispositivo, latitudine, longitudine, nome, timestamp di ultima attività, tipo, modello e alivetime.
 Per un utente non esperto è difficile modificare il menu a tendina precompilato con tutti i sismometri disponibili (non si può modificare con il semplice click), per un utente competente in materia, basta aprire la console di debug di un qualsiasi Browser e modificare il codice della pagina Web.
 Se l'utente non inserisce un sismometro valido, quindi molto probabilmente ha cambiato i valori tramite console, viene stampato nei log un segnale di warning e ovviamente l'azione non viene effettuata dal server.
 \begin{lstlisting}[language=Javascript, firstnumber=34]
@@ -1406,6 +1408,8 @@ Se l'utente non inserisce un sismometro valido, quindi molto probabilmente ha ca
 
 Nel sottocapitolo 3.3 è stato definito il comportamento e le funzionalità dei nodi che utilizzano le API di SeismoCloud per accedere a dati della rete di sismometri.
 Per l'applicazione Android e iOS viene utilizzato un altro metodo di sicurezza, qui si è scelto di aggiungere alle richieste HTTP un token di accesso per verificare che la richiesta provenga effettivamente da un client autorizzato a ricevere ed utilizzare quei dati.
+
+Un problema che non è stato descritto nella ricerca di vulnerabilità è la possibile esposizione della posizione geografica degli utenti nel sistema. In realtà il problema non sussiste perché di default il sistema SeismoCloud ha l'opzione di conservazione della privacy attiva, quindi la posizione che in realtà viene inviata è una posizione effimera, cioè randomizzata in una raggio di due kilometri avente il centro nella reale posizione. Questo fa si che la reale posizione dei sismometri non viene esposta, ma comunque l'algoritmo di Eartquake Early Warning non ne risente dato che i terremoti interessano vaste porzioni di territorio e pochi kilometri di randomizzazione non hanno effetto sul risultato prodotto.
 
 I dati che vengono inviati e ricevuti tramite il protocollo MQTT sono scambiati senza nessun protocollo di cifratura. Il client MQTT prende i dati, li incapsula in un pacchetto TCP/IP e lo invia.
 I dati inviati in questo modo possono essere intercettati da tutti i componenti dell'infrastruttura Internet in cui passa il pacchetto, oppure possono essere letti/modificati da un intruso nella rete, eseguendo appunto un attacco ``Man in the middle".
@@ -1472,6 +1476,8 @@ module.exports = {
 };
 
 \end{lstlisting}
+
+CONCLUSIONE
 
 \clearpage
 
