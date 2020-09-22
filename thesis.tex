@@ -1168,7 +1168,7 @@ In questo caso (\texttt{list-earthquakes.js}) ogni volta che il nodo riceve un i
 \section{Sicurezza nella piattaforma Node-RED}
 
 Come viene scritto chiaramente nella documentazione di Node-RED \cite{securing}, non è sicuro di default.
-Vengono espressi e chiariti alcuni punti su come risolvere alcuni problemi di accesso.
+Vengono espressi e chiariti dei punti su come risolvere alcuni problemi di accesso.
 Viene anche detto però che questo è sufficiente solo se viene effettuato il deploy su un rete fidata, non il nostro caso quindi, ma comunque sono punti necessari.
 Quando il server viene avviato ovviamente viene esposto il servizio pubblicamente su Internet e quindi chiunque può accedere all'interfaccia.
 Innanzitutto Node-RED utilizza il protocollo HTTP, il quale invia i dati in chiaro che possono essere letti da chiunque sta sniffando il traffico.
@@ -1341,15 +1341,16 @@ Ad esempio, si può scaricare un nodo che effettua una richiesta http, oppure un
 \end{lstlisting}
 
 Riguardo l'accesso ai vari tipi di context (node, flow e global) nessuno dei nodi introdotti da SeismoCloud utilizzano questo metodo per scambiare informazioni.
-Tuttavia, alcuni dati che vengono utilizzati dal backend NodeJS vengono comunque caricati nel global context per facilità d'uso. Questo può portare, come si è precedentemente visto, ad esporre tante informazioni sul sistema e sulle variabili d'ambiente.
-È possibile nascondere questo dettaglio inserendo nel file di impostazioni:
+Come è stato scritto nella sezione precedente, neanche i nodi che troviamo in SeismoCloud di default, quindi nessun nodo presente nella palette ne fa uso.
+Tuttavia, alcuni dati che vengono utilizzati dal backend NodeJS, dal package manager NPM e da Docker vengono comunque caricati nel global context per facilità d'uso. Questo può portare, come si è precedentemente visto, ad esporre tante informazioni sul sistema e sulle variabili d'ambiente.
+È possibile nascondere questo dettaglio inserendo nel file di impostazioni queste modifiche: si elimina (o commenta come in questo caso) la riga che setta ed esporta la variabile \texttt{env} che da accesso alle variabili d'ambiente e si setta a falso l'impostazione che gestisce l'esportazione delle chiavi del global context. 
 \begin{lstlisting}[language=Javascript, firstnumber=56]
 functionGlobalContext: {
     // env: process.env
   },
 exportGlobalContextKeys: false,
 \end{lstlisting}
-Con questa modifica, non vengono caricate le variabili d'ambiente di sistema nel global context e viene disabilitata la funzione \texttt{global.keys()} che permetteva di elencare tutte le variabili d'ambiente in un solo messaggio.
+Con questa modifica viene disabilitata la funzione \texttt{global.keys()} che permetteva di elencare tutte le variabili d'ambiente in un solo messaggio.
 Ovviamente, conoscendo il nome delle variabili d'ambiente che utilizza Node-RED (ma anche npm, NodeJS e Docker) era facile anche senza l'utilizzo di questa funzione.
 
 Comunque, rimane un problema fondamentale: il nodo Inject può comunque stampare i valori delle variabili di sistema (che sappiamo contenere dati sensibili).
@@ -1476,8 +1477,6 @@ module.exports = {
 };
 
 \end{lstlisting}
-
-CONCLUSIONE
 
 \clearpage
 
