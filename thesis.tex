@@ -214,7 +214,7 @@ Il punto in cui viene generata questa energia è detto \textbf{ipocentro} (2), z
 \begin{figure}[ht]
 \label{fig:ipocentro}
 \centering
-\includegraphics[width=0.55\textwidth]{relazione-tirocinio/Chapter-1/ipo-epi-centro.png}
+\includegraphics[width=0.55\textwidth]{Chapter-1/ipo-epi-centro.png}
 \end{figure}
 
 \clearpage
@@ -404,7 +404,7 @@ Una seconda scelta è \textbf{draw.io} (\href{https://app.diagrams.net/}{https:/
 \begin{figure}[H]
 \caption{Esempio di flusso esportato da draw.io}
 \label{fig:drawio}
-\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/drawio.png}
+\includegraphics[width=1\textwidth]{Chapter-2/drawio.png}
 \end{figure}
 Il codice sorgente di draw.io è disponibile su GitHub. È  ben documentato, quindi questo aiuta l'integrazione con SeismoCloud. Purtroppo si tratta di uno strumento front-end, quindi manca tutta la logica back-end; i dati inseriti dall'utente vengono esportati in file di tipo xml che devono poi essere tradotti in azioni registrate dal sistema. 
 
@@ -417,7 +417,7 @@ Nel nome il `node' è dato sia dal runtime NodeJS, sia dal nome che hanno gli el
 \begin{figure}[H]
 \caption{Esempio flusso di nodi in Node-RED}
 \label{fig:node-red-flows-example1}
-\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/node-red-flows-1.jpg}
+\includegraphics[width=1\textwidth]{Chapter-2/node-red-flows-1.jpg}
 \end{figure}
 Come si nota in figura \ref{fig:node-red-flows-example1}, i nodi sono dei rettangoli che hanno funzioni particolari:
 \begin{itemize}
@@ -428,7 +428,7 @@ Come si nota in figura \ref{fig:node-red-flows-example1}, i nodi sono dei rettan
 \begin{figure}[H]
 \caption{Esecuzione del comando shutdown}
 \label{fig:node-red-flows-example2}
-\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/node-red-flows-2.jpg}
+\includegraphics[width=1\textwidth]{Chapter-2/node-red-flows-2.jpg}
 \end{figure}
 Nella figura \ref{fig:node-red-flows-example2} abbiamo un altro esempio. Qui quando viene cliccato il pulsante a sinistra del nodo \textit{input}, il nodo invia in uscita un valore (in questo caso qualsiasi, ad esempio 3 o la stringa 'input') che fa eseguire il secondo nodo (di tipo \textit{intermedio}). Il nodo \textit{shutdown} esegue il comando `shutdown` e stampa nella console di debug lo stdout, stderr ed il return code.
 Data la facilità d'uso, il grande supporto (repository con 10+K star su GitHub, community molto attiva e forum ufficiale), la maturità del progetto (versione 0.2 nel 2013, ad oggi (2020) 1.1.3), la facile estendibilità ed integrazione con dispositivi IoT (come appunto i nostri sismometri), decisamente Node-RED è lo strumento più adatto per risolvere i bisogni della community SeismoCloud.
@@ -447,7 +447,7 @@ Un \textbf{sottoflusso} è una collezione di nodi che vengono collassati grafica
 \begin{figure}[H]
 \caption{Esempio di sottoflusso}
 \label{fig:sottoflusso}
-\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/node-red-flows-4.jpg}
+\includegraphics[width=1\textwidth]{Chapter-2/node-red-flows-4.jpg}
 \end{figure}
 Il \textbf{contesto} è il modo principale di condividere informazioni tra i nodi senza essere connessi fra loro. Ne esistono di tre tipi:
 \begin{itemize}
@@ -465,7 +465,7 @@ Inoltre, ogni flusso viene poi tradotto in codice JSON per poter essere esportat
 Viene fornita anche una `vetrina' (\href{https://flows.nodered.org}{flows.nodered.org}) dove possono essere esplorati nodi e flussi creati e pubblicati per la community.
 Esempio di un semplice flusso Node-RED:
 \begin{figure}[H]
-\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/node-red-flows-3.jpg}
+\includegraphics[width=1\textwidth]{Chapter-2/node-red-flows-3.jpg}
 \end{figure}
 Il nodo \textit{date} non è altro che un nodo function che restituisce la data:
 \begin{lstlisting}[language=JavaScript]
@@ -568,7 +568,7 @@ Una immagine Docker consiste in livelli read-only i quali rappresentano il risul
 Quando viene eseguita un'immagine e generato un container, si aggiunge un ulteriore livello sopra ai precedenti.
 Tutte le modifiche poi fatte al container in esecuzione sono eseguite su questo nuovo livello che quindi non è read-only, ma l'unico writable ed è comunemente chiamato \textit{container layer}.
 \begin{figure}[ht]
-\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/container-layers.jpg}
+\includegraphics[width=1\textwidth]{Chapter-2/container-layers.jpg}
 \end{figure}
 Questo tipo di architettura favorisce la condivisione di risorse, infatti se sono presenti più container creati partendo dalla stessa immagine, le modifiche verranno effettuate solo nell'ultimo livello dei rispettivi container condividendo tutti i livelli sottostanti\cite{aboutstoragedrivers}.
 Dato che tutti i dati scritti dal container vengono salvati nell'ultimo livello modificabile, quando il container viene distrutto vengono persi anche i dati scritti dal container.
@@ -588,13 +588,13 @@ Differisce dalla \textbf{virtualizzazione} \cite{dockervsvm2} in:
 
 \begin{figure}[ht]
 \caption{Container vs Virtualizzazione}
-\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/vm-c.jpg}
+\includegraphics[width=1\textwidth]{Chapter-2/vm-c.jpg}
 \end{figure}
 Questa divisione netta fra i container e la condivisione delle risorse per aumentare le prestazioni si prestano molto al caso in esame. Ogni container avrà in esecuzione una instanza di node-red configurata con i dati di un determinato gruppo.
 Come si può notare dai grafici nelle prossime pagine, tratti dallo studio di \textit{Potdar et al.}\cite{dockervsvm}, ci sono molti vantaggi prestazionali nell'utilizzo di container Docker invece di macchine virtuali.
 
 \begin{figure}
-    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-1.jpg}
+    \includegraphics[width=1\textwidth]{Chapter-2/docker-vm-1.jpg}
     \label{fig:docker-vm-1}
 \end{figure}
 La comparazione nei test delle prestazioni della CPU è stato fatta utilizzando gli strumenti sysbench, Phoronix e Apache benchmark. È stato utilizzato il metodo del \textbf{massimo numero primo}.
@@ -604,9 +604,9 @@ Le prestazioni della memoria RAM (utilizzando RAM speed/SMP) sono state misurate
 In un ulteriore test è stato utilizzato un caso particolare, cioè Eigth Queen, una simulazione di un problema del gioco degli scacchi.
 \begin{figure}
 \begin{tabular}{cc}
-  \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-2.jpg} &   \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-3.jpg} \\
- \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-4.jpg} &   \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-5.jpg} \\
- \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-6.jpg} &   \includegraphics[width=0.5\textwidth]{relazione-tirocinio/Chapter-2/docker-vm-7.jpg} \\
+  \includegraphics[width=0.5\textwidth]{Chapter-2/docker-vm-2.jpg} &   \includegraphics[width=0.5\textwidth]{Chapter-2/docker-vm-3.jpg} \\
+ \includegraphics[width=0.5\textwidth]{Chapter-2/docker-vm-4.jpg} &   \includegraphics[width=0.5\textwidth]{Chapter-2/docker-vm-5.jpg} \\
+ \includegraphics[width=0.5\textwidth]{Chapter-2/docker-vm-6.jpg} &   \includegraphics[width=0.5\textwidth]{Chapter-2/docker-vm-7.jpg} \\
 \end{tabular}
 \end{figure}
 Come possiamo notare dai grafici, le prestazioni dei container Docker sono di gran lunga superiori rispetto alle macchine virtuali. Dato che l'immagine del nostro sistema è identica per tutti i container si ha un netto miglioramento delle performance utilizzando container perché tutti condividono la stessa immagine di base.
@@ -678,7 +678,7 @@ Il container interagisce con l'interfaccia web per garantire l' autenticazione d
 Interagisce con gli smartphone nel caso in cui gli utenti decidono di ricevere notifiche push o altri tipi di alert (messaggi Telegram o altra applicazione).
 Con il data server scambia informazioni attraverso il broker mqtt e riceve informazioni sul gruppo (statistiche e dati dei sismometri) attraverso le API.
 \begin{figure}[ht]
-\includegraphics[width=0.9\textwidth]{relazione-tirocinio/Chapter-2/architettura-seismocloud2.png}
+\includegraphics[width=0.9\textwidth]{Chapter-2/architettura-seismocloud2.png}
 \end{figure}
 
 % ======================================= CHAPTER 3 ================================================
@@ -691,7 +691,7 @@ Le condizioni disponibili sono tre: quando $n$ (o un solo) sismometri vibrano/so
 Le possibilità per il metodo di notifica sono quattro: un messaggio tramite Telegram, una notifica push ai membri del gruppo, un widget e la pubblicazione di una API.
 \begin{figure}[ht]
 \label{legacy1}
-\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-3/eud-legacy-1.jpg}
+\includegraphics[width=1\textwidth]{Chapter-3/eud-legacy-1.jpg}
 \end{figure}
 Visto che i dati prodotti sono tanti, sarebbe molto utile ampliare il range di condizioni ad un più vasto campo, tenendo in conto anche di tutti i dati che non vengono considerati in questo sistema, ma che vengono comunque collezionati dai sismometri (temperatura, indirizzi IP, soglia di Quake, rssi, reboot..).
 Sarebbe ancora più utile lasciare completa \textbf{libertà all'utente} (sotto alcune restrizioni di sicurezza) integrando il sismometro con l'ambiente locale potenziando così le funzionalità e l'utilità di un sismometro.
@@ -709,7 +709,7 @@ La ragione principale di questa scelta è che in questo modo si hanno molti più
 
 \begin{figure}[ht]
 \label{legacy2}
-\includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-3/eud-legacy-2.jpg}
+\includegraphics[width=1\textwidth]{Chapter-3/eud-legacy-2.jpg}
 \end{figure}
 \clearpage
 
@@ -718,7 +718,7 @@ La ragione principale di questa scelta è che in questo modo si hanno molti più
 L'immagine di partenza di Node-RED fornisce alcune funzionalità di base. Nella palette di sinistra sono presenti sei sezioni (common, function, network, sequence, parser, storage) che raggruppano i vari nodi in base all'argomento di appartenenza. È stato già anticipato che questo strumento viene utilizzato nell'industria e ha un grande potenziale, possono essere programmate un vasto range di azioni utilizzando molte tecnologie e protocolli differenti. Sono presenti anche azioni che non possono essere programmate ad \textit{alto livello}, cioè si deve scendere nei tecnicismi della tecnologia utilizzata. Un esempio di ciò è l'\textbf{invio di una richiesta di sottoscrizione ad un topic verso il broker mqtt di SeismoCloud}. 
 
 \begin{figure}[hbt]
-    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-3/mqtt-legacy-1.jpg}
+    \includegraphics[width=1\textwidth]{Chapter-3/mqtt-legacy-1.jpg}
     \label{fig:mqtt-legacy-1}
 \end{figure}
 
@@ -740,7 +740,7 @@ Inoltre questo fa comprendere quante competenze sono richieste per l'invio di un
 Ne esistono differenti di protocolli disponibili, quindi la conoscenza tecnica richiesta è elevata pur non richiedendo esperienza in programmazione attraversi dei linguaggi.
 
 \begin{figure}[hbt]
-    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-3/mqtt-legacy-2.jpg}
+    \includegraphics[width=1\textwidth]{Chapter-3/mqtt-legacy-2.jpg}
     \label{fig:mqtt-legacy-2}
 \end{figure}
 
@@ -822,12 +822,12 @@ Viene associata una categoria al nodo alla riga \texttt{3}. La categoria è uno 
 Viene poi assegnato un colore al nodo in dicitura esadecimale uguale per tutti i nodi della stessa categoria, dei parametri di default (in questo caso solamente il nome del nodo), il numero di input e output accettati, un file PNG per associare al nodo un logo che ricorda l'azione che la funzione svolge.
 
 \begin{figure}[ht]
-    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-3/lower-case-1.jpg}
+    \includegraphics[width=1\textwidth]{Chapter-3/lower-case-1.jpg}
     \label{fig:lower-case-1}
 \end{figure}
 
 \begin{figure}[ht]
-    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-3/lower-case-2.jpg}
+    \includegraphics[width=1\textwidth]{Chapter-3/lower-case-2.jpg}
     \label{fig:lower-case-2}
 \end{figure}
 
@@ -1045,7 +1045,7 @@ In questo snippet di codice viene definito il menù a tendina che permette di sc
 \end{lstlisting}
 
 \begin{figure}[ht]
-    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-3/menu.jpg}
+    \includegraphics[width=1\textwidth]{Chapter-3/menu.jpg}
     \caption{Dati necessari per la configurazione di un nodo SeismoCloud}
     \label{fig:menu}
 \end{figure}
@@ -1077,11 +1077,11 @@ Tramite il file \texttt{package.json} invece vengono definite impostazioni di ba
 \end{lstlisting}
 
 \begin{figure}[ht]
-    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-3/rssi-1.jpg}
+    \includegraphics[width=1\textwidth]{Chapter-3/rssi-1.jpg}
     \label{fig:rssi-1}
 \end{figure}
 \begin{figure}[ht]
-    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-3/rssi-2.jpg}
+    \includegraphics[width=1\textwidth]{Chapter-3/rssi-2.jpg}
     \label{fig:rssi-2}
 \end{figure}
 Le figure mostrate qui sopra raffigurano due nodi rssi inseriti nel workspace.
@@ -1156,7 +1156,7 @@ In questo caso (\texttt{list-earthquakes.js}) ogni volta che il nodo riceve un i
 \end{lstlisting}
 
 \begin{figure}[ht]
-    \includegraphics{relazione-tirocinio/Chapter-3/api-seismo.jpg}
+    \includegraphics{Chapter-3/api-seismo.jpg}
     \caption{Nodi custom SeismoCloud per informazioni generali della rete}
     \label{fig:api-seismo-nodes}
 \end{figure}
@@ -1195,7 +1195,7 @@ Alcuni nodi già installati all'interno dell'intefaccia sono stati considerati p
 Come già anticipato, gli utenti devono superare una fase di autenticazione, ma questi nodi vengono comunque considerati pericolosi per l'uso che ne potrebbe anche un utente di SeismoCloud. L'autenticazione certifica che l'utente appartiene effettivamente ad un gruppo, ma questo non esclude cattive intenzioni dello stesso.
 Ad esempio un nodo che è stato considerato pericoloso è il nodo \textbf{exec}. Questo nodo ha un parametro in input e restituisce tre output (Standard output, standard error e return code). Come si evince dal nome esegue comandi di sistema. 
 \begin{figure}[ht]
-    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-4/exec.jpg}
+    \includegraphics[width=1\textwidth]{Chapter-4/exec.jpg}
     \label{fig:exec}
 \end{figure}
 In figura è riportato un esempio di uso cattivo del nodo exec. In realtà però, ci sono molti scenari più pericolosi, come ad esempio l'utilizzo della macchina su cui viene hostato il server come mittente dell'attacco e non come destinatario.
@@ -1214,7 +1214,7 @@ In questo modo si può ad esempio installare nodi come quello mostrato in figura
 Un altro problema potrebbe essere il \textbf{typo-squatting}. L'utente potrebbe voler scaricare ed installare un nodo utile, ad esempio \textit{node-red-contrib-alexa}, ma sbaglia a digitare premendo una c al posto di una x, quindi il sistema gli suggerisce il nodo \textit{node-red-contrib-aleca}, che invece potrebbe essere un nodo malevolo (chiunque può caricare nodi sullo store ufficiale).
 
 \begin{figure}[ht]
-    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-4/install.jpg}
+    \includegraphics[width=1\textwidth]{Chapter-4/install.jpg}
     \caption{Installazione di un nodo esterno}
     \label{fig:install}
 \end{figure}
@@ -1241,7 +1241,7 @@ Queste informazioni possono essere lette dall'interfaccia utente attraverso l'ut
 \end{lstlisting}
 
 \begin{figure}[ht]
-    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-4/env_var_1.jpg}
+    \includegraphics[width=1\textwidth]{Chapter-4/env_var_1.jpg}
     \caption{Il nodo Inject può restituire in output i valori delle variabili d'ambiente}
     \label{fig:env_var_1}
 \end{figure}
@@ -1501,7 +1501,7 @@ I task scelti da svolgere per gli utenti erano quattro (con alcune variazioni du
     
     \begin{figure}[ht]
         \centering
-        \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-5/test-1.jpg}
+        \includegraphics[width=1\textwidth]{Chapter-5/test-1.jpg}
         \label{fig:test1}
     \end{figure}
     
@@ -1509,13 +1509,13 @@ I task scelti da svolgere per gli utenti erano quattro (con alcune variazioni du
     \clearpage
     \begin{figure}[hbt]
         \centering
-        \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-5/test-2.jpg}
+        \includegraphics[width=1\textwidth]{Chapter-5/test-2.jpg}
         \label{fig:test1}
     \end{figure}
     \item Difficoltà Livello 3: Effettuare il reboot del sismometro ‘edotest’ ogni volta che la temperatura è maggiore di $50^{\circ}$C.
     \begin{figure}[hbt]
         \centering
-        \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-5/test-3.jpg}
+        \includegraphics[width=1\textwidth]{Chapter-5/test-3.jpg}
         \label{fig:test1}
     \end{figure}
     
@@ -1523,7 +1523,7 @@ I task scelti da svolgere per gli utenti erano quattro (con alcune variazioni du
     
     \begin{figure}[ht]
         \centering
-        \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-5/test-4.jpg}
+        \includegraphics[width=1\textwidth]{Chapter-5/test-4.jpg}
         \label{fig:test1}
     \end{figure}
     
@@ -1547,7 +1547,7 @@ Il secondo problema è stato rilevato maggiormente durante i test da remoto, dov
 La terza criticità era la descrizione di alcuni nodi, per esempio, uno di questi era il nodo \textbf{BSSID}. Questo termine indica l'indirizzo MAC di un punto di accesso alla rete dove il sismometro si connette.
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-5/bssid-help.jpg}
+    \includegraphics[width=1\textwidth]{Chapter-5/bssid-help.jpg}
     \caption{nodo BSSID corretto dopo la prima sessione di test}
     \label{fig:bssid-help}
 \end{figure}
@@ -1581,7 +1581,7 @@ Si continuerà ad ascoltare gli utenti SeismoCloud ricevendo feedback utili e pr
 Questo lavoro di tirocinio è stato riassunto in un paper creato insieme al Professore Emanuele Panizzi ed il Dottorando Enrico Bassetti, il quale è stato sottomesso ed accettato al Workshop EMPATHY 2020 (Empowering People in Dealing with Internet of Things).
 \begin{figure}[hbt]
     \centering
-    \includegraphics[width=0.9\textwidth]{relazione-tirocinio/Chapter-5/paper.jpg}
+    \includegraphics[width=0.9\textwidth]{Chapter-5/paper.jpg}
     \label{fig:paper}
 \end{figure}
 
@@ -1594,7 +1594,7 @@ Sono molto utili per condividere dati, ma soprattutto per notificare ad un bacin
 L'INGV ha avviato un servizio simile, questo un Tweet di esempio(\href{https://twitter.com/ingvterremoti/status/1259681114920230912}{https://twitter.com/ingvterremoti/status/1259681114920230912}).
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=1\textwidth]{relazione-tirocinio/Chapter-5/tweetINGV.jpg}
+    \includegraphics[width=1\textwidth]{Chapter-5/tweetINGV.jpg}
     \label{fig:tweetINGV}
 \end{figure}
 
