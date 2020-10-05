@@ -381,12 +381,27 @@ Dalla pagina Wikipedia \cite{wikieud}:
 \begin{quoting}[font=itshape, begintext={``}, endtext={``}]
 Lo sviluppo per l'utente finale (EUD) o la programmazione per l'utente finale (EUP) si riferisce ad attività e strumenti che consentono agli utenti finali, persone che non sono sviluppatori di software professionisti, di programmare i computer. Le persone che non sono sviluppatori professionisti possono utilizzare gli strumenti EUD per creare o modificare artefatti software (descrizioni di comportamenti automatizzati) e oggetti di dati complessi senza una conoscenza significativa di un linguaggio di programmazione.
 \end{quoting}
-Ad esempio, si può ricevere un messaggio automatico tramite Telegram ogni volta che il mio sismometro vibra. Questo sistema viene spiegato meglio nel sottocapitolo 3.1 ``Sistema Legacy".
+Quindi, queste tipologie di sistemi permettono a utenti finali (diretti utilizzatori del sistema) di collegare dati e servizi in un modo logico e sviluppare funzionalità ad hoc precedentemente non disponibili.
+Ad esempio, si può ricevere un messaggio automatico tramite Telegram ogni volta che il mio sismometro vibra.
+Oppure, ricevere una notifica push sul proprio cellulare quando $n$ sismometri rilevano una vibrazione nello stesso momento, o meglio ancora, allertare tutti gli utenti in un gruppo.
+È facile intuire che queste tipologie di automazione sono 
+molto utili per un utente non esperto, soprattutto nell'ambito SeismoCloud, dove la community è un fattore cardine dell'applicativo.
 
-\begin{figure}
+Questo sistema viene spiegato meglio nel sottocapitolo 3.1 ``Sistema Legacy".
+
+
+\begin{figure}[hbt]
 \caption{Architettura di SeismoCloud}
 \label{fig:ArchitetturaSeismoCloud}
 \includegraphics[width=1\textwidth]{Chapter-1/architettura-seismocloud.png}
+\end{figure}
+
+\clearpage
+Questo lavoro di tirocinio è stato riassunto in un paper creato insieme al Professore Emanuele Panizzi ed il Dottorando Enrico Bassetti, il quale è stato sottomesso, accettato e presentato al Workshop EMPATHY 2020 (Empowering People in Dealing with Internet of Things) \cite{paper}.
+\begin{figure}[hbt]
+    \centering
+    \includegraphics[width=1\textwidth]{Chapter-1/paper.jpg}
+    \label{fig:paper}
 \end{figure}
 
 \clearpage
@@ -1578,12 +1593,6 @@ Si continuerà ad ascoltare gli utenti SeismoCloud ricevendo feedback utili e pr
 
 \clearpage
 
-Questo lavoro di tirocinio è stato riassunto in un paper creato insieme al Professore Emanuele Panizzi ed il Dottorando Enrico Bassetti, il quale è stato sottomesso ed accettato al Workshop EMPATHY 2020 (Empowering People in Dealing with Internet of Things).
-\begin{figure}[hbt]
-    \centering
-    \includegraphics[width=0.9\textwidth]{Chapter-5/paper.jpg}
-    \label{fig:paper}
-\end{figure}
 
 \section{Sviluppi futuri}
 
@@ -1664,8 +1673,10 @@ Estote semper Parati
   \href{http://ingv.it}{http://ingv.it}
 
 \bibitem{ottimizzazione}
-  \textbf{Ottimizzazione delle risorse nell’uso di servizi in background in SeismoCloud per Android}, 2017, Enrico Bassetti 
+  \textbf{Ottimizzazione delle risorse nell’uso di servizi in background in SeismoCloud per Android}
   \href{https://github.com/Enrico204/bachelor-degree-thesis}{https://github.com/Enrico204/bachelor-degree-thesis}
+  \\
+  2017, Enrico Bassetti. 
 
 \bibitem{berkeleyfaq}
   \textbf{Seismo Berkeley Lab FAQ}.
@@ -1682,6 +1693,11 @@ Estote semper Parati
 \bibitem{MathWorks}
   \textbf{Publish MQTT messages and subscribe to message topics}.\\
   \href{https://www.mathworks.com/help/supportpkg/raspberrypi/ref/publish-and-subscribe-to-mqtt-messages.html}{https://www.mathworks.com/help/supportpkg/raspberrypi/ref/publish-and-subscribe-to-mqtt-messages.html}
+
+\bibitem{paper}
+    \textbf{Simplify Node-RED for End User Development in SeismoCloud}
+    \\
+    2020, EMPATHY Workshop; Enrico Bassetti, Edoardo Ottavianelli, Emanuele Panizzi.
 
 \bibitem{noderedwiki}
   \textbf{Node-RED Wiki}.
@@ -1749,7 +1765,7 @@ Estote semper Parati
     \href{https://odr.chalmers.se/bitstream/20.500.12380/300759/1/CSE\%2020-06\%20Olsson\%20ODR.pdf}{https://odr.chalmers.se/bitstream/20.500.12380/300759/1/CSE\%2020-06\%20Olsson\%20ODR.pdf}
     \\
     2020, Lars Eric Olsson.
-    
+
 \bibitem{telegram-node}
     \textbf{Node-RED Library | Telegram node}
     \\
