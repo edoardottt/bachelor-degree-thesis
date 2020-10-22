@@ -7,9 +7,9 @@
 
 #### Studente: Edoardo Ottavianelli
 
-#### Relatore: Emanuele Panizzi
+#### Relatore: Professore Emanuele Panizzi
 
-#### SeismoCloud Lead Dev: Enrico Bassetti
+#### SeismoCloud Lead Developer: Enrico Bassetti
 
 Get Started 🎉
 -------
