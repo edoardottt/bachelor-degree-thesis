@@ -9,7 +9,7 @@
 
 #### Relatore: Professore Emanuele Panizzi
 
-#### SeismoCloud Lead Developer: Enrico Bassetti
+#### Lead Developer: Enrico Bassetti
 
 Get Started 🎉
 -------
