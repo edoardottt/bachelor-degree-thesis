@@ -13,6 +13,8 @@
 
 #### Lead Developer: Enrico Bassetti
 
+[Read the paper we've published!](http://ceur-ws.org/Vol-2702/EMPATHY_2020_paper_10.pdf)
+
 Get Started 🎉
 -------
 
