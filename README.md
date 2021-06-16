@@ -5,6 +5,9 @@
 
 [![Direct pdf download](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/button.png)](https://github.com/edoardottt/bachelor-degree-thesis/releases/download/final/thesis.pdf)
 
+
+[Read the paper we've published!](http://ceur-ws.org/Vol-2702/EMPATHY_2020_paper_10.pdf)
+
 # [seismocloud.com](https://seismocloud.com)
 
 #### Studente: Edoardo Ottavianelli
@@ -12,8 +15,6 @@
 #### Relatore: Professore Emanuele Panizzi
 
 #### Lead Developer: Enrico Bassetti
-
-[Read the paper we've published!](http://ceur-ws.org/Vol-2702/EMPATHY_2020_paper_10.pdf)
 
 Get Started 🎉
 -------
