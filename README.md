@@ -6,7 +6,7 @@
 [![Direct pdf download](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/button.png)](https://github.com/edoardottt/bachelor-degree-thesis/releases/download/final/thesis.pdf)
 
 
-[Read the paper we've published!](http://ceur-ws.org/Vol-2702/EMPATHY_2020_paper_10.pdf)
+[Read the paper we've published!](https://www.researchgate.net/publication/346084958_Simplify_Node-RED_For_End_User_Development_in_SeismoCloud)
 
 # [seismocloud.com](https://www.seismocloud.com/)
 
