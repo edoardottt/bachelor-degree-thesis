@@ -51,6 +51,4 @@ sudo apt install texlive-base texlive-binaries texlive-extra-utils texlive-font-
 If you liked it drop a ⭐
 -------
 
-If you want to contact me: [edoardoottavianelli.it](https://www.edoardoottavianelli.it)
-
-                                                                      Edoardo Ottavianelli
+[edoardoottavianelli.it](https://www.edoardoottavianelli.it/) to contact me.
