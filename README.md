@@ -1,18 +1,17 @@
-## Design e Sviluppo del sistema di End User Development in SeismoCloud
-
-## [seismocloud.com](https://www.seismocloud.com/)
-
-![latex-logo](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/made-with-latex.svg)
-![overleaf](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/overleaf.svg)
-
-[![Direct pdf download](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/button.png)](https://github.com/edoardottt/bachelor-degree-thesis/releases/download/final/thesis.pdf)
-
+<p align="center">
+  <h2 align="center">Design e Sviluppo del sistema di End User Development in SeismoCloud</h2>
+</p>
+<p align="center">
+<a href="https://www.researchgate.net/publication/346084958_Simplify_Node-RED_For_End_User_Development_in_SeismoCloud"><img src="https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/made-with-latex.svg" alt="pdf read"></a>
+  <a href="https://www.researchgate.net/publication/346084958_Simplify_Node-RED_For_End_User_Development_in_SeismoCloud"><img src="https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/overleaf.svg" alt="pdf read"></a><br>
+  <a href="https://github.com/edoardottt/bachelor-degree-thesis/releases/download/final/thesis.pdf"><img src="https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/button.png" alt="pdf download"></a>
+</p>
 
 [Read the paper we've published!](https://www.researchgate.net/publication/346084958_Simplify_Node-RED_For_End_User_Development_in_SeismoCloud)
 
 #### Studente: Edoardo Ottavianelli
 
-#### Relatore: Professore Emanuele Panizzi
+#### Relatore: Prof. Emanuele Panizzi
 
 #### Lead Developer: Enrico Bassetti
 
