@@ -1,5 +1,7 @@
 ## Design e Sviluppo del sistema di End User Development in SeismoCloud
 
+## [seismocloud.com](https://www.seismocloud.com/)
+
 ![latex-logo](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/made-with-latex.svg)
 ![overleaf](https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/overleaf.svg)
 
@@ -7,8 +9,6 @@
 
 
 [Read the paper we've published!](https://www.researchgate.net/publication/346084958_Simplify_Node-RED_For_End_User_Development_in_SeismoCloud)
-
-# [seismocloud.com](https://www.seismocloud.com/)
 
 #### Studente: Edoardo Ottavianelli
 
