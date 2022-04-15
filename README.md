@@ -47,7 +47,7 @@ sudo apt install texlive-base texlive-binaries texlive-extra-utils texlive-font-
 
 - Clean the folder from files generated while building: `make clean`
 
-If you liked it drop a ⭐
+
 -------
 
 [edoardoottavianelli.it](https://www.edoardoottavianelli.it/) to contact me.
