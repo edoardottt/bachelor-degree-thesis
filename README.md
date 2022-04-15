@@ -1,5 +1,5 @@
 <p align="center">
-  <h2 align="center">Design e Sviluppo del sistema di End User Development in SeismoCloud</h2>
+  <h3 align="center">Design e Sviluppo del sistema di End User Development in SeismoCloud</h3>
 </p>
 <p align="center">
 <a href="https://www.researchgate.net/publication/346084958_Simplify_Node-RED_For_End_User_Development_in_SeismoCloud"><img src="https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/made-with-latex.svg" alt="pdf read"></a>
