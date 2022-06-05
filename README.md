@@ -9,11 +9,9 @@
 
 [Read the paper we've published!](https://www.researchgate.net/publication/346084958_Simplify_Node-RED_For_End_User_Development_in_SeismoCloud)
 
-#### Studente: Edoardo Ottavianelli
-
-#### Relatore: Prof. Emanuele Panizzi
-
-#### Lead Developer: Enrico Bassetti
+Studente: Edoardo Ottavianelli  
+Relatore: Prof. Emanuele Panizzi  
+Lead Developer: Enrico Bassetti  
 
 Get Started 🎉
 -------
@@ -46,7 +44,6 @@ sudo apt install texlive-base texlive-binaries texlive-extra-utils texlive-font-
 - Build the .pdf file: `make thesis.pdf`
 
 - Clean the folder from files generated while building: `make clean`
-
 
 -------
 
