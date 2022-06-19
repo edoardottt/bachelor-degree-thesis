@@ -10,3 +10,4 @@
 *.auto.dot
 *.out
 _minted-tesi
+.vscode/
