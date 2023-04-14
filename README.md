@@ -41,7 +41,7 @@ sudo apt install texlive-base texlive-binaries texlive-extra-utils texlive-font-
   texlive-pstricks
   ```
 
-- Build the .pdf file: `make thesis.pdf`
+- Build the .pdf file: `make pdf`
 
 - Clean the folder from files generated while building: `make clean`
 
