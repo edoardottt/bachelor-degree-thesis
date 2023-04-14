@@ -2,9 +2,9 @@
   <h3 align="center">Design e Sviluppo del sistema di End User Development in SeismoCloud</h3>
 </p>
 <p align="center">
-<a href="https://www.researchgate.net/publication/346084958_Simplify_Node-RED_For_End_User_Development_in_SeismoCloud"><img src="https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/made-with-latex.svg" alt="pdf read"></a>
-  <a href="https://www.researchgate.net/publication/346084958_Simplify_Node-RED_For_End_User_Development_in_SeismoCloud"><img src="https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/overleaf.svg" alt="pdf read"></a><br>
-  <a href="https://github.com/edoardottt/bachelor-degree-thesis/releases/download/final/thesis.pdf"><img src="https://github.com/edoardottt/bachelor-degree-thesis/blob/master/buttons/button.png" alt="pdf download"></a>
+<a href="https://www.researchgate.net/publication/346084958_Simplify_Node-RED_For_End_User_Development_in_SeismoCloud"><img src="https://github.com/edoardottt/images/blob/main/bachelor-degree-thesis/made-with-latex.svg" alt="pdf read"></a>
+  <a href="https://www.researchgate.net/publication/346084958_Simplify_Node-RED_For_End_User_Development_in_SeismoCloud"><img src="https://github.com/edoardottt/images/blob/main/bachelor-degree-thesis/overleaf.svg" alt="pdf read"></a><br>
+  <a href="https://github.com/edoardottt/bachelor-degree-thesis/releases/download/final/thesis.pdf"><img src="https://github.com/edoardottt/images/blob/main/bachelor-degree-thesis/button.png" alt="pdf download"></a>
 </p>
 
 [Read the paper we've published!](https://www.researchgate.net/publication/346084958_Simplify_Node-RED_For_End_User_Development_in_SeismoCloud)
