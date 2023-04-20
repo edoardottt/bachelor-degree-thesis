@@ -16,7 +16,7 @@ Lead Developer: Enrico Bassetti
 Get Started 🎉
 -------
 
-`latexmk` is required.
+[latexmk](https://mg.readthedocs.io/latexmk.html) is required to generate the PDF file.
 
 - Install dependencies (Debian-based distro): 
 ```bash
