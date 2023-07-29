@@ -18,12 +18,14 @@ Get Started 🎉
 
 [latexmk](https://mg.readthedocs.io/latexmk.html) is required to generate the PDF file.
 
-- Install dependencies (Debian-based distro): 
+- Install dependencies (Debian-based distro):
+
 ```bash
 sudo apt install texlive-base texlive-binaries texlive-extra-utils texlive-font-utils texlive-fonts-extra texlive-fonts-extra-links texlive-fonts-recommended  texlive-lang-english texlive-lang-italian texlive-latex-base texlive-latex-extra texlive-latex-recommended texlive-luatex texlive-pictures texlive-plain-generic texlive-pstricks
 ```
 
 - LaTeX requirements:
+
   ```
   texlive-base
   texlive-binaries
@@ -44,11 +46,13 @@ sudo apt install texlive-base texlive-binaries texlive-extra-utils texlive-font-
   ```
 
 Build the .pdf file
+
 ```console
 make pdf
 ```
 
 Clean the folder from files generated while building
+
 ```console
 make clean
 ```
